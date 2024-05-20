@@ -128,7 +128,7 @@ public class RegisterControl extends HttpServlet {
             System.out.println(otp);
             // Set register info session
             User user = new User();
-            user.setUsername(email);
+            user.setEmail(email);
             user.setPassword(password);
             user.setFullname(fullName);
             user.setGender(gender ? "Male" : "Female");

@@ -28,10 +28,10 @@ public class UserDAO {
 
     // Create (Register)
     public boolean registerUser(User user) {
-        String query = "INSERT INTO [User] (Username, Password, Fullname, Gender, Address, Phone, CreatedBy) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO [User] (Email, Password, Fullname, Gender, Address, Phone, CreatedBy) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             ps = conn.prepareStatement(query);
-            ps.setString(1, user.getUsername());
+            ps.setString(1, user.getEmail());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getFullname());
             ps.setString(4, user.getGender());
@@ -48,38 +48,9 @@ public class UserDAO {
         return false;
     }
 
-    // Read (Get User by Username)
-    public User getUserByUsername(String username) {
-        String query = "SELECT * FROM [User] WHERE Username = ?";
-        try {
-            ps = conn.prepareStatement(query);
-            ps.setString(1, username);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("ID"));
-                user.setUsername(rs.getString("Username"));
-                user.setPassword(rs.getString("Password"));
-                user.setFullname(rs.getString("Fullname"));
-                user.setGender(rs.getString("Gender"));
-                user.setAddress(rs.getString("Address"));
-                user.setPhone(rs.getString("Phone"));
-                user.setIsDeleted(rs.getBoolean("IsDeleted"));
-                user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
-                user.setCreatedBy(rs.getInt("CreatedBy"));
-                return user;
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
-        } finally {
-            closeResources();
-        }
-        return null;
-    }
-    
     // Read (Get User by Email)
     public User getUserByEmail(String email) {
-        String query = "SELECT * FROM [User] WHERE Username = ?";
+        String query = "SELECT * FROM [User] WHERE Email = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
@@ -87,7 +58,7 @@ public class UserDAO {
             if (rs.next()) {
                 User user = new User();
                 user.setId(rs.getInt("ID"));
-                user.setUsername(rs.getString("Username"));
+                user.setEmail(rs.getString("Email"));
                 user.setPassword(rs.getString("Password"));
                 user.setFullname(rs.getString("Fullname"));
                 user.setGender(rs.getString("Gender"));
@@ -120,7 +91,7 @@ public class UserDAO {
             while (rs.next()) {
                 User user = new User();
                 user.setId(rs.getInt("ID"));
-                user.setUsername(rs.getString("Username"));
+                user.setEmail(rs.getString("Email"));
                 user.setPassword(rs.getString("Password"));
                 user.setFullname(rs.getString("Fullname"));
                 user.setGender(rs.getString("Gender"));
@@ -138,13 +109,88 @@ public class UserDAO {
         }
         return userList;
     }
+    
+    public List<User> getAllPagination(int pageNumber, int pageSize) {
+        List<User> userList = new ArrayList<>();
+        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY UserID) AS RowNum, * FROM Users) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
+        int startIndex = (pageNumber - 1) * pageSize + 1;
+        int endIndex = pageNumber * pageSize;
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, startIndex);
+            ps.setInt(2, endIndex);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("ID"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
+                user.setFullname(rs.getString("Fullname"));
+                user.setGender(rs.getString("Gender"));
+                user.setAddress(rs.getString("Address"));
+                user.setPhone(rs.getString("Phone"));
+                user.setIsDeleted(rs.getBoolean("IsDeleted"));
+                user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                user.setCreatedBy(rs.getInt("CreatedBy"));
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userList;
+    }
+    
+    public List<User> getFilteredUsers(String fullName, String email, String role, String gender, int pageNumber, int pageSize) {
+        List<User> filteredUserList = new ArrayList<>();
+        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY UserID) AS RowNum FROM Users WHERE 1=1";
+        // Add filter conditions
+        if (fullName != null && !fullName.isEmpty()) {
+            query += " AND FullName LIKE '%" + fullName + "%'";
+        }
+        if (email != null && !email.isEmpty()) {
+            query += " AND Email LIKE '%" + email + "%'";
+        }
+        if (role != null && !role.isEmpty()) {
+            query += " AND Role = '" + role + "'";
+        }
+        if (gender != null && !gender.isEmpty()) {
+            query += " AND Gender = " + Boolean.parseBoolean(gender);
+        }
+        // Add pagination
+        query += ") AS SubQuery WHERE RowNum BETWEEN ? AND ?";
+        int startIndex = (pageNumber - 1) * pageSize + 1;
+        int endIndex = pageNumber * pageSize;
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, startIndex);
+            ps.setInt(2, endIndex);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("ID"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
+                user.setFullname(rs.getString("Fullname"));
+                user.setGender(rs.getString("Gender"));
+                user.setAddress(rs.getString("Address"));
+                user.setPhone(rs.getString("Phone"));
+                user.setIsDeleted(rs.getBoolean("IsDeleted"));
+                user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                user.setCreatedBy(rs.getInt("CreatedBy"));
+                filteredUserList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filteredUserList;
+    }
 
     // Update (Update User)
     public boolean updateUser(User user) {
-        String query = "UPDATE [User] SET Username=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=? WHERE ID=?";
+        String query = "UPDATE [User] SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
-            ps.setString(1, user.getUsername());
+            ps.setString(1, user.getEmail());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getFullname());
             ps.setString(4, user.getGender());
@@ -181,7 +227,7 @@ public class UserDAO {
 
     // Login
     public User loginUser(String email, String password) {
-        String query = "SELECT * FROM [User] WHERE Username = ? AND Password = ?";
+        String query = "SELECT * FROM [User] WHERE Email = ? AND Password = ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, email);
@@ -190,7 +236,7 @@ public class UserDAO {
             if (rs.next()) {
                 User user = new User();
                 user.setId(rs.getInt("ID"));
-                user.setUsername(rs.getString("Username"));
+                user.setEmail(rs.getString("Email"));
                 user.setPassword(rs.getString("Password"));
                 user.setFullname(rs.getString("Fullname"));
                 user.setGender(rs.getString("Gender"));
