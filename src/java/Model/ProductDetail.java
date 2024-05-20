@@ -12,6 +12,7 @@ import java.sql.*;
  */
 public class ProductDetail {
     private int productDetailId;
+    private int productId;
     private String imageURL;
     private String size;
     private String color;
@@ -20,8 +21,16 @@ public class ProductDetail {
     private int discount;
     private Timestamp createdAt;
     private int createdBy;
+    
+    public int getProductId() {
+        return productId;
+    }
 
     // Getters and setters
+    public void setProductId(int productId) {    
+        this.productId = productId;
+    }
+
     public int getProductDetailId() {
         return productDetailId;
     }
@@ -92,6 +101,11 @@ public class ProductDetail {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDetail{" + "productDetailId=" + productDetailId + ", imageURL=" + imageURL + ", size=" + size + ", color=" + color + ", stock=" + stock + ", price=" + price + ", discount=" + discount + ", createdAt=" + createdAt + ", createdBy=" + createdBy + '}';
     }
     
     

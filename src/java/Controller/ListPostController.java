@@ -4,8 +4,9 @@
  */
 package Controller;
 
-import DAO.ProductDAO;
-import Model.Product;
+import DAO.PostDAO;
+import Model.Category;
+import Model.Post;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,8 +20,8 @@ import java.util.List;
  *
  * @author Legion
  */
-@WebServlet(name = "HomeController", urlPatterns = {"/home"})
-public class HomeController extends HttpServlet {
+@WebServlet(name = "ListPostController", urlPatterns = {"/marketing/list-post"})
+public class ListPostController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +40,10 @@ public class HomeController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomeController</title>");            
+            out.println("<title>Servlet ListPostController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HomeController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ListPostController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,17 +61,49 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         String pageParam = request.getParameter("page");
-        int pageNumber = pageParam == null ? 1 : Integer.parseInt(pageParam);
-        int pageSize = 12;
 
-        List<Product> products = new ProductDAO().getProductsByPage(pageNumber, pageSize);
-        int total = new ProductDAO().countTotalProducts();
-        int endPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
-        request.setAttribute("products", products);
-        request.setAttribute("endPage", endPage);
-        request.setAttribute("page", pageNumber);
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
+        int PAGE_SIZE = 10;
+        int page = 1;
+        String pageStr = request.getParameter("page");
+        if (pageStr != null && !pageStr.isEmpty()) {
+            page = Integer.parseInt(pageStr);
+        }
+
+        // Get filtering and sorting parameters
+        String category = request.getParameter("category");
+        String author = request.getParameter("author");
+        String status = request.getParameter("status");
+        String search = request.getParameter("search");
+        String sortBy = request.getParameter("sortBy");
+        String sortOrder = request.getParameter("sortOrder");
+
+        // Fetch posts for the requested page with filters and sorting
+        PostDAO postDAO = new PostDAO();
+        List<Post> posts = postDAO.getPosts(page, PAGE_SIZE, category, author, status, search, sortBy, sortOrder);
+
+        // Get the total number of posts for pagination
+        int totalPosts = postDAO.getTotalPosts(category, author, status, search);
+        int totalPages = (int) Math.ceil((double) totalPosts / PAGE_SIZE);
+
+        // Fetch filter options
+        List<Category> categories = postDAO.getUniqueCategories();
+        List<String> authors = postDAO.getUniqueAuthors();
+
+        // Set attributes for the JSP
+        request.setAttribute("posts", posts);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("categories", categories);
+        request.setAttribute("authors", authors);
+        request.setAttribute("category", category);
+        request.setAttribute("author", author);
+        request.setAttribute("status", status);
+        request.setAttribute("search", search);
+        request.setAttribute("sortBy", sortBy);
+        request.setAttribute("sortOrder", sortOrder);
+        request.setAttribute("success", request.getParameter("isSuccess"));
+        
+        request.getRequestDispatcher("/list-post.jsp").forward(request, response);
     }
 
     /**

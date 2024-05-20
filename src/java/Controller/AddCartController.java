@@ -6,6 +6,7 @@ package Controller;
 
 import DAO.ProductDAO;
 import Model.Product;
+import Model.ProductDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +14,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Legion
  */
-@WebServlet(name = "HomeController", urlPatterns = {"/home"})
-public class HomeController extends HttpServlet {
+@WebServlet(name = "AddCartController", urlPatterns = {"/public/add-cart"})
+public class AddCartController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +41,10 @@ public class HomeController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HomeController</title>");            
+            out.println("<title>Servlet AddCartController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HomeController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddCartController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,17 +62,26 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         String pageParam = request.getParameter("page");
-        int pageNumber = pageParam == null ? 1 : Integer.parseInt(pageParam);
-        int pageSize = 12;
+        List<ProductDetail> cart = new ArrayList<>();
+        if (request.getSession().getAttribute("cart") == null) {
+            request.getSession().setAttribute("cart", cart);
+        } else {
+            cart = (ArrayList<ProductDetail>) request.getSession().getAttribute("cart");
+        }
 
-        List<Product> products = new ProductDAO().getProductsByPage(pageNumber, pageSize);
-        int total = new ProductDAO().countTotalProducts();
-        int endPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
-        request.setAttribute("products", products);
-        request.setAttribute("endPage", endPage);
-        request.setAttribute("page", pageNumber);
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
+        int id = Integer.parseInt(request.getParameter("id"));
+        boolean isExisted = false;
+        for (ProductDetail productDetail : cart) {
+            if (productDetail.getProductDetailId() == id) {
+                isExisted = true;
+            }
+        }
+        if (!isExisted) {
+            ProductDetail productDetail = new ProductDAO().getProductDetailById(id);
+            cart.add(productDetail);
+        }
+        
+        response.sendRedirect("home");
     }
 
     /**

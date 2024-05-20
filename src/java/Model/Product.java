@@ -4,12 +4,16 @@
  */
 package Model;
 
+import java.sql.Timestamp;
+
 public class Product {
     private int productId;
     private String productName;
     private String categoryName;
+    private String description;
     private ProductDetail productDetail;
-
+    private Timestamp createdAt;
+    private int createdBy;
     // Getters and setters
     public int getProductId() {
         return productId;
@@ -42,4 +46,37 @@ public class Product {
     public void setProductDetail(ProductDetail productDetail) {
         this.productDetail = productDetail;
     }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public int getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "productId=" + productId + ", productName=" + productName + ", categoryName=" + categoryName + ", description=" + description + ", productDetail=" + productDetail + ", createdAt=" + createdAt + ", createdBy=" + createdBy + '}';
+    }
+    
+    
+
+  
 }

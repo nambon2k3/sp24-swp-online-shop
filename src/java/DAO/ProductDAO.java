@@ -80,4 +80,215 @@ public class ProductDAO extends DBContext {
 
         return products;
     }
+
+    public List<Product> getProductsByPage(int pageNumber, int pageSize) {
+        List<Product> products = new ArrayList<>();
+        int offset = (pageNumber - 1) * pageSize;
+
+        String sql = "SELECT distinct\n"
+                + "p.ID AS ProductID,\n"
+                + "p.Name AS ProductName,\n"
+                + "c.Name AS CategoryName\n"
+                + "FROM Product p\n"
+                + "INNER JOIN Category c ON p.CategoryID = c.ID\n"
+                + "WHERE p.IsDeleted = 0\n"
+                + "ORDER BY p.ID ASC\n"
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, offset);
+            statement.setInt(2, pageSize);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setProductId(resultSet.getInt("ProductID"));
+                product.setProductName(resultSet.getString("ProductName"));
+                product.setCategoryName(resultSet.getString("CategoryName"));
+
+                ProductDetail productDetail = getProductDetailByProductId(product.getProductId());
+                product.setProductDetail(productDetail);
+                products.add(product);
+            }
+        } catch (SQLException ex) {
+            System.out.println("getProductsByPage: " + ex.getMessage());
+        }
+
+        return products;
+    }
+
+    public ProductDetail getProductDetailByProductId(int productId) {
+
+        String sql = "SELECT "
+                + "pd.ID AS ProductDetailID, "
+                + "pd.ImageURL, "
+                + "pd.Size, "
+                + "pd.Color, "
+                + "pd.Stock, "
+                + "pd.price, "
+                + "pd.discount, "
+                + "pd.CreatedAt, "
+                + "pd.CreatedBy "
+                + "FROM ProductDetail pd "
+                + "WHERE pd.ProductID = ? AND pd.IsDeleted = 0";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, productId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
+                productDetail.setImageURL(resultSet.getString("ImageURL"));
+                productDetail.setSize(resultSet.getString("Size"));
+                productDetail.setColor(resultSet.getString("Color"));
+                productDetail.setStock(resultSet.getInt("Stock"));
+                productDetail.setPrice(resultSet.getDouble("price"));
+                productDetail.setDiscount(resultSet.getInt("discount"));
+                productDetail.setCreatedAt(resultSet.getTimestamp("CreatedAt"));
+                productDetail.setCreatedBy(resultSet.getInt("CreatedBy"));
+                return productDetail;
+            }
+        } catch (SQLException ex) {
+            System.out.println("getProductDetailsByProductId: " + ex.getMessage());
+        }
+
+        return new ProductDetail();
+    }
+
+    public int countTotalProducts() {
+        int totalProducts = 0;
+
+        String sql = "SELECT COUNT(*) AS TotalProducts FROM Product WHERE IsDeleted = 0";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql); ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                totalProducts = resultSet.getInt("TotalProducts");
+            }
+        } catch (SQLException ex) {
+            System.out.println("countTotalProducts: " + ex.getMessage());
+        }
+
+        return totalProducts;
+    }
+
+    public List<ProductDetail> getProductDetailsByProductId(int productId) {
+        List<ProductDetail> productDetails = new ArrayList<>();
+
+        String sql = "SELECT "
+                + "pd.ID AS ProductDetailID, "
+                + "pd.ImageURL, "
+                + "pd.Size, "
+                + "pd.Color, "
+                + "pd.Stock, "
+                + "pd.price, "
+                + "pd.discount, "
+                + "pd.CreatedAt, "
+                + "pd.CreatedBy "
+                + "FROM ProductDetail pd "
+                + "WHERE pd.ProductID = ? AND pd.IsDeleted = 0";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, productId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
+                productDetail.setImageURL(resultSet.getString("ImageURL"));
+                productDetail.setSize(resultSet.getString("Size"));
+                productDetail.setColor(resultSet.getString("Color"));
+                productDetail.setStock(resultSet.getInt("Stock"));
+                productDetail.setPrice(resultSet.getDouble("price"));
+                productDetail.setDiscount(resultSet.getInt("discount"));
+                productDetail.setCreatedAt(resultSet.getTimestamp("CreatedAt"));
+                productDetail.setCreatedBy(resultSet.getInt("CreatedBy"));
+
+                productDetails.add(productDetail);
+            }
+        } catch (SQLException ex) {
+            System.out.println("getProductDetailsByProductId: " + ex.getMessage());
+        }
+
+        return productDetails;
+    }
+
+    public Product getProductById(int productId) {
+        Product product = null;
+
+        String productSql = "SELECT "
+                + "p.ID AS ProductID, "
+                + "p.Name AS ProductName, "
+                + "c.Name AS CategoryName, "
+                + "p.CreatedAt AS ProductCreatedAt, "
+                + "p.description AS description, "
+                + "p.CreatedBy AS ProductCreatedBy "
+                + "FROM Product p "
+                + "INNER JOIN Category c ON p.CategoryID = c.ID "
+                + "WHERE p.ID = ? AND p.IsDeleted = 0";
+
+        try (PreparedStatement productStatement = connection.prepareStatement(productSql)) {
+            productStatement.setInt(1, productId);
+
+            try (ResultSet resultSet = productStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    product = new Product();
+                    product.setProductId(resultSet.getInt("ProductID"));
+                    product.setProductName(resultSet.getString("ProductName"));
+                    product.setCategoryName(resultSet.getString("CategoryName"));
+                    product.setCreatedAt(resultSet.getTimestamp("ProductCreatedAt"));
+                    product.setCreatedBy(resultSet.getInt("ProductCreatedBy"));
+                    product.setDescription(resultSet.getString("description"));
+                    product.setProductDetail(getProductDetailByProductId(productId));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("getProductById: " + ex.getMessage());
+        }
+
+        return product;
+    }
+
+    public ProductDetail getProductDetailById(int productDetailId) {
+        ProductDetail productDetail = null;
+
+        String sql = "SELECT "
+                + "ID AS ProductDetailID, "
+                + "ProductID, "
+                + "ImageURL, "
+                + "Size, "
+                + "Color, "
+                + "price, "
+                + "discount, "
+                + "Stock, "
+                + "CreatedAt, "
+                + "CreatedBy "
+                + "FROM ProductDetail "
+                + "WHERE ID = ? AND IsDeleted = 0";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, productDetailId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    productDetail = new ProductDetail();
+                    productDetail.setProductDetailId(resultSet.getInt("ProductDetailID"));
+                    productDetail.setProductId(resultSet.getInt("ProductID"));
+                    productDetail.setImageURL(resultSet.getString("ImageURL"));
+                    productDetail.setSize(resultSet.getString("Size"));
+                    productDetail.setColor(resultSet.getString("Color"));
+                    productDetail.setStock(resultSet.getInt("Stock"));
+                    productDetail.setPrice(resultSet.getDouble("price"));
+                    productDetail.setDiscount(resultSet.getInt("discount"));
+                    productDetail.setCreatedAt(resultSet.getTimestamp("CreatedAt"));
+                    productDetail.setCreatedBy(resultSet.getInt("CreatedBy"));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("getProductDetailById: " + ex.getMessage());
+        }
+
+        return productDetail;
+    }
 }
