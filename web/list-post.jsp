@@ -105,7 +105,7 @@
                                                     <label for="sortBy">Sort By:</label>
                                                     <select id="sortBy" name="sortBy" class="form-control">
                                                         <option value="title" ${param.sortBy == 'title' ? 'selected' : ''}>Title</option>
-                                                        <option value="category" ${param.sortBy == 'category' ? 'selected' : ''}>Category</option>
+                                                        <option value="CategoryId" ${param.sortBy == 'CategoryId' ? 'selected' : ''}>Category</option>
                                                         <option value="author" ${param.sortBy == 'author' ? 'selected' : ''}>Author</option>
                                                         <option value="featured" ${param.sortBy == 'featured' ? 'selected' : ''}>Featured</option>
                                                         <option value="status" ${param.sortBy == 'status' ? 'selected' : ''}>Status</option>
