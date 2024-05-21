@@ -38,16 +38,18 @@
                             <span id="cart" class="badge bg-dark text-white ms-1 rounded-pill">${sessionScope.cart eq null ? 0 : sessionScope.cart.size()}</span>
                         </button>
                         <c:if test="${sessionScope.user == null}">
-                            <button class="btn btn-outline-dark" type="submit">
+                            <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/login">
                                 <i class="bi-user me-1"></i>
                                 Login
-                            </button>
+                            </a>
                         </c:if>
-                            <c:if test="${sessionScope.user != null}">
-                            <button class="btn btn-outline-dark" type="submit">
-                                <i class="bi-user me-1"></i>
+                        <c:if test="${sessionScope.user != null}">
+                            <a class="btn btn-outline-dark mx-2" href="${pageContext.request.contextPath}/common/profile">
+                                Profile
+                            </a>
+                            <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/logout">
                                 Logout
-                            </button>
+                            </a>
                         </c:if>
                     </form>
                 </div>
