@@ -38,11 +38,10 @@ public class AdminUserControl extends HttpServlet {
         // Filter parameters
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
-        String role = request.getParameter("role");
         String gender = request.getParameter("gender");
 
         // Perform filtering based on the provided parameters
-        List<User> filteredUserList = userDAO.getFilteredUsers(fullName, email, role, gender, pageNumber, pageSize);
+        List<User> filteredUserList = userDAO.getFilteredUsers(fullName, email, gender, pageNumber, pageSize);
 
         // Get total number of users matching the filter criteria
         int totalUsers = userDAO.getAllUsers(pageNumber, pageSize).size();
