@@ -47,6 +47,35 @@ public class UserDAO {
         }
         return false;
     }
+    
+    // Read (Get User by Id)
+    public User getUserById(int id) {
+        String query = "SELECT * FROM [User] WHERE ID = ?";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("ID"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
+                user.setFullname(rs.getString("Fullname"));
+                user.setGender(rs.getString("Gender"));
+                user.setAddress(rs.getString("Address"));
+                user.setPhone(rs.getString("Phone"));
+                user.setIsDeleted(rs.getBoolean("IsDeleted"));
+                user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
+                user.setCreatedBy(rs.getInt("CreatedBy"));
+                return user;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            closeResources();
+        }
+        return null;
+    }
 
     // Read (Get User by Email)
     public User getUserByEmail(String email) {

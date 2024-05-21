@@ -18,7 +18,7 @@
     <body>
         <jsp:include page="header.jsp"></jsp:include>
             <!-- Header-->
-            <header class="bg-dark py-5">
+            <header class="py-5" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://w0.peakpx.com/wallpaper/752/914/HD-wallpaper-sabito-s-haori-kimetsu-no-yaiba-pattern.jpg);">
                 <div class="container px-4 px-lg-5 my-5">
                     <div class="text-center text-white">
                         <h1 class="display-4 fw-bolder">Shop in style</h1>
@@ -68,8 +68,8 @@
                 </div>
                 <div class="row mb-5 ">
                     <form action="home" class="d-flex text-center justify-content-center align-items-lg-center">
-                        <button style="margin-right: 10px; width: fit-content">Go to Page:</button> 
-                        <input oninput="valid(this)" style="width: 30px; font-size: 15px; padding: 5px; height: 25px; margin-right: 5px"  type="input" name="page" value="${page}" pattern="\d{1,}" title="Enter number"> /  ${endPage}
+                        <button style="margin-right: 10px; width: fit-content"class="btn btn-primary">Go to Page:</button> 
+                        <input class="form-control" oninput="valid(this)" style="width: 30px; font-size: 15px; padding: 5px; height: 25px; margin-right: 5px"  type="input" name="page" value="${page}" pattern="\d{1,}" title="Enter number"> /  ${endPage}
                     </form>
 
                 </div>
