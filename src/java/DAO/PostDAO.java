@@ -196,7 +196,7 @@ public class PostDAO extends DBContext {
     public Post getPostById(int postId) {
         Post post = new Post();
         // SQL query to retrieve post by ID
-        String query = "SELECT po.ID as PostID, CategoryId, Title, Content, po.IsDeleted, po.CreatedAt, po.CreatedBy, u.Fullname as AuthorName "
+        String query = "SELECT po.ID as PostID, CategoryId, Title, Content, po.IsDeleted, po.CreatedAt, po.CreatedBy, po.imgURL, u.Fullname as AuthorName "
                 + "FROM [dbo].[Post] po "
                 + "JOIN [dbo].[User] u ON po.CreatedBy = u.ID "
                 + "WHERE po.ID = ?";
@@ -218,6 +218,7 @@ public class PostDAO extends DBContext {
                 // Create Post object
                 post = new Post(postId, categoryId, title, content, isDeleted, createdAt, createdBy);
                 post.setAuthorName(authorName);
+                post.setImgURL(rs.getString("imgURL"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -235,7 +236,7 @@ public class PostDAO extends DBContext {
             stmt.setString(1, title);
             stmt.setString(2, content);
             stmt.setInt(3, categoryId);
-            stmt.setString(3, imgURL);
+            stmt.setString(4, imgURL);
             stmt.setInt(5, postId);
 
             // Execute the update query

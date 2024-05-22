@@ -277,6 +277,10 @@
                                 <input type="text" class="form-control" id="createdBy" name="createdBy" readonly style="background-color: #e6e6e6">
                             </div>
                             <div class="form-group">
+                                <label for="postImgURLUpdate">Thumbnail Link:</label>
+                                <input type="text" class="form-control" id="postImgURLUpdate" name="imgURL" required>
+                            </div>
+                            <div class="form-group">
                                 <label for="postCategoryEdit">Category</label>
                                 <select class="form-control" id="postCategoryEdit" name="category" required>
                                     <c:forEach var="cat" items="${categories}">
@@ -308,6 +312,7 @@
                                 document.getElementById('postContentEdit').value = post.content;
                                 document.getElementById('createdAt').value = post.createdAt;
                                 document.getElementById('createdBy').value = post.createdBy;
+                                document.getElementById('postImgURLUpdate').value = post.imgURL;
                                 
 
                                 let listCategory = document.getElementsByClassName('cateOption');
