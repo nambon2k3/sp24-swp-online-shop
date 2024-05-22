@@ -103,7 +103,20 @@ public class Staff {
         this.createdBy = createdBy;
     }
 
+    public void setRoleInt(String role) {
+        if (role == "Admin") this.role = 1;
+        if (role == "Marketing") this.role = 2;
+        if (role == "Sale") this.role = 3;
+        if (role == "Sale leader") this.role = 4;
+        if (role == "User") this.role = 5;
+    }
     
-    
+    public String getRoleString() {
+        if (this.role == 1) return "Admin";
+        if (this.role == 2) return "Marketing";
+        if (this.role == 3) return "Sale";
+        if (this.role == 4) return "Sale leader";
+        return "User";
+    }
 
 }

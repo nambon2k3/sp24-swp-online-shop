@@ -49,6 +49,36 @@ public class StaffDAO {
         return false;
     }
 
+    // Read (Get Staff by Id)
+    public Staff getStaffById(int id) {
+        String query = "SELECT * FROM [Staff] WHERE ID = ?";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                Staff staff = new Staff();
+                staff.setId(rs.getInt("ID"));
+                staff.setEmail(rs.getString("Email"));
+                staff.setPassword(rs.getString("Password"));
+                staff.setFullname(rs.getString("Fullname"));
+                staff.setGender(rs.getString("Gender"));
+                staff.setAddress(rs.getString("Address"));
+                staff.setPhone(rs.getString("Phone"));
+                staff.setRole(rs.getInt("Role"));
+                staff.setIsDeleted(rs.getBoolean("IsDeleted"));
+                staff.setCreatedAt(rs.getDate("CreatedAt"));
+                staff.setCreatedBy(rs.getInt("CreatedBy"));
+                return staff;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(StaffDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            closeResources();
+        }
+        return null;
+    }
+
     // Read (Get Staff by Email)
     public Staff getStaffByEmail(String email) {
         String query = "SELECT * FROM [Staff] WHERE Email = ?";
@@ -111,6 +141,125 @@ public class StaffDAO {
             closeResources();
         }
         return staffList;
+    }
+
+    // Get all staff with pagination
+    public List<Staff> getAllStaff() {
+        List<Staff> staffList = new ArrayList<>();
+        String query = "SELECT * FROM [Staff]";
+        try {
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Staff staff = new Staff();
+                staff.setId(rs.getInt("ID"));
+                staff.setEmail(rs.getString("Email"));
+                staff.setPassword(rs.getString("Password"));
+                staff.setFullname(rs.getString("Fullname"));
+                staff.setGender(rs.getString("Gender"));
+                staff.setAddress(rs.getString("Address"));
+                staff.setPhone(rs.getString("Phone"));
+                staff.setRole(rs.getInt("Role"));
+                staff.setIsDeleted(rs.getBoolean("IsDeleted"));
+                staff.setCreatedAt(rs.getDate("CreatedAt"));
+                staff.setCreatedBy(rs.getInt("CreatedBy"));
+                staffList.add(staff);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(StaffDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            closeResources();
+        }
+        return staffList;
+    }
+
+    public List<Staff> getFilteredStaff(String fullName, String email, int role, String gender, int pageNumber, int pageSize) {
+        List<Staff> filteredUserList = new ArrayList<>();
+        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [Staff] WHERE 1=1";
+        // Add filter conditions
+        if (fullName != null && !fullName.isEmpty()) {
+            query += " AND Fullname LIKE '%" + fullName + "%'";
+        }
+        if (email != null && !email.isEmpty()) {
+            query += " AND Email LIKE '%" + email + "%'";
+        }
+        if (role != -1) {
+            query += " AND Role = " + role;
+        }
+        if (gender != null && !gender.isEmpty()) {
+            query += " AND Gender = '" + gender + "'";
+        }
+        // Add pagination
+        query += ") AS SubQuery WHERE RowNum BETWEEN ? AND ?";
+        System.out.println(query);
+        int startIndex = (pageNumber - 1) * pageSize + 1;
+        int endIndex = pageNumber * pageSize;
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, startIndex);
+            ps.setInt(2, endIndex);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Staff staff = new Staff();
+                staff.setId(rs.getInt("ID"));
+                staff.setEmail(rs.getString("Email"));
+                staff.setPassword(rs.getString("Password"));
+                staff.setFullname(rs.getString("Fullname"));
+                staff.setGender(rs.getString("Gender"));
+                staff.setAddress(rs.getString("Address"));
+                staff.setPhone(rs.getString("Phone"));
+                staff.setRole(rs.getInt("Role"));
+                staff.setIsDeleted(rs.getBoolean("IsDeleted"));
+                staff.setCreatedAt(rs.getDate("CreatedAt"));
+                staff.setCreatedBy(rs.getInt("CreatedBy"));
+                filteredUserList.add(staff);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filteredUserList;
+    }
+    
+    public List<Staff> getFilteredStaff(String fullName, String email, int role, String gender) {
+        List<Staff> filteredUserList = new ArrayList<>();
+        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [Staff] WHERE 1=1";
+        // Add filter conditions
+        if (fullName != null && !fullName.isEmpty()) {
+            query += " AND Fullname LIKE '%" + fullName + "%'";
+        }
+        if (email != null && !email.isEmpty()) {
+            query += " AND Email LIKE '%" + email + "%'";
+        }
+        if (role != -1) {
+            query += " AND Role = " + role;
+        }
+        if (gender != null && !gender.isEmpty()) {
+            query += " AND Gender LIKE '%" + gender + "%'";
+        }
+        // Add pagination
+        query += ") AS SubQuery";
+        try {
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Staff staff = new Staff();
+                staff.setId(rs.getInt("ID"));
+                staff.setEmail(rs.getString("Email"));
+                staff.setPassword(rs.getString("Password"));
+                staff.setFullname(rs.getString("Fullname"));
+                staff.setGender(rs.getString("Gender"));
+                staff.setAddress(rs.getString("Address"));
+                staff.setPhone(rs.getString("Phone"));
+                staff.setRole(rs.getInt("Role"));
+                staff.setIsDeleted(rs.getBoolean("IsDeleted"));
+                staff.setCreatedAt(rs.getDate("CreatedAt"));
+                staff.setCreatedBy(rs.getInt("CreatedBy"));
+                filteredUserList.add(staff);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filteredUserList;
     }
 
     // Update (Update Staff)
@@ -186,12 +335,6 @@ public class StaffDAO {
     }
 
     private void closeResources() {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            Logger.getLogger(StaffDAO.class.getName()).log(Level.SEVERE, null, e);
-        }
+
     }
 }
