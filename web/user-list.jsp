@@ -42,7 +42,7 @@
                 <div class="form-group mr-2">
                     <input type="text" class="form-control" name="email" placeholder="Email">
                 </div>
-                <div class="form-group mr-2" style="display: none;">
+<!--                <div class="form-group mr-2" style="display: none;">
                     <select class="form-control" name="role">
                         <option value="">Select Role</option>
                         <option value="Admin">Admin</option>
@@ -50,12 +50,12 @@
                         <option value="Sale">Sale</option>
                         <option value="Marketing">Marketing</option>
                     </select>
-                </div>
+                </div>-->
                 <div class="form-group mr-2">
                     <select class="form-control" name="gender">
                         <option value="">Select Gender</option>
-                        <option value="true">Male</option>
-                        <option value="false">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Search</button>
@@ -68,7 +68,6 @@
                         <th>ID</th>
                         <th>Full Name</th>
                         <th>Email</th>
-                        <th>Role</th>
                         <th>Gender</th>
                         <th>Address</th>
                         <th>Actions</th>
@@ -77,15 +76,14 @@
                 <tbody>
                     <c:forEach var="user" items="${userList}">
                         <tr>
-                            <td>${user.getID()}</td>
-                            <td>${user.getFullName()}</td>
+                            <td>${user.getId()}</td>
+                            <td>${user.getFullname()}</td>
                             <td>${user.getEmail()}</td>
-                            <td>${user.getRole()}</td>
-                            <td>${user.isGender() ? 'Male' : 'Female'}</td>
+                            <td>${user.getGender()}</td>
                             <td>${user.getAddress()}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.getID()}">Info</button>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.getID()}">Edit</button>
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.getId()}">Info</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.getId()}">Edit</button>
                             </td>
                         </tr>
 
@@ -117,11 +115,11 @@
         <c:forEach var="user" items="${userList}">
 
             <!-- Edit User Modal -->
-            <div class="modal fade" id="editUserModal_${user.getID()}" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel_${user.getID()}" aria-hidden="true">
+            <div class="modal fade" id="editUserModal_${user.getId()}" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel_${user.getId()}" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editUserModalLabel_${user.getID()}">Edit User</h5>
+                            <h5 class="modal-title" id="editUserModalLabel_${user.getId()}">Edit User</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -130,29 +128,20 @@
                             <!-- Edit User Form -->
                             <form action="user" method="post">
                                 <input type="hidden" name="action" value="update">
-                                <input type="hidden" name="userId" value="${user.getID()}">
+                                <input type="hidden" name="userId" value="${user.getId()}">
                                 <div class="form-group">
                                     <label for="fullName">Full Name</label>
-                                    <input type="text" class="form-control" id="fullName" name="fullName" value="${user.getFullName()}">
+                                    <input type="text" class="form-control" id="fullName" name="fullName" value="${user.getFullname()}">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control" id="email" name="email" value="${user.getEmail()}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="role">Role</label>
-                                    <select class="form-control" id="role" name="role">
-                                        <option value="Admin" ${user.getRole().equals("Admin") ? "selected" : ""}>Admin</option>
-                                        <option value="User" ${user.getRole().equals("User") ? "selected" : ""}>User</option>
-                                        <option value="Marketing" ${user.getRole().equals("Marketing") ? "selected" : ""}>Marketing</option>
-                                        <option value="Sale" ${user.getRole().equals("Sale") ? "selected" : ""}>Sale</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
                                     <label for="gender">Gender</label>
                                     <select class="form-control" id="gender" name="gender">
-                                        <option value="true" ${user.isGender() ? "selected" : ""}>Male</option>
-                                        <option value="false" ${!user.isGender() ? "selected" : ""}>Female</option>
+                                        <option value="true" ${user.getGender() == 'Male' ? "selected" : ""}>Male</option>
+                                        <option value="false" ${user.getGender() == 'Female' ? "selected" : ""}>Female</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -172,21 +161,20 @@
             </div>
 
             <!-- User Info Modal -->
-            <div class="modal fade" id="userInfoModal_${user.getID()}" tabindex="-1" role="dialog" aria-labelledby="userInfoModalLabel_${user.getID()}" aria-hidden="true">
+            <div class="modal fade" id="userInfoModal_${user.getId()}" tabindex="-1" role="dialog" aria-labelledby="userInfoModalLabel_${user.getId()}" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="userInfoModalLabel_${user.getID()}">User Details</h5>
+                            <h5 class="modal-title" id="userInfoModalLabel_${user.getId()}">User Details</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>ID:</strong> ${user.getID()}</p>
-                            <p><strong>Full Name:</strong> ${user.getFullName()}</p>
+                            <p><strong>ID:</strong> ${user.getId()}</p>
+                            <p><strong>Full Name:</strong> ${user.getFullname()}</p>
                             <p><strong>Email:</strong> ${user.getEmail()}</p>
-                            <p><strong>Role:</strong> ${user.getRole()}</p>
-                            <p><strong>Gender:</strong> ${user.isGender() ? 'Male' : 'Female'}</p>
+                            <p><strong>Gender:</strong> ${user.getGender()}</p>
                             <p><strong>Address:</strong> ${user.getAddress()}</p>
                             <p><strong>Phone:</strong> ${user.getPhone()}</p>
                         </div>
@@ -227,15 +215,6 @@
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="role">Role</label>
-                                <select class="form-control" id="role" name="role">
-                                    <option value="Admin">Admin</option>
-                                    <option value="User">User</option>
-                                    <option value="Sale">Sale</option>
-                                    <option value="Marketing">Marketing</option>
-                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="gender">Gender</label>

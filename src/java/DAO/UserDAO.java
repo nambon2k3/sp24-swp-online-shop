@@ -141,7 +141,7 @@ public class UserDAO {
     
     public List<User> getAllPagination(int pageNumber, int pageSize) {
         List<User> userList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY UserID) AS RowNum, * FROM Users) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
+        String query = "SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY UserID) AS RowNum, * FROM User) AS SubQuery WHERE RowNum BETWEEN ? AND ?";
         int startIndex = (pageNumber - 1) * pageSize + 1;
         int endIndex = pageNumber * pageSize;
         try {
@@ -169,21 +169,18 @@ public class UserDAO {
         return userList;
     }
     
-    public List<User> getFilteredUsers(String fullName, String email, String role, String gender, int pageNumber, int pageSize) {
+    public List<User> getFilteredUsers(String fullName, String email, String gender, int pageNumber, int pageSize) {
         List<User> filteredUserList = new ArrayList<>();
-        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY UserID) AS RowNum FROM Users WHERE 1=1";
+        String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [User] WHERE 1=1";
         // Add filter conditions
         if (fullName != null && !fullName.isEmpty()) {
-            query += " AND FullName LIKE '%" + fullName + "%'";
+            query += " AND Fullname LIKE '%" + fullName + "%'";
         }
         if (email != null && !email.isEmpty()) {
             query += " AND Email LIKE '%" + email + "%'";
         }
-        if (role != null && !role.isEmpty()) {
-            query += " AND Role = '" + role + "'";
-        }
         if (gender != null && !gender.isEmpty()) {
-            query += " AND Gender = " + Boolean.parseBoolean(gender);
+            query += " AND Gender = " + gender;
         }
         // Add pagination
         query += ") AS SubQuery WHERE RowNum BETWEEN ? AND ?";
@@ -285,12 +282,6 @@ public class UserDAO {
     }
 
     private void closeResources() {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
-        } catch (SQLException e) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
-        }
+        
     }
 }
