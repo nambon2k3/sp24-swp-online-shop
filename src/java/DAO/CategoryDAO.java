@@ -4,10 +4,13 @@
  */
 package DAO;
 
+import Model.Category;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Legion
@@ -43,5 +46,26 @@ public class CategoryDAO extends DBContext{
         }
 
         return null;
+    }
+    public List<Category> getCategories() {
+        List<Category> categories = new ArrayList<>();
+
+        String sql = "SELECT ID, Name FROM Category WHERE IsDeleted = 0;";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
+
+            while (rs.next()) {
+                Category category = new Category(
+                        rs.getInt("ID"),
+                        rs.getString("Name")
+                );
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categories;
     }
 }

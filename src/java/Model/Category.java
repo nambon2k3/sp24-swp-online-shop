@@ -18,6 +18,16 @@ public class Category {
     private Timestamp createdAt;
     private int createdBy;
 
+    public Category() {
+    }
+
+    public Category(int ID, String categoryName) {
+        this.ID = ID;
+        this.categoryName = categoryName;
+    }
+    
+    
+
     public int getID() {
         return ID;
     }

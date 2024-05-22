@@ -291,4 +291,72 @@ public class ProductDAO extends DBContext {
 
         return productDetail;
     }
+
+    public List<Product> getProductsByPage(int pageNumber, int pageSize, String searchQuery, String categoryId) {
+        List<Product> products = new ArrayList<>();
+        int offset = (pageNumber - 1) * pageSize;
+        String sql = "SELECT p.ID as productId, p.Name as productName, p.CategoryID, c.Name as categoryName, "
+                + "p.IsDeleted, p.CreatedAt, p.CreatedBy, p.description "
+                + "FROM Product p "
+                + "JOIN Category c ON p.CategoryID = c.ID "
+                + "WHERE p.IsDeleted = 0 AND c.IsDeleted = 0 "
+                + "AND (p.Name LIKE ? OR ? IS NULL) "
+                + "AND (p.CategoryID = ? OR ? IS NULL) Order by p.ID "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            
+            statement.setString(2, searchQuery != null && !searchQuery.isBlank()? "%" + searchQuery + "%" : null);
+            statement.setString(1, "%" + searchQuery + "%");
+            statement.setString(4, categoryId != null && !categoryId.isBlank() ? categoryId : null);
+            statement.setString(3, categoryId);
+            statement.setInt(6, pageSize);
+            statement.setInt(5, offset);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Product product = new Product();
+                    product.setProductId(resultSet.getInt("ProductID"));
+                    product.setProductName(resultSet.getString("ProductName"));
+                    product.setCategoryName(resultSet.getString("CategoryName"));
+                    product.setCreatedAt(resultSet.getTimestamp("CreatedAt"));
+                    product.setCreatedBy(resultSet.getInt("CreatedBy"));
+                    product.setDescription(resultSet.getString("description"));
+                    product.setProductDetail(getProductDetailByProductId(product.getProductId()));
+                    product.setProductDetail(getProductDetailByProductId(product.getProductId()));
+                    products.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
+    public int countTotalProducts(String searchQuery, String categoryId) {
+        int total = 0;
+        String sql = "SELECT COUNT(*) FROM Product p "
+                + "JOIN Category c ON p.CategoryID = c.ID "
+                + "WHERE p.IsDeleted = 0 AND c.IsDeleted = 0 "
+                + "AND (p.Name LIKE ? OR ? IS NULL) "
+                + "AND (p.CategoryID = ? OR ? IS NULL);";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(2, searchQuery != null && !searchQuery.isBlank()? "%" + searchQuery + "%" : null);
+            statement.setString(1, "%" + searchQuery + "%");
+            statement.setString(4, categoryId != null && !categoryId.isBlank() ? categoryId : null);
+            statement.setString(3, categoryId);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    total = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return total;
+    }
 }
