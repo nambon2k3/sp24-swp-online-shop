@@ -56,6 +56,18 @@
                         <div class="col-12">
                             <h1 class="color-gray border-bottom pb-3">Post Management</h1>
                             <div class="card mt-4 p-3">
+                                <c:if test="${isSuccess ne null && isSuccess}">
+                                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
+                                        <strong>Save success!</strong> You should check in on some of those fields below.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
+                                <c:if test="${isSuccess ne null && !isSuccess}">
+                                    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
+                                        <strong>Save failed!</strong> You should check your network.
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
                                 <div class="card-header">
                                     List post
                                 </div>
@@ -136,6 +148,7 @@
                                     <thead class="text-bold">
                                         <tr>
                                             <td>#</td>
+                                            <td>Thumbnail</td>
                                             <td>Title</td>
                                             <td>Brief</td>
                                             <td>Category</td>
@@ -148,6 +161,7 @@
                                         <c:forEach var="post" items="${posts}">
                                             <tr>
                                                 <td>${post.id}</td>
+                                                <td><img src="${post.imgURL}" alt="alt" width="100px" height="100px"/></td>
                                                 <td>${post.title}</td>
                                                 <td>${fn:substring(post.content, 0, 50)}...</td>
                                                 <td>
@@ -184,18 +198,7 @@
                                             </c:if>
                                     </ul>
                                 </nav>
-                                <c:if test="${isSuccess ne null && isSuccess}">
-                                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                                        <strong>Save success!</strong> You should check in on some of those fields below.
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                </c:if>
-                                <c:if test="${isSuccess ne null && !isSuccess}">
-                                    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                                        <strong>Save failed!</strong> You should check in on some of those fields below.
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                </c:if>
+                                
 
                             </div>
                         </div>
@@ -213,6 +216,10 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+                            <div class="form-group">
+                                <label for="postImgURL">Thumbnail Link:</label>
+                                <input type="text" class="form-control" id="postImgURL" name="imgURL" required>
+                            </div>
                             <div class="form-group">
                                 <label for="postTitle">Title</label>
                                 <input type="text" class="form-control" id="postTitle" name="title" required>

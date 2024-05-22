@@ -22,6 +22,7 @@ public class Post {
     private Timestamp createdAt;
     private int createdBy;
     private String authorName; 
+    private String imgURL;
 
     // Constructor
     public Post(int id, int categoryId, String title, String content, boolean isDeleted, Timestamp createdAt, int createdBy, String authorName) {
@@ -124,6 +125,15 @@ public class Post {
     public String getCategoryName() {
         return new CategoryDAO().getCategoryNameById(categoryId);
     }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
+    }
+    
 
     @Override
     public String toString() {

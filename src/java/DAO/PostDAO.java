@@ -33,7 +33,7 @@ public class PostDAO extends DBContext {
     public List<Post> getPosts(int page, int pageSize, String category, String author, String status, String search, String sortBy, String sortOrder) {
         List<Post> posts = new ArrayList<>();
         int offset = (page - 1) * pageSize;
-        StringBuilder query = new StringBuilder("SELECT po.ID, po.[CategoryId], po.Title, po.Content, po.IsDeleted, po.CreatedAt, u.Fullname as AuthorName "
+        StringBuilder query = new StringBuilder("SELECT po.ID, po.[CategoryId], po.Title, po.Content, po.IsDeleted, po.CreatedAt, po.imgURL, u.Fullname as AuthorName "
                 + "FROM [dbo].[Post] po "
                 + "JOIN [dbo].[User] u ON po.CreatedBy = u.ID "
                 + "JOIN [dbo].[Category] c ON po.CategoryId = c.ID "
@@ -85,6 +85,7 @@ public class PostDAO extends DBContext {
                 Timestamp createdAt = rs.getTimestamp("CreatedAt");
                 String authorName = rs.getString("AuthorName");
                 Post post = new Post(id, categoryId, title, content, isDeleted, createdAt, authorName);
+                post.setImgURL(rs.getString("imgURL"));
                 posts.add(post);
             }
         } catch (SQLException e) {
@@ -142,9 +143,7 @@ public class PostDAO extends DBContext {
     public List<Category> getUniqueCategories() {
         List<Category> categories = new ArrayList<>();
         String query = "SELECT DISTINCT c.ID, c.Name "
-                + "FROM [dbo].[Post] po "
-                + "JOIN [dbo].[Category] c "
-                + "ON po.CategoryId = c.ID "
+                + "FROM [dbo].[Category] c "
                 + "WHERE c.IsDeleted = 0";
 
         try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
@@ -174,13 +173,14 @@ public class PostDAO extends DBContext {
         return authors;
     }
 
-    public boolean createPost(String title, String content, String category, int createdBy) {
-        String query = "INSERT INTO [dbo].[Post] (Title, Content, categoryid, IsDeleted, CreatedAt, CreatedBy) VALUES (?, ?, ?, 0, GETDATE(), ?)";
+    public boolean createPost(String title, String content, String category, int createdBy, String imgURL) {
+        String query = "INSERT INTO [dbo].[Post] (Title, Content, categoryid, IsDeleted, CreatedAt, CreatedBy, imgURL) VALUES (?, ?, ?, 0, GETDATE(), ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query);) {
             stmt.setString(1, title);
             stmt.setString(2, content);
             stmt.setInt(3, Integer.parseInt(category));
             stmt.setInt(4, createdBy);
+            stmt.setString(5, imgURL);
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {
@@ -228,14 +228,15 @@ public class PostDAO extends DBContext {
     }
     
     
-    public boolean updatePost(int postId, String title, String content, int categoryId) {
+    public boolean updatePost(int postId, String title, String content, int categoryId, String imgURL) {
         // SQL query to update the post
-            String query = "UPDATE [dbo].[Post] SET Title = ?, Content = ?, CategoryId = ? WHERE ID = ?";
+            String query = "UPDATE [dbo].[Post] SET Title = ?, Content = ?, CategoryId = ?, imgURL = ? WHERE ID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query);){
             stmt.setString(1, title);
             stmt.setString(2, content);
             stmt.setInt(3, categoryId);
-            stmt.setInt(4, postId);
+            stmt.setString(3, imgURL);
+            stmt.setInt(5, postId);
 
             // Execute the update query
             int rowsUpdated = stmt.executeUpdate();

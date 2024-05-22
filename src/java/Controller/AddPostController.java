@@ -75,10 +75,11 @@ public class AddPostController extends HttpServlet {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
         String category = request.getParameter("category");
+        String imgURL = request.getParameter("imgURL");
         // Assuming you have a way to get the current user ID
         //int createdBy = ((User) request.getSession().getAttribute("user")).getId();
         int createdBy = 1; //need delete
-        boolean isSuccess = new PostDAO().createPost(title, content, category, createdBy);
+        boolean isSuccess = new PostDAO().createPost(title, content, category, createdBy, imgURL);
         response.sendRedirect("list-post?isSuccess=" + isSuccess);
     }
 

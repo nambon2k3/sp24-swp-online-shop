@@ -76,7 +76,8 @@ public class UpdatePostController extends HttpServlet {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
         int categoryId = Integer.parseInt(request.getParameter("category"));
-        boolean isSuccess = new PostDAO().updatePost(postId, title, content, categoryId);
+        String imgURL = request.getParameter("imgURL");
+        boolean isSuccess = new PostDAO().updatePost(postId, title, content, categoryId, imgURL);
         response.sendRedirect("list-post?isSuccess=" + isSuccess);
         
     }
