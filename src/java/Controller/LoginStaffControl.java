@@ -75,11 +75,14 @@ public class LoginStaffControl extends HttpServlet {
             // Login successful
             request.getSession().setAttribute("staff", staff); 
 
-            response.sendRedirect("home");
+            if (staff.getRole() == 1) response.sendRedirect("admin/dashboard");
+            if (staff.getRole() == 2) response.sendRedirect("marketing/dashboard");
+            if (staff.getRole() == 3 || staff.getRole() == 4) response.sendRedirect("sale/dashboard");
+//            response.sendRedirect("home");
         } else {
             // Login failed
             request.setAttribute("errorMessage", "Invalid email or password");
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            request.getRequestDispatcher("LoginStaff.jsp").forward(request, response);
         }
     }
 
