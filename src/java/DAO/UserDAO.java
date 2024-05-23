@@ -28,7 +28,7 @@ public class UserDAO {
 
     // Create (Register)
     public boolean registerUser(User user) {
-        String query = "INSERT INTO [User] (Email, Password, Fullname, Gender, Address, Phone, CreatedBy) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO [User] (Email, Password, Fullname, Gender, Address, Phone, CreatedBy, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, user.getEmail());
@@ -38,6 +38,7 @@ public class UserDAO {
             ps.setString(5, user.getAddress());
             ps.setString(6, user.getPhone());
             ps.setInt(7, user.getCreatedBy());
+            ps.setString(8, user.getAvatar());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
@@ -67,6 +68,7 @@ public class UserDAO {
                 user.setIsDeleted(rs.getBoolean("IsDeleted"));
                 user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
                 user.setCreatedBy(rs.getInt("CreatedBy"));
+                user.setAvatar(rs.getString("Avatar"));
                 return user;
             }
         } catch (SQLException e) {
@@ -96,6 +98,7 @@ public class UserDAO {
                 user.setIsDeleted(rs.getBoolean("IsDeleted"));
                 user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
                 user.setCreatedBy(rs.getInt("CreatedBy"));
+                user.setAvatar(rs.getString("Avatar"));
                 return user;
             }
         } catch (SQLException e) {
@@ -129,6 +132,7 @@ public class UserDAO {
                 user.setIsDeleted(rs.getBoolean("IsDeleted"));
                 user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
                 user.setCreatedBy(rs.getInt("CreatedBy"));
+                user.setAvatar(rs.getString("Avatar"));
                 userList.add(user);
             }
         } catch (SQLException e) {
@@ -161,6 +165,7 @@ public class UserDAO {
                 user.setIsDeleted(rs.getBoolean("IsDeleted"));
                 user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
                 user.setCreatedBy(rs.getInt("CreatedBy"));
+                user.setAvatar(rs.getString("Avatar"));
                 userList.add(user);
             }
         } catch (SQLException e) {
@@ -203,6 +208,7 @@ public class UserDAO {
                 user.setIsDeleted(rs.getBoolean("IsDeleted"));
                 user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
                 user.setCreatedBy(rs.getInt("CreatedBy"));
+                user.setAvatar(rs.getString("Avatar"));
                 filteredUserList.add(user);
             }
         } catch (SQLException e) {
@@ -213,7 +219,7 @@ public class UserDAO {
 
     // Update (Update User)
     public boolean updateUser(User user) {
-        String query = "UPDATE [User] SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=? WHERE ID=?";
+        String query = "UPDATE [User] SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=?, Avatar=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, user.getEmail());
@@ -225,6 +231,7 @@ public class UserDAO {
             ps.setBoolean(7, user.isIsDeleted());
             ps.setInt(8, user.getCreatedBy());
             ps.setInt(9, user.getId());
+            ps.setString(10, user.getAvatar());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
@@ -271,6 +278,7 @@ public class UserDAO {
                 user.setIsDeleted(rs.getBoolean("IsDeleted"));
                 user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime());
                 user.setCreatedBy(rs.getInt("CreatedBy"));
+                user.setAvatar(rs.getString("Avatar"));
                 return user;
             }
         } catch (SQLException e) {

@@ -40,6 +40,8 @@ public class ProfileController extends HttpServlet {
         String gender = request.getParameter("gender");
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
+        String avatar = request.getParameter("avatar");
+
         
         User user = new UserDAO().getUserById(id);
         user.setId(id);
@@ -49,6 +51,7 @@ public class ProfileController extends HttpServlet {
         user.setGender(gender);
         user.setAddress(address);
         user.setPhone(phone);
+        user.setAvatar(avatar);
               
         new UserDAO().updateUser(user);
         

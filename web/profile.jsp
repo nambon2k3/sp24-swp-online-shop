@@ -31,17 +31,24 @@
                     <!-- Hidden Fields -->
                     <input type="hidden" id="id" name="id" value="${user.id}">
                     <input type="hidden" id="password" name="password" value="${user.password}">
+                    
+                    <!-- Profile Image -->
+                    <div class="form-group text-center">
+                        <label for="profileImage">Profile Image:</label><br>
+                        <img src="${user.avatar}" class="img-thumbnail mb-3" alt="Profile Image" style="width: 150px; height: 150px;">
+                        <input type="text" class="form-control" id="avatar" name="avatar" value="${user.avatar}">
+                    </div>
 
                     <!-- Email -->
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" value="${user.email}">
+                        <input type="email" class="form-control" id="email" name="email" value="${user.email}" required>
                     </div>
 
                     <!-- Full Name -->
                     <div class="form-group">
                         <label for="fullname">Full Name:</label>
-                        <input type="text" class="form-control" id="fullname" name="fullname" value="${user.fullname}">
+                        <input type="text" class="form-control" id="fullname" name="fullname" value="${user.fullname}" required>
                     </div>
 
                     <!-- Gender -->
@@ -56,13 +63,13 @@
                     <!-- Address -->
                     <div class="form-group">
                         <label for="address">Address:</label>
-                        <input type="text" class="form-control" id="address" name="address" value="${user.address}">
+                        <input type="text" class="form-control" id="address" name="address" value="${user.address}" required>
                     </div>
 
                     <!-- Phone -->
                     <div class="form-group">
                         <label for="phone">Phone:</label>
-                        <input type="tel" class="form-control" id="phone" name="phone" value="${user.phone}">
+                        <input type="tel" class="form-control" id="phone" name="phone" value="${user.phone}" required>
                     </div>
 
                     <!-- Submit Button -->
@@ -70,6 +77,9 @@
 
                     <!-- Go Back Button -->
                     <button type="button" onclick="window.history.back()" class="btn btn-secondary">Go Back</button>
+                    
+                    <br>
+                    <a href="change-pass" class="btn btn-warning mt-3">Change password</a>
                 </form>
             </div>
         </div>

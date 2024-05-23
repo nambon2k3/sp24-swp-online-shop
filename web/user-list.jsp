@@ -44,6 +44,10 @@
                     <input type="text" class="form-control" name="email" placeholder="Email">
                 </div>
                 <div class="form-group mr-2">
+                    <input type="text" class="form-control" name="phone" placeholder="Phone">
+                </div>
+                
+                <div class="form-group mr-2">
                     <select class="form-control" name="role">
                         <option value="">Select Role</option>
                         <option value="1">Admin</option>
@@ -59,7 +63,8 @@
                         <option value="Female">Female</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Search</button>
+                
+                <button type="submit" class="btn btn-primary mt-3">Search</button>
             </form>
 
 
@@ -72,6 +77,8 @@
                         <th>Role</th>
                         <th>Gender</th>
                         <th>Address</th>
+                        <th>Phone</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -84,6 +91,8 @@
                             <td>${user.roleString}</td>
                             <td>${user.gender}</td>
                             <td>${user.address}</td>
+                            <td>${user.phone}</td>
+                            <td>${user.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userInfoModal_${user.id}">Info</button>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal_${user.id}">Edit</button>
@@ -273,7 +282,7 @@
                     "paging": false,
                     "lengthChange": false,
                     "searching": false,
-                    "ordering": false,
+                    "ordering": true,
                     "info": false,
                     "autoWidth": false
                 });

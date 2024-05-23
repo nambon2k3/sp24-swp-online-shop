@@ -18,6 +18,7 @@ public class User {
     private boolean isDeleted;
     private LocalDateTime createdAt;
     private int createdBy;
+    private String avatar;
 
     public int getId() {
         return id;
@@ -99,4 +100,12 @@ public class User {
         this.createdBy = createdBy;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+    
 }

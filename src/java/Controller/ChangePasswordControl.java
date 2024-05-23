@@ -18,12 +18,15 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author lvhn1
  */
-@WebServlet(name = "ChangePasswordControl", urlPatterns = {"/common/change-password"})
+@WebServlet(name = "ChangePasswordControl", urlPatterns = {"/common/change-pass"})
 public class ChangePasswordControl extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        request.getRequestDispatcher("../change-pass.jsp").forward(request, response);
+        
     }
 
     @Override
@@ -42,9 +45,9 @@ public class ChangePasswordControl extends HttpServlet {
             user.setPassword(password);
             new UserDAO().updateUser(user);
             
-            response.sendRedirect("change-pass?successcp");
+            response.sendRedirect("change-pass?success");
 
-        } else response.sendRedirect("change-pass?failcp");
+        } else response.sendRedirect("change-pass?fail");
 
         
     }

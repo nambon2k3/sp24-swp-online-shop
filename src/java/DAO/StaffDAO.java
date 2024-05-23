@@ -173,7 +173,7 @@ public class StaffDAO {
         return staffList;
     }
 
-    public List<Staff> getFilteredStaff(String fullName, String email, int role, String gender, int pageNumber, int pageSize) {
+    public List<Staff> getFilteredStaff(String fullName, String email, String phone, int role, String gender, int pageNumber, int pageSize) {
         List<Staff> filteredUserList = new ArrayList<>();
         String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [Staff] WHERE 1=1";
         // Add filter conditions
@@ -182,6 +182,9 @@ public class StaffDAO {
         }
         if (email != null && !email.isEmpty()) {
             query += " AND Email LIKE '%" + email + "%'";
+        }
+        if (phone != null && !phone.isEmpty()) {
+            query += " AND Phone LIKE '%" + phone + "%'";
         }
         if (role != -1) {
             query += " AND Role = " + role;

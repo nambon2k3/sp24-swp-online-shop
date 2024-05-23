@@ -38,12 +38,13 @@ public class AdminUserControl extends HttpServlet {
         // Filter parameters
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
         String roleString = request.getParameter("role");
         int role = (roleString==null || roleString.isEmpty()) ? -1 : Integer.parseInt(roleString);
         String gender = request.getParameter("gender");
 
         // Perform filtering based on the provided parameters
-        List<Staff> filteredStaffList = staffDAO.getFilteredStaff(fullName, email, role, gender, pageNumber, pageSize);
+        List<Staff> filteredStaffList = staffDAO.getFilteredStaff(fullName, email, phone, role, gender, pageNumber, pageSize);
 
         // Get total number of staffs matching the filter criteria
         int totalStaffs = staffDAO.getFilteredStaff(fullName, email, role, gender).size();

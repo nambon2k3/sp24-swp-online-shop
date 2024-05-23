@@ -2,125 +2,62 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
-    <!-- Bootstrap CDN -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <div class="card">
-            <div class="card-header">
-                Profile
-            </div>
-            <c:if test="${param.success ne null}">
-                <div class="alert alert-success" role="alert">
-                    Success!
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Change Password</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+
+            <div class="card">
+                <div class="card-header">
+                    Change password
                 </div>
-            </c:if>
-            <c:if test="${param.fail ne null}">
-                <div class="alert alert-danger" role="alert">
-                    Failed!
+                <c:if test="${param.success ne null}">
+                    <div class="alert alert-success" role="alert">
+                        Success!
+                    </div>
+                </c:if>
+                <c:if test="${param.fail ne null}">
+                    <div class="alert alert-danger" role="alert">
+                        Failed!
+                    </div>
+                </c:if>
+                <div class="card-body">
+                    <form id="profileForm" action="change-pass" method="post">
+                        <!-- Hidden Fields -->
+                        <input type="hidden" id="id" name="id" value="${user.id}">
+                        <input type="hidden" id="password" name="check-password" value="${user.password}">
+
+                        <div class="form-group">
+                            <label for="email">Old password:</label>
+                            <input type="password" class="form-control" name="oldpassword" value="" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">New password:</label>
+                            <input type="password" class="form-control" name="password" value="" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Retype password:</label>
+                            <input type="password" class="form-control" name="repassword" value="" required>
+                        </div>
+                        
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                        <!-- Go Back Button -->
+                        <a href="profile" class="btn btn-secondary">Go Back</a>
+                    </form>
                 </div>
-            </c:if>
-            <div class="card-body">
-                <form id="profileForm" onsubmit="return validateForm()" action="profile" method="post">
-                    <!-- Hidden Fields -->
-                    <input type="hidden" id="id" name="id" value="${user.id}">
-                    <input type="hidden" id="password" name="password" value="${user.password}">
-
-                    <!-- Email -->
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" value="${user.email}">
-                    </div>
-
-                    <!-- Full Name -->
-                    <div class="form-group">
-                        <label for="fullname">Full Name:</label>
-                        <input type="text" class="form-control" id="fullname" name="fullname" value="${user.fullname}">
-                    </div>
-
-                    <!-- Gender -->
-                    <div class="form-group">
-                        <label for="gender">Gender:</label>
-                        <select class="form-control" name="gender" id="gender">
-                            <option value="Male" ${user.gender eq 'Male' ? 'selected' : ''}>Male</option>
-                            <option value="Female" ${user.gender eq 'Female' ? 'selected' : ''}>Female</option>
-                        </select>
-                    </div>
-
-                    <!-- Address -->
-                    <div class="form-group">
-                        <label for="address">Address:</label>
-                        <input type="text" class="form-control" id="address" name="address" value="${user.address}">
-                    </div>
-
-                    <!-- Phone -->
-                    <div class="form-group">
-                        <label for="phone">Phone:</label>
-                        <input type="tel" class="form-control" id="phone" name="phone" value="${user.phone}">
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Submit</button>
-
-                    <!-- Go Back Button -->
-                    <button type="button" onclick="window.history.back()" class="btn btn-secondary">Go Back</button>
-                </form>
             </div>
         </div>
-    </div>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Validation Script -->
-    <script>
-        function validateForm() {
-            let email = document.getElementById('email').value;
-            let fullname = document.getElementById('fullname').value;
-            let gender = document.getElementById('gender').value;
-            let address = document.getElementById('address').value;
-            let phone = document.getElementById('phone').value;
-
-            if (!validateEmail(email)) {
-                alert("Please enter a valid email address.");
-                return false;
-            }
-            if (fullname.trim() === "") {
-                alert("Full name is required.");
-                return false;
-            }
-            if (gender !== "Male" && gender !== "Female") {
-                alert("Please select a valid gender.");
-                return false;
-            }
-            if (address.trim() === "") {
-                alert("Address is required.");
-                return false;
-            }
-            if (!validatePhone(phone)) {
-                alert("Please enter a valid phone number.");
-                return false;
-            }
-            return true;
-        }
-
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(String(email).toLowerCase());
-        }
-
-        function validatePhone(phone) {
-            const re = /^\d{10}$/;
-            return re.test(phone);
-        }
-    </script>
-</body>
+    </body>
 </html>
