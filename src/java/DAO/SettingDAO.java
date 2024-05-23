@@ -51,12 +51,15 @@ public class SettingDAO {
             ps.setInt(1, settingID);
             rs = ps.executeQuery();
             if (rs.next()) {
-                return new Setting(
+                Setting setting = new Setting(
                         rs.getInt("ID"),
                         rs.getString("Type"),
                         rs.getString("Value"),
                         rs.getInt("Order")
                 );
+                
+                setting.setIsDeleted(rs.getBoolean("isDeleted"));
+                return setting;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,13 +69,14 @@ public class SettingDAO {
 
     // Update
     public boolean updateSetting(Setting setting) {
-        String query = "UPDATE Settings SET Type=?, Value=?, [Order]=? WHERE ID=?";
+        String query = "UPDATE Settings SET Type=?, Value=?, [Order]=?, [isDeleted]=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, setting.getType());
             ps.setString(2, setting.getValue());
             ps.setInt(3, setting.getOrder());
-            ps.setInt(4, setting.getID());
+            ps.setBoolean(4, setting.getIsDeleted());
+            ps.setInt(5, setting.getID());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
@@ -108,6 +112,7 @@ public class SettingDAO {
                 setting.setType(rs.getString("Type"));
                 setting.setValue(rs.getString("Value"));
                 setting.setOrder(rs.getInt("Order"));
+                setting.setIsDeleted(rs.getBoolean("isDeleted"));
                 settingsList.add(setting);
             }
         } catch (SQLException e) {
@@ -133,6 +138,7 @@ public class SettingDAO {
                 setting.setType(rs.getString("Type"));
                 setting.setValue(rs.getString("Value"));
                 setting.setOrder(rs.getInt("Order"));
+                setting.setIsDeleted(rs.getBoolean("isDeleted"));
                 settingsList.add(setting);
             }
         } catch (SQLException e) {

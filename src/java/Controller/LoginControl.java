@@ -72,9 +72,10 @@ public class LoginControl extends HttpServlet {
         User user = userDAO.loginUser(email, password);
 
         if (user != null) {
-            // Login successful
+            // save user info to session
             request.getSession().setAttribute("user", user); 
 
+            
             response.sendRedirect("home");
         } else {
             // Login failed

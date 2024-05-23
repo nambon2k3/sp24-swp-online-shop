@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [swp-online-shop]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Database [swp-online-shop]    Script Date: 5/23/2024 11:37:20 PM ******/
 CREATE DATABASE [swp-online-shop]
 GO
 ALTER DATABASE [swp-online-shop] SET COMPATIBILITY_LEVEL = 150
@@ -76,7 +76,7 @@ ALTER DATABASE [swp-online-shop] SET QUERY_STORE = OFF
 GO
 USE [swp-online-shop]
 GO
-/****** Object:  Table [dbo].[Cart]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Cart]    Script Date: 5/23/2024 11:37:20 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -95,7 +95,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Category]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Category]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -112,7 +112,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Feedback]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Feedback]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -131,7 +131,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Order]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Order]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -152,7 +152,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderDetail]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[OrderDetail]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -170,7 +170,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Post]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Post]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -190,7 +190,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Product]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Product]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -209,7 +209,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductDetail]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[ProductDetail]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -232,7 +232,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Role]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Role]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -248,7 +248,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Settings]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Settings]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -258,10 +258,11 @@ CREATE TABLE [dbo].[Settings](
 	[Type] [varchar](50) NULL,
 	[Value] [varchar](150) NULL,
 	[Order] [int] NULL,
-	[CreatedBy] [int] NULL
+	[CreatedBy] [int] NULL,
+	[isDeleted] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Slider]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Slider]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -279,7 +280,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Staff]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[Staff]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -296,13 +297,14 @@ CREATE TABLE [dbo].[Staff](
 	[IsDeleted] [bit] NULL,
 	[CreatedAt] [datetime] NULL,
 	[CreatedBy] [int] NULL,
+	[Avatar] [text] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[User]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Table [dbo].[User]    Script Date: 5/23/2024 11:37:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -533,49 +535,49 @@ SET IDENTITY_INSERT [dbo].[Role] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Settings] ON 
 GO
-INSERT [dbo].[Settings] ([ID], [Type], [Value], [Order], [CreatedBy]) VALUES (1, N'test', N'test', 1, 1)
+INSERT [dbo].[Settings] ([ID], [Type], [Value], [Order], [CreatedBy], [isDeleted]) VALUES (1, N'test', N'test', 1, 1, 1)
 GO
-INSERT [dbo].[Settings] ([ID], [Type], [Value], [Order], [CreatedBy]) VALUES (2, N'test2', N'test2', 2, 1)
+INSERT [dbo].[Settings] ([ID], [Type], [Value], [Order], [CreatedBy], [isDeleted]) VALUES (2, N'test2', N'test2', 2, 1, 0)
 GO
 SET IDENTITY_INSERT [dbo].[Settings] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Staff] ON 
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (1, N'a', N'a', N'John Doe', N'Male', N'1234 Elm Street, Springfield, IL', N'123-456-7890', 1, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 1)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (1, N'a@a.a', NULL, N'John Doe', N'Male', N'1234 Elm Street, Springfield, IL', N'123-456-7890', 1, 1, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 1, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (2, N'user2@example.com', N'hashed_password2', N'Jane Doe', N'Female', N'2345 Oak Street, Springfield, IL', N'234-567-8901', 2, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 2)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (2, N'user2@example.com', N'hashed_password2', N'Jane Doe', N'Female', N'2345 Oak Street, Springfield, IL', N'234-567-8901', 2, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 2, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (3, N'user3@example.com', N'hashed_password3', N'Jim Beam', N'Male', N'3456 Pine Street, Springfield, IL', N'345-678-9012', 3, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 3)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (3, N'user3@example.com', N'hashed_password3', N'Jim Beam', N'Male', N'3456 Pine Street, Springfield, IL', N'345-678-9012', 3, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 3, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (4, N'user4@example.com', N'hashed_password4', N'Jack Daniels', N'Male', N'4567 Maple Street, Springfield, IL', N'456-789-0123', 4, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 4)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (4, N'user4@example.com', N'hashed_password4', N'Jack Daniels', N'Male', N'4567 Maple Street, Springfield, IL', N'456-789-0123', 4, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 4, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (5, N'user5@example.com', N'hashed_password5', N'Johnny Walker', N'Male', N'5678 Cedar Street, Springfield, IL', N'567-890-1234', 1, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 1)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (5, N'user5@example.com', N'hashed_password5', N'Johnny Walker', N'Male', N'5678 Cedar Street, Springfield, IL', N'567-890-1234', 1, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 1, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (6, N'user6@example.com', N'hashed_password6', N'Jill Valentine', N'Female', N'6789 Birch Street, Springfield, IL', N'678-901-2345', 2, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 2)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (6, N'user6@example.com', N'hashed_password6', N'Jill Valentine', N'Female', N'6789 Birch Street, Springfield, IL', N'678-901-2345', 2, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 2, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (7, N'user7@example.com', N'hashed_password7', N'Chris Redfield', N'Male', N'7890 Spruce Street, Springfield, IL', N'789-012-3456', 3, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 3)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (7, N'user7@example.com', N'hashed_password7', N'Chris Redfield', N'Male', N'7890 Spruce Street, Springfield, IL', N'789-012-3456', 3, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 3, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (8, N'user8@example.com', N'hashed_password8', N'Claire Redfield', N'Female', N'8901 Redwood Street, Springfield, IL', N'890-123-4567', 4, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 4)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (8, N'user8@example.com', N'hashed_password8', N'Claire Redfield', N'Female', N'8901 Redwood Street, Springfield, IL', N'890-123-4567', 4, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 4, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (9, N'user9@example.com', N'hashed_password9', N'Leon Kennedy', N'Male', N'9012 Sequoia Street, Springfield, IL', N'901-234-5678', 1, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 1)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (9, N'user9@example.com', N'hashed_password9', N'Leon Kennedy', N'Male', N'9012 Sequoia Street, Springfield, IL', N'901-234-5678', 1, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 1, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (10, N'user10@example.com', N'hashed_password10', N'Ada Wong', N'Female', N'0123 Cypress Street, Springfield, IL', N'012-345-6789', 2, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 2)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (10, N'user10@example.com', N'hashed_password10', N'Ada Wong', N'Female', N'0123 Cypress Street, Springfield, IL', N'012-345-6789', 2, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 2, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (11, N'user11@example.com', N'hashed_password11', N'Albert Wesker', N'Male', N'1234 Fir Street, Springfield, IL', N'123-456-7891', 3, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 3)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (11, N'user11@example.com', N'hashed_password11', N'Albert Wesker', N'Male', N'1234 Fir Street, Springfield, IL', N'123-456-7891', 3, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 3, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (12, N'user12@example.com', N'hashed_password12', N'Rebecca Chambers', N'Female', N'2345 Hemlock Street, Springfield, IL', N'234-567-8902', 4, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 4)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (12, N'user12@example.com', N'hashed_password12', N'Rebecca Chambers', N'Female', N'2345 Hemlock Street, Springfield, IL', N'234-567-8902', 4, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 4, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (13, N'user13@example.com', N'hashed_password13', N'Barry Burton', N'Male', N'3456 Palm Street, Springfield, IL', N'345-678-9013', 1, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 1)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (13, N'user13@example.com', N'hashed_password13', N'Barry Burton', N'Male', N'3456 Palm Street, Springfield, IL', N'345-678-9013', 1, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 1, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (14, N'user14@example.com', N'hashed_password14', N'Sherry Birkin', N'Female', N'4567 Mahogany Street, Springfield, IL', N'456-789-0124', 2, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 2)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (14, N'user14@example.com', N'hashed_password14', N'Sherry Birkin', N'Female', N'4567 Mahogany Street, Springfield, IL', N'456-789-0124', 2, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 2, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
-INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy]) VALUES (15, N'user15@example.com', N'hashed_password15', N'HUNK', N'Male', N'5678 Teak Street, Springfield, IL', N'567-890-1235', 3, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 3)
+INSERT [dbo].[Staff] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [Role], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (15, N'user15@example.com', N'hashed_password15', N'HUNK', N'Male', N'5678 Teak Street, Springfield, IL', N'567-890-1235', 3, 0, CAST(N'2024-05-22T23:21:10.153' AS DateTime), 3, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
 SET IDENTITY_INSERT [dbo].[Staff] OFF
 GO
 SET IDENTITY_INSERT [dbo].[User] ON 
 GO
-INSERT [dbo].[User] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (1, N'a', N'a', N'John Doe', N'Male', N'123 Main St', N'1234567890', 0, CAST(N'2024-05-19T10:53:56.770' AS DateTime), 1, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
+INSERT [dbo].[User] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (1, N'a', N'123456', N'John Doe', N'Male', N'123 Main St', N'1234567890', 0, CAST(N'2024-05-19T10:53:56.770' AS DateTime), 1, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
 INSERT [dbo].[User] ([ID], [Email], [Password], [Fullname], [Gender], [Address], [Phone], [IsDeleted], [CreatedAt], [CreatedBy], [Avatar]) VALUES (2, N'user2', N'pass2', N'Jane Smith', N'Female', N'456 Elm St', N'0987654321', 0, CAST(N'2024-05-19T10:53:56.770' AS DateTime), 1, N'https://www.svgrepo.com/show/452030/avatar-default.svg')
 GO
@@ -583,7 +585,7 @@ SET IDENTITY_INSERT [dbo].[User] OFF
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Staff__A9D105344C14B5E7]    Script Date: 5/23/2024 8:57:08 PM ******/
+/****** Object:  Index [UQ__Staff__A9D105344C14B5E7]    Script Date: 5/23/2024 11:37:21 PM ******/
 ALTER TABLE [dbo].[Staff] ADD UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
@@ -591,7 +593,7 @@ ALTER TABLE [dbo].[Staff] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__User__A9D105342F405FD3]    Script Date: 5/23/2024 8:57:09 PM ******/
+/****** Object:  Index [UQ__User__A9D105342F405FD3]    Script Date: 5/23/2024 11:37:21 PM ******/
 ALTER TABLE [dbo].[User] ADD UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
@@ -639,6 +641,8 @@ ALTER TABLE [dbo].[Role] ADD  DEFAULT (getdate()) FOR [CreatedAt]
 GO
 ALTER TABLE [dbo].[Settings] ADD  DEFAULT ((1)) FOR [CreatedBy]
 GO
+ALTER TABLE [dbo].[Settings] ADD  DEFAULT ((0)) FOR [isDeleted]
+GO
 ALTER TABLE [dbo].[Slider] ADD  DEFAULT ((0)) FOR [IsDeleted]
 GO
 ALTER TABLE [dbo].[Slider] ADD  DEFAULT (getdate()) FOR [CreatedAt]
@@ -646,6 +650,8 @@ GO
 ALTER TABLE [dbo].[Staff] ADD  DEFAULT ((0)) FOR [IsDeleted]
 GO
 ALTER TABLE [dbo].[Staff] ADD  DEFAULT (getdate()) FOR [CreatedAt]
+GO
+ALTER TABLE [dbo].[Staff] ADD  DEFAULT ('https://www.svgrepo.com/show/452030/avatar-default.svg') FOR [Avatar]
 GO
 ALTER TABLE [dbo].[User] ADD  DEFAULT ((0)) FOR [IsDeleted]
 GO

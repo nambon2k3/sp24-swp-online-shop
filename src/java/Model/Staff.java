@@ -14,6 +14,7 @@ public class Staff {
     private boolean isDeleted;
     private Date createdAt;
     private int createdBy;
+    private String avatar;
 
     public int getId() {
         return id;
@@ -103,6 +104,14 @@ public class Staff {
         this.createdBy = createdBy;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+    
     public void setRoleInt(String role) {
         if (role == "Admin") this.role = 1;
         if (role == "Marketing") this.role = 2;

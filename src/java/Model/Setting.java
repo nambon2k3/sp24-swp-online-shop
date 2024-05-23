@@ -14,6 +14,7 @@ public class Setting {
     private String type;
     private String value;
     private int order;
+    private boolean isDeleted;
 
     public Setting() {
     }
@@ -55,6 +56,22 @@ public class Setting {
 
     public void setOrder(int order) {
         this.order = order;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
 }

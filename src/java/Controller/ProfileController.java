@@ -44,6 +44,7 @@ public class ProfileController extends HttpServlet {
 
         
         User user = new UserDAO().getUserById(id);
+        
         user.setId(id);
         user.setEmail(email);
         user.setPassword(password);

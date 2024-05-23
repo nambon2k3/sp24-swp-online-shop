@@ -6,6 +6,7 @@ package Controller;
 
 import DAO.UserDAO;
 import Model.User;
+import Utils.EmailService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -124,7 +125,8 @@ public class RegisterControl extends HttpServlet {
                     + request.getContextPath() + "/verify?otp=" + otp + "&email=" + email;
 
             // Send mail verify
-            sendEmail(email, "Verify email", "Click here to verify: " + verifyLink);
+            EmailService.sendEmail(email, "Verify email", "Click here to verify: " + verifyLink);
+            
             System.out.println(otp);
             // Set register info session
             User user = new User();
@@ -221,49 +223,6 @@ public class RegisterControl extends HttpServlet {
     public int generateRandomSixDigit() {
         Random random = new Random();
         return 100000 + random.nextInt(900000);
-    }
-
-    public boolean sendEmail(String to, String subject, String text) {
-        // URL to which the request will be sent
-        String url = "https://mail-sender-service.vercel.app/send-email";
-
-        try {
-            // Create a URL object
-            URL apiUrl = new URL(url);
-
-            // Open a connection to the URL
-            HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
-
-            // Set the request method
-            connection.setRequestMethod("POST");
-
-            // Enable input/output streams
-            connection.setDoOutput(true);
-
-            // Set the content type
-            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-
-            // Prepare the request payload
-            String payload = "{\"to\":\"" + to + "\",\"subject\":\"" + subject + "\",\"text\":\"" + text + "\"}";
-
-            // Write the payload to the output stream
-            try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = payload.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            // Get the response code
-            int responseCode = connection.getResponseCode();
-
-            // Close the connection
-            connection.disconnect();
-
-            return responseCode == 200;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
 }

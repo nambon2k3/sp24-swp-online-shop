@@ -41,6 +41,7 @@
                         <th>Type</th>
                         <th>Value</th>
                         <th>Order</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -51,6 +52,7 @@
                             <td>${setting.getType()}</td>
                             <td>${setting.getValue()}</td>
                             <td>${setting.getOrder()}</td>
+                            <td>${setting.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSettingModal_${setting.getID()}">Edit</button>
                             </td>
@@ -110,6 +112,13 @@
                                     <label for="order">Order</label>
                                     <input type="number" class="form-control" id="order" name="order" value="${setting.getOrder()}">
                                 </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="false" ${!setting.isDeleted ? "selected" : ""}>Active</option>
+                                        <option value="true" ${setting.isDeleted ? "selected" : ""}>Inactive</option>
+                                    </select>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </form>
                         </div>
@@ -165,7 +174,7 @@
                     "paging": false,
                     "lengthChange": false,
                     "searching": false,
-                    "ordering": false,
+                    "ordering": true,
                     "info": false,
                     "autoWidth": false
                 });

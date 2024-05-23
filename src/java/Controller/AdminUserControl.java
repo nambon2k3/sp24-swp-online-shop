@@ -96,15 +96,15 @@ public class AdminUserControl extends HttpServlet {
         if (staff == null) {
             // Register the staff
             Staff newStaff = new Staff();
-            staff.setEmail(email);
-            staff.setPassword(password);
-            staff.setFullname(fullName);
-            staff.setGender(gender ? "Male" : "Female");
-            staff.setAddress(address);
-            staff.setPhone(phone);
-            staff.setRole(role);
+            newStaff.setEmail(email);
+            newStaff.setPassword(password);
+            newStaff.setFullname(fullName);
+            newStaff.setGender(gender ? "Male" : "Female");
+            newStaff.setAddress(address);
+            newStaff.setPhone(phone);
+            newStaff.setRole(role);
 
-            success = staffDAO.registerStaff(staff);
+            success = staffDAO.registerStaff(newStaff);
 
             EmailService.sendEmail(email, "Account created", "Your password: " + password);
         }
@@ -127,9 +127,10 @@ public class AdminUserControl extends HttpServlet {
         boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
 
         // Create a Staff object with the updated data
-        Staff staff = new Staff();
+        Staff staff = new StaffDAO().getStaffById(staffId);
         staff.setId(staffId);
         staff.setFullname(fullName);
         staff.setEmail(email);
@@ -138,6 +139,7 @@ public class AdminUserControl extends HttpServlet {
         staff.setGender(gender ? "Male" : "Female");
         staff.setAddress(address);
         staff.setPhone(phone);
+        staff.setIsDeleted(status);
 
         // Update the staff
         boolean success = staffDAO.updateStaff(staff);

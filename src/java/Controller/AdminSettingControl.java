@@ -86,9 +86,11 @@ public class AdminSettingControl extends HttpServlet {
         String type = request.getParameter("type");
         String value = request.getParameter("value");
         int order = Integer.parseInt(request.getParameter("order"));
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
 
         // Create a Setting object with the updated data
         Setting setting = new Setting(settingId, type, value, order);
+        setting.setIsDeleted(status);
 
         // Update the setting
         boolean success = settingDAO.updateSetting(setting);

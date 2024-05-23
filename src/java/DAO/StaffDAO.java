@@ -69,6 +69,7 @@ public class StaffDAO {
                 staff.setIsDeleted(rs.getBoolean("IsDeleted"));
                 staff.setCreatedAt(rs.getDate("CreatedAt"));
                 staff.setCreatedBy(rs.getInt("CreatedBy"));
+                staff.setAvatar(rs.getString("Avatar"));
                 return staff;
             }
         } catch (SQLException e) {
@@ -99,6 +100,7 @@ public class StaffDAO {
                 staff.setIsDeleted(rs.getBoolean("IsDeleted"));
                 staff.setCreatedAt(rs.getDate("CreatedAt"));
                 staff.setCreatedBy(rs.getInt("CreatedBy"));
+                staff.setAvatar(rs.getString("Avatar"));
                 return staff;
             }
         } catch (SQLException e) {
@@ -133,6 +135,7 @@ public class StaffDAO {
                 staff.setIsDeleted(rs.getBoolean("IsDeleted"));
                 staff.setCreatedAt(rs.getDate("CreatedAt"));
                 staff.setCreatedBy(rs.getInt("CreatedBy"));
+                staff.setAvatar(rs.getString("Avatar"));
                 staffList.add(staff);
             }
         } catch (SQLException e) {
@@ -163,6 +166,7 @@ public class StaffDAO {
                 staff.setIsDeleted(rs.getBoolean("IsDeleted"));
                 staff.setCreatedAt(rs.getDate("CreatedAt"));
                 staff.setCreatedBy(rs.getInt("CreatedBy"));
+                staff.setAvatar(rs.getString("Avatar"));
                 staffList.add(staff);
             }
         } catch (SQLException e) {
@@ -194,7 +198,6 @@ public class StaffDAO {
         }
         // Add pagination
         query += ") AS SubQuery WHERE RowNum BETWEEN ? AND ?";
-        System.out.println(query);
         int startIndex = (pageNumber - 1) * pageSize + 1;
         int endIndex = pageNumber * pageSize;
         try {
@@ -215,6 +218,7 @@ public class StaffDAO {
                 staff.setIsDeleted(rs.getBoolean("IsDeleted"));
                 staff.setCreatedAt(rs.getDate("CreatedAt"));
                 staff.setCreatedBy(rs.getInt("CreatedBy"));
+                staff.setAvatar(rs.getString("Avatar"));
                 filteredUserList.add(staff);
             }
         } catch (SQLException e) {
@@ -257,6 +261,7 @@ public class StaffDAO {
                 staff.setIsDeleted(rs.getBoolean("IsDeleted"));
                 staff.setCreatedAt(rs.getDate("CreatedAt"));
                 staff.setCreatedBy(rs.getInt("CreatedBy"));
+                staff.setAvatar(rs.getString("Avatar"));
                 filteredUserList.add(staff);
             }
         } catch (SQLException e) {
@@ -327,6 +332,7 @@ public class StaffDAO {
                 staff.setIsDeleted(rs.getBoolean("IsDeleted"));
                 staff.setCreatedAt(rs.getDate("CreatedAt"));
                 staff.setCreatedBy(rs.getInt("CreatedBy"));
+                staff.setAvatar(rs.getString("Avatar"));
                 return staff;
             }
         } catch (SQLException e) {

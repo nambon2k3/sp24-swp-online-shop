@@ -230,8 +230,8 @@ public class UserDAO {
             ps.setString(6, user.getPhone());
             ps.setBoolean(7, user.isIsDeleted());
             ps.setInt(8, user.getCreatedBy());
-            ps.setInt(9, user.getId());
-            ps.setString(10, user.getAvatar());
+            ps.setString(9, user.getAvatar());
+            ps.setInt(10, user.getId());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
