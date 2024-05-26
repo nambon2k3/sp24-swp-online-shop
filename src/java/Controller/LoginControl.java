@@ -74,7 +74,6 @@ public class LoginControl extends HttpServlet {
         if (user != null) {
             // save user info to session
             request.getSession().setAttribute("user", user); 
-
             
             response.sendRedirect("home");
         } else {

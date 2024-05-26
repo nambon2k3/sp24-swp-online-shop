@@ -72,6 +72,12 @@ public class LoginStaffControl extends HttpServlet {
         Staff staff = staffDAO.loginStaff(email, password);
 
         if (staff != null) {
+                
+            if (!staff.isIsDeleted()) {
+                request.setAttribute("errorMessage", "Banned");
+                request.getRequestDispatcher("LoginStaff.jsp").forward(request, response);
+            }
+                
             // Login successful
             request.getSession().setAttribute("staff", staff); 
 

@@ -69,9 +69,10 @@ public class AdminSettingControl extends HttpServlet {
         String type = request.getParameter("type");
         String value = request.getParameter("value");
         int order = Integer.parseInt(request.getParameter("order"));
+        String description = request.getParameter("description");
 
         // Add the setting
-        boolean success = settingDAO.addSetting(type, value, order);
+        boolean success = settingDAO.addSetting(type, value, order, description);
         if (success) {
             // Redirect to setting list page after successful addition
             response.sendRedirect("setting?success");
@@ -87,10 +88,12 @@ public class AdminSettingControl extends HttpServlet {
         String value = request.getParameter("value");
         int order = Integer.parseInt(request.getParameter("order"));
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
+        String description = request.getParameter("description");
 
         // Create a Setting object with the updated data
         Setting setting = new Setting(settingId, type, value, order);
         setting.setIsDeleted(status);
+        setting.setDescription(description);
 
         // Update the setting
         boolean success = settingDAO.updateSetting(setting);

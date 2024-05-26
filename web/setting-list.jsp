@@ -34,6 +34,16 @@
 
             <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addSettingModal">Add Setting</button>
 
+            <!-- Status Filter -->
+            <div class="mb-3">
+                <label for="statusFilter">Filter by Status:</label>
+                <select id="statusFilter" class="form-control" style="width: auto; display: inline-block;">
+                    <option value="">All</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+
             <table id="settingTable" class="table table-striped">
                 <thead>
                     <tr>
@@ -41,6 +51,7 @@
                         <th>Type</th>
                         <th>Value</th>
                         <th>Order</th>
+                        <th>Description</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -52,6 +63,7 @@
                             <td>${setting.getType()}</td>
                             <td>${setting.getValue()}</td>
                             <td>${setting.getOrder()}</td>
+                            <td>${setting.getDescription()}</td>
                             <td>${setting.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSettingModal_${setting.getID()}">Edit</button>
@@ -119,6 +131,10 @@
                                         <option value="true" ${setting.isDeleted ? "selected" : ""}>Inactive</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="order">Description</label>
+                                    <input type="text" class="form-control" id="order" name="description" value="${setting.getDescription()}">
+                                </div>
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </form>
                         </div>
@@ -153,6 +169,10 @@
                                 <label for="order">Order</label>
                                 <input type="number" class="form-control" id="order" name="order" required>
                             </div>
+                            <div class="form-group">
+                                <label for="order">Description</label>
+                                <input type="number" class="form-control" id="order" name="description" required>
+                            </div>
                             <button type="submit" class="btn btn-primary">Add Setting</button>
                         </form>
                     </div>
@@ -170,13 +190,22 @@
 
         <script>
             $(document).ready(function () {
-                $('#settingTable').DataTable({
+                var table = $('#settingTable').DataTable({
                     "paging": false,
                     "lengthChange": false,
-                    "searching": false,
+                    "searching": true,
                     "ordering": true,
                     "info": false,
                     "autoWidth": false
+                });
+
+                $('#statusFilter').on('change', function () {
+                    var selectedStatus = $(this).val();
+                    if (selectedStatus) {
+                        table.columns(5).search('^' + selectedStatus + '$', true, false).draw();
+                    } else {
+                        table.columns(5).search('').draw();
+                    }
                 });
             });
         </script>
