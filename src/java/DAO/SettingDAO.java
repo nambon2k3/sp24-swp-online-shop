@@ -28,13 +28,14 @@ public class SettingDAO {
     }
 
     // Create
-    public boolean addSetting(String type, String value, int order) {
-        String query = "INSERT INTO Settings (Type, Value, [Order]) VALUES (?, ?, ?)";
+    public boolean addSetting(String type, String value, int order, String description) {
+        String query = "INSERT INTO Settings (Type, Value, [Order], description) VALUES (?, ?, ?, ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, type);
             ps.setString(2, value);
             ps.setInt(3, order);
+            ps.setString(4, description);
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
@@ -59,6 +60,7 @@ public class SettingDAO {
                 );
                 
                 setting.setIsDeleted(rs.getBoolean("isDeleted"));
+                setting.setDescription(rs.getString("description"));
                 return setting;
             }
         } catch (SQLException e) {
@@ -69,14 +71,15 @@ public class SettingDAO {
 
     // Update
     public boolean updateSetting(Setting setting) {
-        String query = "UPDATE Settings SET Type=?, Value=?, [Order]=?, [isDeleted]=? WHERE ID=?";
+        String query = "UPDATE Settings SET Type=?, Value=?, [Order]=?, [isDeleted]=?, [description]=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, setting.getType());
             ps.setString(2, setting.getValue());
             ps.setInt(3, setting.getOrder());
             ps.setBoolean(4, setting.getIsDeleted());
-            ps.setInt(5, setting.getID());
+            ps.setString(5, setting.getDescription());
+            ps.setInt(6, setting.getID());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
@@ -113,6 +116,7 @@ public class SettingDAO {
                 setting.setValue(rs.getString("Value"));
                 setting.setOrder(rs.getInt("Order"));
                 setting.setIsDeleted(rs.getBoolean("isDeleted"));
+                setting.setDescription(rs.getString("description"));
                 settingsList.add(setting);
             }
         } catch (SQLException e) {
@@ -139,6 +143,7 @@ public class SettingDAO {
                 setting.setValue(rs.getString("Value"));
                 setting.setOrder(rs.getInt("Order"));
                 setting.setIsDeleted(rs.getBoolean("isDeleted"));
+                setting.setDescription(rs.getString("description"));
                 settingsList.add(setting);
             }
         } catch (SQLException e) {

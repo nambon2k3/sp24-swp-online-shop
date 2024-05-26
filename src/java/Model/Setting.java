@@ -15,6 +15,7 @@ public class Setting {
     private String value;
     private int order;
     private boolean isDeleted;
+    private String description;
 
     public Setting() {
     }
@@ -73,5 +74,15 @@ public class Setting {
     public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    
 
 }

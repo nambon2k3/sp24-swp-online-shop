@@ -122,7 +122,6 @@ public class AdminUserControl extends HttpServlet {
         int staffId = Integer.parseInt(request.getParameter("userId"));
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
-        String password = request.getParameter("password");
         int role = Integer.parseInt(request.getParameter("role"));
         boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
         String address = request.getParameter("address");
@@ -134,7 +133,6 @@ public class AdminUserControl extends HttpServlet {
         staff.setId(staffId);
         staff.setFullname(fullName);
         staff.setEmail(email);
-        staff.setPassword(password);
         staff.setRole(role);
         staff.setGender(gender ? "Male" : "Female");
         staff.setAddress(address);
