@@ -193,8 +193,8 @@
                     </span>
                 </div>
                 <br>
-                <a href="/products" class="btn btn-secondary">Choose More Products</a>
-                <a href="/checkout" class="btn btn-primary">Check Out</a>
+                <a href="list-product" class="btn btn-secondary">Choose More Products</a>
+                <a href="checkout" class="btn btn-primary">Check Out</a>
             </div>
 
         </div>
