@@ -34,38 +34,38 @@ public class CartDAO {
         }
     }
     
-//    public List<Cart> getAllCarts(int userId) {
-//        List<Cart> carts = new ArrayList<>();
-//        try {
-//
-//            // SQL query to retrieve all cart items
-//            String query = "SELECT id, userId, productDetailId, quantity, isDeleted, createdAt, createdBy FROM [dbo].[Cart] where userId = ?";
-//            
-//            // Prepare the statement
-//            stmt = connection.prepareStatement(query);
-//            stmt.setInt(1, userId);
-//
-//            // Execute the query
-//            rs = stmt.executeQuery();
-//
-//            // Process the result set
-//            while (rs.next()) {
-//                int id = rs.getInt("id");
-//                int productDetailId = rs.getInt("productDetailId");
-//                int quantity = rs.getInt("quantity");
-//                boolean isDeleted = rs.getBoolean("isDeleted");
-//                Timestamp createdAt = rs.getTimestamp("createdAt");
-//                int createdBy = rs.getInt("createdBy");
-//
-//                // Create a Cart object and add it to the list
-//                Cart cart = new Cart(id, userId, productDetailId, quantity, isDeleted, new Date(createdAt.getTime()), createdBy);
-//                carts.add(cart);
-//            }
-//        } catch (SQLException e) {
-//            System.out.println("getAllCarts: " + e.getMessage());
-//        }
-//        return carts;
-//    }
+    public List<Cart> getAllCarts(int userId) {
+        List<Cart> carts = new ArrayList<>();
+        try {
+
+            // SQL query to retrieve all cart items
+            String query = "SELECT id, userId, productDetailId, quantity, isDeleted, createdAt, createdBy FROM [dbo].[Cart] where userId = ?";
+            
+            // Prepare the statement
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, userId);
+
+            // Execute the query
+            rs = stmt.executeQuery();
+
+            // Process the result set
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int productDetailId = rs.getInt("productDetailId");
+                int quantity = rs.getInt("quantity");
+                boolean isDeleted = rs.getBoolean("isDeleted");
+                Timestamp createdAt = rs.getTimestamp("createdAt");
+                int createdBy = rs.getInt("createdBy");
+
+                // Create a Cart object and add it to the list
+                Cart cart = new Cart(id, userId, productDetailId, quantity, isDeleted, new Date(createdAt.getTime()), createdBy);
+                carts.add(cart);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAllCarts: " + e.getMessage());
+        }
+        return carts;
+    }
     
     public List<Cart> getAllCarts(int userId, int page, int pageSize, String searchQuery, String category) {
         List<Cart> carts = new ArrayList<>();

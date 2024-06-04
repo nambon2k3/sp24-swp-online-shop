@@ -121,6 +121,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <c:set value="0" var="total"/>
                         <c:forEach var="item" items="${cartItems}">
                             <tr>
                                 <td><img src="${item.productDetail.imageURL}" width="50" height="50" alt="alt"/></td>
@@ -130,9 +131,11 @@
                                 <td>
                                     <c:if test="${item.productDetail.discount != null || item.productDetail.discount != 0}">
                                         $${item.productDetail.price * (100.0- p.productDetail.discount)/100}
+                                        <c:set value="${total + item.productDetail.price * (100.0- p.productDetail.discount)/100}" var="total"/>
                                     </c:if>
                                     <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
                                         $${item.productDetail.price}
+                                        <c:set value="${total + item.productDetail.price}" var="total"/>
                                     </c:if>
                                 </td>
                                 <td>
@@ -177,8 +180,14 @@
                 <div>
                     Total Order Price: $<span id="total-price">
                         <c:set var="totalPrice" value="0" />
-                        <c:forEach var="item" items="${cartItems}">
-                            <c:set var="totalPrice" value="${totalPrice + item.totalCost}" />
+                        <c:forEach var="item" items="${cartItemsFull}">
+                            <c:if test="${item.productDetail.discount != null || item.productDetail.discount != 0}">
+                                <c:set var="totalPrice" value="${totalPrice + item.quantity * (item.productDetail.price * (100.0- p.productDetail.discount)/100)}" />
+                            </c:if>
+                            <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
+                                <c:set var="totalPrice" value="${totalPrice + item.quantity * (item.productDetail.price)}" />
+                            </c:if>
+                            
                         </c:forEach>
                         ${totalPrice}
                     </span>
@@ -187,11 +196,11 @@
                 <a href="/products" class="btn btn-secondary">Choose More Products</a>
                 <a href="/checkout" class="btn btn-primary">Check Out</a>
             </div>
-                    
+
         </div>
-        
+
     </body>
-       
+
 </html>
 
 
