@@ -145,8 +145,8 @@
                             </button>
                         </div>
                         <div class="modal-body">
+                            <img class="w-100 mb-3" src="${slider.imageUrl}">
                             <p><strong>ID:</strong> ${slider.id}</p>
-                            <p><strong>Image URL:</strong> ${slider.imageUrl}</p>
                             <p><strong>Status:</strong> ${slider.isDeleted ? 'Inactive' : 'Active'}</p>
                             <p><strong>Created At:</strong> <fmt:formatDate value="${slider.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
                             <!--<p><strong>Created By:</strong> ${slider.createdBy}</p>-->
