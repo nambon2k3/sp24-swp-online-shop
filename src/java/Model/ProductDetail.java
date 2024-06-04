@@ -4,6 +4,7 @@
  */
 package Model;
 
+import DAO.ProductDAO;
 import java.sql.*;
 
 /**
@@ -101,6 +102,10 @@ public class ProductDetail {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+    
+    public String getProductName() {
+        return new ProductDAO().getProductById(productId).getProductName();
     }
 
     @Override
