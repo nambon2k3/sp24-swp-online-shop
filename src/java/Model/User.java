@@ -4,7 +4,7 @@
  */
 package Model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class User {
 
@@ -16,7 +16,7 @@ public class User {
     private String address;
     private String phone;
     private boolean isDeleted;
-    private LocalDateTime createdAt;
+    private Date createdAt;
     private int createdBy;
     private String avatar;
 
@@ -84,11 +84,11 @@ public class User {
         this.isDeleted = isDeleted;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 

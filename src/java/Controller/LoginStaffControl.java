@@ -73,7 +73,7 @@ public class LoginStaffControl extends HttpServlet {
 
         if (staff != null) {
                 
-            if (!staff.isIsDeleted()) {
+            if (staff.isIsDeleted()) {
                 request.setAttribute("errorMessage", "Banned");
                 request.getRequestDispatcher("LoginStaff.jsp").forward(request, response);
             }
