@@ -1,5 +1,7 @@
 package Model;
 
+import DAO.CartDAO;
+import DAO.ProductDAO;
 import java.util.Date;
 
 public class Cart {
@@ -10,7 +12,39 @@ public class Cart {
     private boolean isDeleted;
     private Date createdAt;
     private int createdBy;
+    private ProductDetail productDetail;
 
+    public Cart() {
+    }
+    
+    
+
+    // Constructor
+    public Cart(int id, int userId, int productDetailId, int quantity, boolean isDeleted, Date createdAt, int createdBy) {
+        this.id = id;
+        this.userId = userId;
+        this.productDetailId = productDetailId;
+        this.quantity = quantity;
+        this.isDeleted = isDeleted;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+        this.productDetail = new ProductDAO().getProductDetailById(productDetailId);
+    }
+
+    public ProductDetail getProductDetail() {
+        return productDetail;
+    }
+
+    public void setProductDetail(ProductDetail productDetail) {
+        this.productDetail = productDetail;
+    }
+    
+    public int getTotal(int userId) {
+        return new CartDAO().getCartCount(userId, "", "");
+    }
+    
+    
+    
     public int getId() {
         return id;
     }

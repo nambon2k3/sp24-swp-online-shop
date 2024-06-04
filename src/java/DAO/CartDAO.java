@@ -1,0 +1,178 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package DAO;
+
+import Model.Cart;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.Timestamp;
+import java.util.Date;
+
+/**
+ *
+ * @author Legion
+ */
+public class CartDAO {
+    private Connection connection;
+    private PreparedStatement stmt;
+    private ResultSet rs;
+
+    public CartDAO() {
+        try {
+            // Initialize the connection in the constructor
+            connection = new DBContext().getConnection();
+        } catch (Exception ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+//    public List<Cart> getAllCarts(int userId) {
+//        List<Cart> carts = new ArrayList<>();
+//        try {
+//
+//            // SQL query to retrieve all cart items
+//            String query = "SELECT id, userId, productDetailId, quantity, isDeleted, createdAt, createdBy FROM [dbo].[Cart] where userId = ?";
+//            
+//            // Prepare the statement
+//            stmt = connection.prepareStatement(query);
+//            stmt.setInt(1, userId);
+//
+//            // Execute the query
+//            rs = stmt.executeQuery();
+//
+//            // Process the result set
+//            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                int productDetailId = rs.getInt("productDetailId");
+//                int quantity = rs.getInt("quantity");
+//                boolean isDeleted = rs.getBoolean("isDeleted");
+//                Timestamp createdAt = rs.getTimestamp("createdAt");
+//                int createdBy = rs.getInt("createdBy");
+//
+//                // Create a Cart object and add it to the list
+//                Cart cart = new Cart(id, userId, productDetailId, quantity, isDeleted, new Date(createdAt.getTime()), createdBy);
+//                carts.add(cart);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("getAllCarts: " + e.getMessage());
+//        }
+//        return carts;
+//    }
+    
+    public List<Cart> getAllCarts(int userId, int page, int pageSize, String searchQuery, String category) {
+        List<Cart> carts = new ArrayList<>();
+        int offset = (page - 1) * pageSize;
+
+        try {
+            if(category == null) {
+                category = "";
+            } if(searchQuery == null) {
+                searchQuery = "";
+            }
+            // SQL query with pagination, search, and filter
+            String query = "SELECT c.id, c.userId, c.productDetailId, c.quantity, c.isDeleted, c.createdAt, c.createdBy " +
+                           "FROM [dbo].[Cart] c " +
+                           "JOIN [dbo].ProductDetail pd ON c.ProductDetailID = pd.ID " +
+                           "JOIN [dbo].Product p ON p.ID = pd.ProductID " +
+                           "JOIN [dbo].[Category] cat ON p.CategoryID = cat.ID " +
+                           "WHERE c.userId = ? " +
+                           "AND cat.Name LIKE '%" + category + "%'" +
+                           "AND p.Name LIKE '%" + searchQuery + "%'" +
+                           "ORDER BY c.createdAt DESC " +
+                           "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+            
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, userId);
+            stmt.setInt(2, offset);
+            stmt.setInt(3, pageSize);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int productDetailId = rs.getInt("productDetailId");
+                int quantity = rs.getInt("quantity");
+                boolean isDeleted = rs.getBoolean("isDeleted");
+                Timestamp createdAt = rs.getTimestamp("createdAt");
+                int createdBy = rs.getInt("createdBy");
+
+                Cart cart = new Cart(id, userId, productDetailId, quantity, isDeleted, new Date(createdAt.getTime()), createdBy);
+                carts.add(cart);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return carts;
+    }
+    
+    public int getCartCount(int userId, String searchQuery, String category) {
+        int count = 0;
+
+        try {
+            if(category == null) {
+                category = "";
+            } if(searchQuery == null) {
+                searchQuery = "";
+            }
+            String query = "SELECT COUNT(*) AS total " +
+                           "FROM [dbo].[Cart] c " +
+                           "JOIN [dbo].ProductDetail pd ON c.ProductDetailID = pd.ID " +
+                           "JOIN [dbo].Product p ON p.ID = pd.ProductID " +
+                           "JOIN [dbo].[Category] cat ON p.CategoryID = cat.ID " +
+                           "WHERE c.userId = ? " +
+                           "AND cat.Name LIKE '%" + category + "%'" +
+                           "AND p.Name LIKE '%" + searchQuery + "%'";
+
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, userId);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return count;
+    }
+    
+    public void updateCart(int quantity, int cartId) {
+        try {
+            String sql = "UPDATE Cart SET Quantity = ? WHERE ID = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, quantity);
+            stmt.setInt(2, cartId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public boolean deleteCart(int cartId) {
+        boolean isDeleted = false;
+
+        try {
+            String query = "DELETE FROM [dbo].[Cart] WHERE id = ?";
+
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, cartId);
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                isDeleted = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return isDeleted;
+    }
+}

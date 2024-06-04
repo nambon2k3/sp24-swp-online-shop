@@ -5,6 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Model.Cart" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -35,7 +36,7 @@
                         <button class="btn btn-outline-dark" type="submit" style="margin-right: 25px">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
-                            <span id="cart" class="badge bg-dark text-white ms-1 rounded-pill">${sessionScope.cart eq null ? 0 : sessionScope.cart.size()}</span>
+                            <span id="cart" class="badge bg-dark text-white ms-1 rounded-pill"><%=new Cart().getTotal(1)%></span>
                         </button>
                         <c:if test="${sessionScope.user == null}">
                             <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/login">
