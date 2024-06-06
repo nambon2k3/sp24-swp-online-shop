@@ -121,7 +121,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="status">Status</label>
-                                    <select class="form-control" id="status" name="status">
+                                    <select class="form-control" id="status" name="isDeleted">
                                         <option value="false" ${!slider.isDeleted ? "selected" : ""}>Active</option>
                                         <option value="true" ${slider.isDeleted ? "selected" : ""}>Inactive</option>
                                     </select>
