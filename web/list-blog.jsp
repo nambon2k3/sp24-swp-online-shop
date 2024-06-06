@@ -90,6 +90,9 @@
                                 <td><img src="${post.imgURL}" alt="alt" width="200px" height="200px"/></td>
                                 <td>${post.title}</td>
                                 <td>${fn:substring(post.content, 0, 50)}...</td>
+                                <td>
+                                    <a class="btn btn-primary" href="post-detail?id=${post.id}">See more</a>
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>
