@@ -154,7 +154,7 @@ public class FeedbackDAO {
             queryBuilder.append(" AND IsDeleted = ?");
         }
 
-        queryBuilder.append(") AS SubQuery WHERE RowNum BETWEEN ? AND ?");
+        queryBuilder.append(") AS SubQuery");
 
         String query = queryBuilder.toString();
         try {

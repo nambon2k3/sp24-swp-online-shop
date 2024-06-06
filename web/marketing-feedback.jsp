@@ -34,8 +34,6 @@
                 </div>
             </c:if>
 
-            <!--<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addFeedbackModal">Add Feedback</button>-->
-
             <!--filter form-->
             <form action="feedback" method="get" class="form-inline mb-3">
                 <div class="form-group mr-2">
@@ -70,7 +68,7 @@
                             <td>${feedback.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#feedbackInfoModal_${feedback.id}">Info</button>
-                                <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editFeedbackModal_${feedback.id}">Edit</button>-->
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editFeedbackModal_${feedback.id}">Edit</button>
                             </td>
                         </tr>
                     </c:forEach>
@@ -116,17 +114,24 @@
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="feedbackId" value="${feedback.id}">
                                 <div class="form-group">
-                                    <label for="imageUrl">Image URL</label>
-                                    <input type="text" class="form-control" id="imageUrl" name="imageUrl" value="${feedback.imageUrl}">
+                                    <label for="orderDetailId">Order Detail ID</label>
+                                    <input type="text" class="form-control" id="orderDetailId" name="orderDetailId" value="${feedback.orderDetailId}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="rating">Rating</label>
+                                    <input type="number" class="form-control" id="rating" name="rating" value="${feedback.rating}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment">Comment</label>
+                                    <textarea class="form-control" id="comment" name="comment"readonly>${feedback.comment}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="status">Status</label>
-                                    <select class="form-control" id="status" name="status">
+                                    <select class="form-control" id="status" name="isDeleted">
                                         <option value="false" ${!feedback.isDeleted ? "selected" : ""}>Active</option>
                                         <option value="true" ${feedback.isDeleted ? "selected" : ""}>Inactive</option>
                                     </select>
                                 </div>
-                                <!-- Add other fields as needed -->
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
                             </form>
                         </div>
@@ -146,10 +151,10 @@
                         </div>
                         <div class="modal-body">
                             <p><strong>ID:</strong> ${feedback.id}</p>
-                            <p><strong>Image URL:</strong> ${feedback.imageUrl}</p>
+                            <p><strong>Order Detail ID:</strong> ${feedback.orderDetailId}</p>
+                            <p><strong>Rating:</strong> ${feedback.rating}</p>
+                            <p><strong>Comment:</strong> ${feedback.comment}</p>
                             <p><strong>Status:</strong> ${feedback.isDeleted ? 'Inactive' : 'Active'}</p>
-                            <p><strong>Created At:</strong> <fmt:formatDate value="${feedback.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
-                            <!--<p><strong>Created By:</strong> ${feedback.createdBy}</p>-->
                         </div>
                     </div>
                 </div>
@@ -177,8 +182,16 @@
                             <input type="hidden" name="action" value="add">
                             <!-- Form Inputs -->
                             <div class="form-group">
-                                <label for="imageUrl">Image URL</label>
-                                <input type="text" class="form-control" id="imageUrl" name="imageUrl" required>
+                                <label for="orderDetailId">Order Detail ID</label>
+                                <input type="text" class="form-control" id="orderDetailId" name="orderDetailId" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rating">Rating</label>
+                                <input type="number" class="form-control" id="rating" name="rating" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Comment</label>
+                                <textarea class="form-control" id="comment" name="comment" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="isDeleted">Status</label>
@@ -187,10 +200,6 @@
                                     <option value="true">Inactive</option>
                                 </select>
                             </div>
-<!--                            <div class="form-group">
-                                <label for="createdBy">Created By</label>
-                                <input type="text" class="form-control" id="createdBy" name="createdBy" required>
-                            </div>-->
                             <button type="submit" class="btn btn-primary">Add Feedback</button>
                         </form>
                     </div>
