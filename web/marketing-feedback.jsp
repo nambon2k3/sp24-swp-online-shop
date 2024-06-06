@@ -8,7 +8,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Slider List</title>
+        <title>Feedback List</title>
         <!-- Bootstrap CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <!-- DataTable CSS -->
@@ -21,7 +21,7 @@
         <%@ include file="marketing-sidebar.jsp" %>
 
         <div class="container mt-5 main-content">
-            <h2>Slider List</h2>
+            <h2>Feedback List</h2>
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
@@ -34,10 +34,10 @@
                 </div>
             </c:if>
 
-            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addSliderModal">Add Slider</button>
+            <!--<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addFeedbackModal">Add Feedback</button>-->
 
             <!--filter form-->
-            <form action="slider" method="get" class="form-inline mb-3">
+            <form action="feedback" method="get" class="form-inline mb-3">
                 <div class="form-group mr-2">
                     <input type="text" class="form-control" name="search" placeholder="Search">
                 </div>
@@ -51,26 +51,26 @@
                 <button type="submit" class="btn btn-primary mt-3">Search</button>
             </form>
 
-            <table id="sliderTable" class="table table-striped">
+            <table id="feedbackTable" class="table table-striped">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Image URL</th>
+                        <th>Rating</th>
+                        <th>Comment</th>
                         <th>Status</th>
-                        <th>Created At</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="slider" items="${sliderList}">
+                    <c:forEach var="feedback" items="${feedbackList}">
                         <tr>
-                            <td>${slider.id}</td>
-                            <td>${fn:substring(slider.imageUrl, 0, 30)}...</td>
-                            <td>${slider.isDeleted ? 'Inactive' : 'Active'}</td>
-                            <td><fmt:formatDate value="${slider.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+                            <td>${feedback.id}</td>
+                            <td>${feedback.rating}</td>
+                            <td>${fn:substring(feedback.comment, 0, 30)}...</td>
+                            <td>${feedback.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#sliderInfoModal_${slider.id}">Info</button>
-                                <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSliderModal_${slider.id}">Edit</button>-->
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#feedbackInfoModal_${feedback.id}">Info</button>
+                                <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editFeedbackModal_${feedback.id}">Edit</button>-->
                             </td>
                         </tr>
                     </c:forEach>
@@ -98,32 +98,32 @@
             </nav>
         </div>
 
-        <c:forEach var="slider" items="${sliderList}">
+        <c:forEach var="feedback" items="${feedbackList}">
 
-            <!-- Edit Slider Modal -->
-            <div class="modal fade" id="editSliderModal_${slider.id}" tabindex="-1" role="dialog" aria-labelledby="editSliderModalLabel_${slider.id}" aria-hidden="true">
+            <!-- Edit Feedback Modal -->
+            <div class="modal fade" id="editFeedbackModal_${feedback.id}" tabindex="-1" role="dialog" aria-labelledby="editFeedbackModalLabel_${feedback.id}" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editSliderModalLabel_${slider.id}">Edit Slider</h5>
+                            <h5 class="modal-title" id="editFeedbackModalLabel_${feedback.id}">Edit Feedback</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <!-- Edit Slider Form -->
-                            <form action="slider" method="post">
+                            <!-- Edit Feedback Form -->
+                            <form action="feedback" method="post">
                                 <input type="hidden" name="action" value="update">
-                                <input type="hidden" name="sliderId" value="${slider.id}">
+                                <input type="hidden" name="feedbackId" value="${feedback.id}">
                                 <div class="form-group">
                                     <label for="imageUrl">Image URL</label>
-                                    <input type="text" class="form-control" id="imageUrl" name="imageUrl" value="${slider.imageUrl}">
+                                    <input type="text" class="form-control" id="imageUrl" name="imageUrl" value="${feedback.imageUrl}">
                                 </div>
                                 <div class="form-group">
                                     <label for="status">Status</label>
                                     <select class="form-control" id="status" name="status">
-                                        <option value="false" ${!slider.isDeleted ? "selected" : ""}>Active</option>
-                                        <option value="true" ${slider.isDeleted ? "selected" : ""}>Inactive</option>
+                                        <option value="false" ${!feedback.isDeleted ? "selected" : ""}>Active</option>
+                                        <option value="true" ${feedback.isDeleted ? "selected" : ""}>Inactive</option>
                                     </select>
                                 </div>
                                 <!-- Add other fields as needed -->
@@ -134,22 +134,22 @@
                 </div>
             </div>
 
-            <!-- Slider Info Modal -->
-            <div class="modal fade" id="sliderInfoModal_${slider.id}" tabindex="-1" role="dialog" aria-labelledby="sliderInfoModalLabel_${slider.id}" aria-hidden="true">
+            <!-- Feedback Info Modal -->
+            <div class="modal fade" id="feedbackInfoModal_${feedback.id}" tabindex="-1" role="dialog" aria-labelledby="feedbackInfoModalLabel_${feedback.id}" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="sliderInfoModalLabel_${slider.id}">Slider Details</h5>
+                            <h5 class="modal-title" id="feedbackInfoModalLabel_${feedback.id}">Feedback Details</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <img class="w-100 mb-3" src="${slider.imageUrl}">
-                            <p><strong>ID:</strong> ${slider.id}</p>
-                            <p><strong>Status:</strong> ${slider.isDeleted ? 'Inactive' : 'Active'}</p>
-                            <p><strong>Created At:</strong> <fmt:formatDate value="${slider.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
-                            <!--<p><strong>Created By:</strong> ${slider.createdBy}</p>-->
+                            <p><strong>ID:</strong> ${feedback.id}</p>
+                            <p><strong>Image URL:</strong> ${feedback.imageUrl}</p>
+                            <p><strong>Status:</strong> ${feedback.isDeleted ? 'Inactive' : 'Active'}</p>
+                            <p><strong>Created At:</strong> <fmt:formatDate value="${feedback.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+                            <!--<p><strong>Created By:</strong> ${feedback.createdBy}</p>-->
                         </div>
                     </div>
                 </div>
@@ -157,22 +157,22 @@
 
         </c:forEach>
 
-        <!-- Add Slider Modal -->
-        <div class="modal fade" id="addSliderModal" tabindex="-1" role="dialog" aria-labelledby="addSliderModalLabel" aria-hidden="true">
+        <!-- Add Feedback Modal -->
+        <div class="modal fade" id="addFeedbackModal" tabindex="-1" role="dialog" aria-labelledby="addFeedbackModalLabel" aria-hidden="true">
             <!-- Modal Content -->
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addSliderModalLabel">Add Slider</h5>
+                        <h5 class="modal-title" id="addFeedbackModalLabel">Add Feedback</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <!-- Modal Body -->
                     <div class="modal-body">
-                        <!-- Add Slider Form -->
-                        <form action="slider" method="post">
+                        <!-- Add Feedback Form -->
+                        <form action="feedback" method="post">
                             <!-- Hidden Field -->
                             <input type="hidden" name="action" value="add">
                             <!-- Form Inputs -->
@@ -191,7 +191,7 @@
                                 <label for="createdBy">Created By</label>
                                 <input type="text" class="form-control" id="createdBy" name="createdBy" required>
                             </div>-->
-                            <button type="submit" class="btn btn-primary">Add Slider</button>
+                            <button type="submit" class="btn btn-primary">Add Feedback</button>
                         </form>
                     </div>
                 </div>
@@ -208,7 +208,7 @@
 
         <script>
             $(document).ready(function () {
-                $('#sliderTable').DataTable({
+                $('#feedbackTable').DataTable({
                     "paging": false,
                     "lengthChange": false,
                     "searching": false,
