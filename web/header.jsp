@@ -43,6 +43,12 @@
                                 <i class="bi-user me-1"></i>
                                 Login
                             </a>
+                        </c:if>
+                        <c:if test="${sessionScope.user != null}">
+                            <a class="btn btn-outline-dark mx-2" href="${pageContext.request.contextPath}/common/profile">
+                                Profile
+                            </a>
+                                
                             <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/customer/my-order" style="margin-right: 25px">
                                 <i class="bi-user me-1"></i>
                                 My Order
@@ -50,11 +56,6 @@
                             <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/customer/feedback">
                                 <i class="bi-user me-1"></i>
                                 Feedback
-                            </a>
-                        </c:if>
-                        <c:if test="${sessionScope.user != null}">
-                            <a class="btn btn-outline-dark mx-2" href="${pageContext.request.contextPath}/common/profile">
-                                Profile
                             </a>
                             <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/logout">
                                 Logout
