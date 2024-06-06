@@ -2,12 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package Controller;
 
 import DAO.OrderDAO;
-import DAO.ProductDAO;
-import Model.Order;
-import Model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,45 +13,41 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
  * @author Legion
  */
-@WebServlet(name = "MyOrderController", urlPatterns = {"/customer/my-order"})
-public class MyOrderController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+@WebServlet(name="CancelOrderController", urlPatterns={"/customer/cancel-order"})
+public class CancelOrderController extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MyOrderController</title>");
+            out.println("<title>Servlet CancelOrderController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MyOrderController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CancelOrderController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -61,37 +55,18 @@ public class MyOrderController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+
         OrderDAO orderDAO = new OrderDAO();
-        ProductDAO productDAO = new ProductDAO();
-
-        int currentPage = 1;
-        int ordersPerPage = 10; // Set the number of orders per page
-
-        int userId = 1; // (int) request.getSession().getAttribute("user");
         
-        if (request.getParameter("page") != null) {
-            currentPage = Integer.parseInt(request.getParameter("page"));
-        }
-
-        List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, userId);
-        List<Product> products = productDAO.getThreeLastestProducts();
-
-        int totalOrders = orderDAO.getTotalOrderCount(userId);
-        int totalPages = (int) Math.ceil((double) totalOrders / ordersPerPage);
-
-        // Set order data in request attribute (security concern)
-        request.setAttribute("orders", orders);
-        request.setAttribute("products", products);
-        request.setAttribute("currentPage", currentPage);
-        request.setAttribute("totalPages", totalPages);
+        boolean isSuccess = orderDAO.cancelOrder(orderId);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
-        request.getRequestDispatcher("/my-order.jsp").forward(request, response);
-    }
+        response.sendRedirect("my-order?isSuccess=" + isSuccess);
+    } 
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -99,13 +74,12 @@ public class MyOrderController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

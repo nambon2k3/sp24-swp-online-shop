@@ -4,6 +4,7 @@
  */
 package Model;
 
+import DAO.CategoryDAO;
 import DAO.ProductDAO;
 import java.sql.*;
 
@@ -23,8 +24,18 @@ public class ProductDetail {
     private Timestamp createdAt;
     private int createdBy;
     
+    private int buyQuantity;
+    
     public int getProductId() {
         return productId;
+    }
+
+    public int getBuyQuantity() {
+        return buyQuantity;
+    }
+
+    public void setBuyQuantity(int buyQuantity) {
+        this.buyQuantity = buyQuantity;
     }
 
     // Getters and setters
@@ -106,6 +117,10 @@ public class ProductDetail {
     
     public String getProductName() {
         return new ProductDAO().getProductById(productId).getProductName();
+    }
+    
+    public String getCateogryName() {
+        return new ProductDAO().getProductById(productId).getCategoryName();
     }
 
     @Override

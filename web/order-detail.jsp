@@ -1,30 +1,25 @@
 <%-- 
-    Document   : my-order
-    Created on : Jun 4, 2024, 10:24:19 PM
+    Document   : order-detail
+    Created on : Jun 6, 2024, 3:54:30 PM
     Author     : Legion
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
     <head>
-        <title>Shopping Cart</title>
+        <meta charset="UTF-8">
+        <title>Order Details</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            #product:hover, #product *:hover {
-                background-color: #e6e6e6;
-            }
-        </style>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     </head>
-
     <body>
         <jsp:include page="header.jsp"></jsp:include>
             <!-- Header-->
-            <header class="py-5" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://w0.peakpx.com/wallpaper/752/914/HD-wallpaper-sabito-s-haori-kimetsu-no-yaiba-pattern.jpg);">
+            <header class="py-5 mb-3" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://w0.peakpx.com/wallpaper/752/914/HD-wallpaper-sabito-s-haori-kimetsu-no-yaiba-pattern.jpg);">
                 <div class="container px-4 px-lg-5 my-5">
                     <div class="text-center text-white">
                         <h1 class="display-4 fw-bolder">Shop in style</h1>
@@ -32,10 +27,9 @@
                     </div>
                 </div>
             </header>
-
-            <div class="col-md-12 d-flex justify-content-center p-3">
-
-                <div id="sidebar" class="col-md-2 p-3" style="border: 1px solid rgb(144, 141, 141); height: 100vh;">
+            <div class="row col-12" style="margin-bottom: 200px">
+                <!-- Sidebar -->
+                <div id="sidebar" class="col-md-2 p-3 mr-5" style="border: 1px solid rgb(144, 141, 141); height: 100vh;">
                     <form method="get" action="/public/list-product" class="mr-0">
                         <div id="product-search">
                             <h3>Search Products</h3>
@@ -93,77 +87,61 @@
                     <p>Address: 123 Main St, Anytown, USA</p>
                 </div>
             </div>
-            <div class="col-md-10">
-                <c:if test="${isSuccess ne null && isSuccess}">
-                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                        <strong>Save success!</strong> You should check in on some of those fields below.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
-                <c:if test="${isSuccess ne null && !isSuccess}">
-                    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                        <strong>Save failed!</strong> You should check your network.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
-                <h2>My Orders</h2>
+            <div class="col-md-9">
+                <!-- Order Details -->
+                <h2>Order Details</h2>
+                <p>Order ID: ${order.id}</p>
+                <p>Order Date: ${order.createdAt}</p>
+                <p>Total Cost: $${order.totalCost}</p>
+                <p>Status: ${order.status}</p>
+
+                <!-- Receiver Information -->
+                <h3>Receiver Information</h3>
+                <p>Full Name: ${order.fullname}</p>
+                <p>Address: ${order.address}</p>
+                <p>Phone: ${order.phone}</p>
+
+                <!-- Ordered Products -->
+                <h3>Ordered Products</h3>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Order Date</th>
-                            <th>Address</th>
-                            <th>Phone</th>
-                            <th>Total</th>
-                            <th>Status</th>
+                            <th>Thumbnail</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th>Total Cost</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="item" items="${orders}">
+                        <c:forEach var="product" items="${orderedProducts}">
                             <tr>
-                                <td><a href="order-detail?orderId=${item.id}">${item.id}</a></td>
-                                <td>${item.createdAt}</td>
-                                <td>${item.address}</td>
-                                <td>${item.phone}</td>
-                                <td>$${item.totalCost}</td>
-                                <td>${item.status}</td>
+                                <td><img src="${product.imageURL}" alt="..." width="100" height="100"></td>
+                                <td>${product.getProductName()}</td>
+                                <td>${product.getCateogryName()}</td>
+                                <td>$${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100) : product.price}</td>
+                                <td>${product.buyQuantity}</td>
+                                <td>$${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) : product.price*product.buyQuantity}</td>
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/public/product-detail?id=${product.productId}&pdid=${product.productDetailId}" class="btn btn-primary">Re-buy</a>
+                                    <a href="feedback?productId=" class="btn btn-secondary">Feedback</a>
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-                <!-- Pagination Controls -->
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <c:if test="${currentPage > 1}">
-                            <li class="page-item">
-                                <a class="page-link" href="?page=${currentPage - 1}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        </c:if>
-                        <c:forEach var="i" begin="1" end="${totalPages}">
-                            <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                <a class="page-link" href="?page=${i}">${i}</a>
-                            </li>
-                        </c:forEach>
-                        <c:if test="${currentPage < totalPages}">
-                            <li class="page-item">
-                                <a class="page-link" href="?page=${currentPage + 1}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </c:if>
-                    </ul>
-                </nav>
+                <div>
+                    <strong>Total Order Price:</strong> $${order.totalCost}
+                </div>
+                <!-- Order Actions -->
+                <div class="mt-4">
+                    <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Cancel Order</a>
+                </div>
             </div>
-
         </div>
-
+                    <jsp:include page="footer.html"></jsp:include>
     </body>
-
 </html>
 
-
-</body>
-
-</html>

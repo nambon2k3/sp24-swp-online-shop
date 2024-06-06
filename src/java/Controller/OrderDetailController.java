@@ -8,6 +8,7 @@ import DAO.OrderDAO;
 import DAO.ProductDAO;
 import Model.Order;
 import Model.Product;
+import Model.ProductDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -21,8 +22,8 @@ import java.util.List;
  *
  * @author Legion
  */
-@WebServlet(name = "MyOrderController", urlPatterns = {"/customer/my-order"})
-public class MyOrderController extends HttpServlet {
+@WebServlet(name = "OrderDetailController", urlPatterns = {"/customer/order-detail"})
+public class OrderDetailController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +42,10 @@ public class MyOrderController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MyOrderController</title>");
+            out.println("<title>Servlet OrderDetailController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MyOrderController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet OrderDetailController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,31 +63,19 @@ public class MyOrderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+
         OrderDAO orderDAO = new OrderDAO();
         ProductDAO productDAO = new ProductDAO();
 
-        int currentPage = 1;
-        int ordersPerPage = 10; // Set the number of orders per page
+        Order order = orderDAO.getOrderById(orderId);
+        List<ProductDetail> orderedProducts = orderDAO.getOrderedProductsByOrderId(orderId);
+        List<Product> latestProducts = productDAO.getThreeLastestProducts();
 
-        int userId = 1; // (int) request.getSession().getAttribute("user");
-        
-        if (request.getParameter("page") != null) {
-            currentPage = Integer.parseInt(request.getParameter("page"));
-        }
-
-        List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, userId);
-        List<Product> products = productDAO.getThreeLastestProducts();
-
-        int totalOrders = orderDAO.getTotalOrderCount(userId);
-        int totalPages = (int) Math.ceil((double) totalOrders / ordersPerPage);
-
-        // Set order data in request attribute (security concern)
-        request.setAttribute("orders", orders);
-        request.setAttribute("products", products);
-        request.setAttribute("currentPage", currentPage);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("isSuccess", request.getParameter("isSuccess"));
-        request.getRequestDispatcher("/my-order.jsp").forward(request, response);
+        request.setAttribute("order", order);
+        request.setAttribute("orderedProducts", orderedProducts);
+        request.setAttribute("latestProducts", latestProducts);
+        request.getRequestDispatcher("/order-detail.jsp").forward(request, response);
     }
 
     /**
