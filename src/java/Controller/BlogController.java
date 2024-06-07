@@ -68,7 +68,7 @@ public class BlogController extends HttpServlet {
         
         // Get filtering and sorting parameters
         String category = request.getParameter("category");
-        String search = request.getParameter("search");
+        String search = request.getParameter("searchQuery");
         
         PostDAO postDAO = new PostDAO();
         List<Post> posts = postDAO.getPosts(page, 8, category, "", "", search, "", "");
