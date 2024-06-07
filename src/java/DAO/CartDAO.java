@@ -21,6 +21,7 @@ import java.util.Date;
  * @author Legion
  */
 public class CartDAO {
+
     private Connection connection;
     private PreparedStatement stmt;
     private ResultSet rs;
@@ -33,14 +34,14 @@ public class CartDAO {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public List<Cart> getAllCarts(int userId) {
         List<Cart> carts = new ArrayList<>();
         try {
 
             // SQL query to retrieve all cart items
             String query = "SELECT id, userId, productDetailId, quantity, isDeleted, createdAt, createdBy FROM [dbo].[Cart] where userId = ?";
-            
+
             // Prepare the statement
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, userId);
@@ -66,29 +67,30 @@ public class CartDAO {
         }
         return carts;
     }
-    
+
     public List<Cart> getAllCarts(int userId, int page, int pageSize, String searchQuery, String category) {
         List<Cart> carts = new ArrayList<>();
         int offset = (page - 1) * pageSize;
 
         try {
-            if(category == null) {
+            if (category == null) {
                 category = "";
-            } if(searchQuery == null) {
+            }
+            if (searchQuery == null) {
                 searchQuery = "";
             }
             // SQL query with pagination, search, and filter
-            String query = "SELECT c.id, c.userId, c.productDetailId, c.quantity, c.isDeleted, c.createdAt, c.createdBy " +
-                           "FROM [dbo].[Cart] c " +
-                           "JOIN [dbo].ProductDetail pd ON c.ProductDetailID = pd.ID " +
-                           "JOIN [dbo].Product p ON p.ID = pd.ProductID " +
-                           "JOIN [dbo].[Category] cat ON p.CategoryID = cat.ID " +
-                           "WHERE c.userId = ? " +
-                           "AND cat.Name LIKE '%" + category + "%'" +
-                           "AND p.Name LIKE '%" + searchQuery + "%'" +
-                           "ORDER BY c.createdAt DESC " +
-                           "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-            
+            String query = "SELECT c.id, c.userId, c.productDetailId, c.quantity, c.isDeleted, c.createdAt, c.createdBy "
+                    + "FROM [dbo].[Cart] c "
+                    + "JOIN [dbo].ProductDetail pd ON c.ProductDetailID = pd.ID "
+                    + "JOIN [dbo].Product p ON p.ID = pd.ProductID "
+                    + "JOIN [dbo].[Category] cat ON p.CategoryID = cat.ID "
+                    + "WHERE c.userId = ? "
+                    + "AND cat.Name LIKE '%" + category + "%'"
+                    + "AND p.Name LIKE '%" + searchQuery + "%'"
+                    + "ORDER BY c.createdAt DESC "
+                    + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, userId);
             stmt.setInt(2, offset);
@@ -109,27 +111,28 @@ public class CartDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return carts;
     }
-    
+
     public int getCartCount(int userId, String searchQuery, String category) {
         int count = 0;
 
         try {
-            if(category == null) {
+            if (category == null) {
                 category = "";
-            } if(searchQuery == null) {
+            }
+            if (searchQuery == null) {
                 searchQuery = "";
             }
-            String query = "SELECT COUNT(*) AS total " +
-                           "FROM [dbo].[Cart] c " +
-                           "JOIN [dbo].ProductDetail pd ON c.ProductDetailID = pd.ID " +
-                           "JOIN [dbo].Product p ON p.ID = pd.ProductID " +
-                           "JOIN [dbo].[Category] cat ON p.CategoryID = cat.ID " +
-                           "WHERE c.userId = ? " +
-                           "AND cat.Name LIKE '%" + category + "%'" +
-                           "AND p.Name LIKE '%" + searchQuery + "%'";
+            String query = "SELECT COUNT(*) AS total "
+                    + "FROM [dbo].[Cart] c "
+                    + "JOIN [dbo].ProductDetail pd ON c.ProductDetailID = pd.ID "
+                    + "JOIN [dbo].Product p ON p.ID = pd.ProductID "
+                    + "JOIN [dbo].[Category] cat ON p.CategoryID = cat.ID "
+                    + "WHERE c.userId = ? "
+                    + "AND cat.Name LIKE '%" + category + "%'"
+                    + "AND p.Name LIKE '%" + searchQuery + "%'";
 
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, userId);
@@ -141,10 +144,10 @@ public class CartDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return count;
     }
-    
+
     public void updateCart(int quantity, int cartId) {
         try {
             String sql = "UPDATE Cart SET Quantity = ? WHERE ID = ?";
@@ -156,7 +159,7 @@ public class CartDAO {
             e.printStackTrace();
         }
     }
-    
+
     public boolean deleteCart(int cartId) {
         boolean isDeleted = false;
 
@@ -172,7 +175,59 @@ public class CartDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return isDeleted;
+    }
+
+    public void addToCart(int userId, int productDetailId, int quantity) {
+        try {
+            // Check if the item already exists in the cart
+            String selectSQL = "SELECT quantity FROM Cart WHERE userId = ? AND productDetailId = ? AND isDeleted = 0";
+            PreparedStatement selectStmt = connection.prepareStatement(selectSQL);
+            selectStmt.setInt(1, userId);
+            selectStmt.setInt(2, productDetailId);
+            rs = selectStmt.executeQuery();
+            
+            if (rs.next()) {
+                // Item exists, update the quantity
+                int currentQuantity = rs.getInt("quantity");
+                int newQuantity = currentQuantity + quantity;
+                
+                String updateSQL = "UPDATE Cart SET quantity = ? WHERE userId = ? AND productDetailId = ? AND isDeleted = 0";
+                PreparedStatement updateStmt = connection.prepareStatement(updateSQL);
+                updateStmt.setInt(1, newQuantity);
+                updateStmt.setInt(2, userId);
+                updateStmt.setInt(3, productDetailId);
+                updateStmt.executeUpdate();
+            } else {
+                // Item does not exist, insert a new record
+                String insertSQL = "INSERT INTO Cart (userId, productDetailId, quantity, isDeleted, createdAt, createdBy) VALUES (?, ?, ?, 0, ?, ?)";
+                PreparedStatement insertStmt = connection.prepareStatement(insertSQL);
+                insertStmt.setInt(1, userId);
+                insertStmt.setInt(2, productDetailId);
+                insertStmt.setInt(3, quantity);
+                insertStmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+                insertStmt.setInt(5, userId);  // Assuming userId is also the createdBy
+                insertStmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            System.out.println("addToCart: " + ex.getMessage());
+        }
+    }
+
+    public int getTotalProductCount(int userId) {
+        int totalQuantity = 0;
+        try {
+            String query = "SELECT Count(*) AS totalQuantity FROM [Cart] WHERE [UserID] = ? AND isDeleted = 0";
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, userId);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalQuantity = rs.getInt("totalQuantity");
+            }
+        } catch (SQLException e) {
+            System.out.println("getTotalProductCount: " + e.getMessage());
+        }
+        return totalQuantity;
     }
 }

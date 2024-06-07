@@ -19,15 +19,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Legion
  */
-@WebServlet(name="CartController", urlPatterns={"/public/cart"})
-public class CartController extends HttpServlet {
+@WebServlet(name="CartContactController", urlPatterns={"/public/cart-contact"})
+public class CartContactController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -44,10 +43,10 @@ public class CartController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CartController</title>");  
+            out.println("<title>Servlet CartContactController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CartController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CartContactController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -93,7 +92,7 @@ public class CartController extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
-        request.getRequestDispatcher("/cart.jsp").forward(request, response);
+        request.getRequestDispatcher("/cart-contact.jsp").forward(request, response);
     } 
 
     /** 

@@ -33,11 +33,11 @@
                         </li>
                     </ul>
                     <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit" style="margin-right: 25px">
+                        <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/public/cart" style="margin-right: 25px">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
                             <span id="cart" class="badge bg-dark text-white ms-1 rounded-pill"><%=new Cart().getTotal(1)%></span>
-                        </button>
+                        </a>
                         <c:if test="${sessionScope.user == null}">
                             <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/login" style="margin-right: 25px">
                                 <i class="bi-user me-1"></i>

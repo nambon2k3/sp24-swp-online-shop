@@ -6,6 +6,8 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="DAO.CartDAO"%>
+<%@page import="Model.User"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -83,7 +85,7 @@
                                     <span class="color" style="background-color:  ${product.productDetail.color.toLowerCase()}"></span>
                                 </h5>
                                 <h5 class="colors">Quantity: 
-                                    <input oninput="valid(this)" type="text" style="padding: 5px" value="1" name="quantity"> 
+                                    <input oninput="valid(this)" id="quantity" type="text" style="padding: 5px" value="1" name="quantity"> 
                                     <span style="font-weight: normal; font-style: italic"> (Available: ${product.productDetail.stock}) </span>
                                 </h5>
                                 
@@ -104,15 +106,16 @@
         <script src="../js/scripts.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-        <script>
+        <script defer>
             function valid(input) {
                 input.value= input.value.replace(/[^0-9]/g, '');
                 if(input.value > ${product.productDetail.stock}) input.value = ${product.productDetail.stock};
                 if(input.value < 1) input.value = 1;
             }
             function addToCart(id) {
-                fetch('add-cart?id=' + id);
-                document.getElementById('cart').innerHTML = ${sessionScope.cart eq null ? 1 : sessionScope.cart.size()};
+                let quantity = document.getElementById('quantity').value;
+                console.log(quantity);
+                fetch('add-cart?id=' + id+'&quantity='+quantity);
                 window.alert('ADDED Successfully');
             }
         </script>

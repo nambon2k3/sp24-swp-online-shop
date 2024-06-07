@@ -6,11 +6,6 @@
 package Controller;
 
 import DAO.CartDAO;
-import DAO.PostDAO;
-import DAO.ProductDAO;
-import Model.Cart;
-import Model.Category;
-import Model.Product;
 import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,15 +14,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author Legion
  */
-@WebServlet(name="CartController", urlPatterns={"/public/cart"})
-public class CartController extends HttpServlet {
+@WebServlet(name="AddCartController", urlPatterns={"/public/add-cart"})
+public class AddCartController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -44,10 +38,10 @@ public class CartController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CartController</title>");  
+            out.println("<title>Servlet AddCartController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CartController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet AddCartController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,36 +58,16 @@ public class CartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        User user = (User) request.getSession().getAttribute("user");
-        int userId = user.getId();
-        int page = 1;
-        int PAGE_SIZE = 5;
-        String searchQuery = request.getParameter("searchQuery");
-        String category = request.getParameter("category");
+        // Extract parameters
+        int productDetailId = Integer.parseInt(request.getParameter("id"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
+        // Get user information from session
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
 
-        CartDAO cartDAO = new CartDAO();
-        ProductDAO productDAO = new ProductDAO();
-
-        List<Cart> cartItemsFull = cartDAO.getAllCarts(userId);
-        List<Cart> cartItems = cartDAO.getAllCarts(userId, page, PAGE_SIZE, searchQuery, category);
-        List<Category> categories = new PostDAO().getUniqueCategories();
-        List<Product> products = productDAO.getThreeLastestProducts();
-
-        int totalCartItems = cartDAO.getCartCount(userId, searchQuery, category);
-        int totalPages = (int) Math.ceil((double) totalCartItems / PAGE_SIZE);
-
-        request.setAttribute("cartItemsFull", cartItemsFull);
-        request.setAttribute("cartItems", cartItems);
-        request.setAttribute("products", products);
-        request.setAttribute("categories", categories);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("isSuccess", request.getParameter("isSuccess"));
-        request.getRequestDispatcher("/cart.jsp").forward(request, response);
+        // Assuming there's a method to handle adding product to the cart
+        new CartDAO().addToCart(user.getId(), productDetailId, quantity);
     } 
 
     /** 
