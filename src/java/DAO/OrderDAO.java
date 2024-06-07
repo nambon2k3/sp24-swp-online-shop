@@ -58,6 +58,7 @@ public class OrderDAO {
 
                 // Create an Order object with extracted data
                 Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, createdAt, createdBy);
+                order.setNotes(rs.getString("notes"));
                 orders.add(order);
             }
 
@@ -116,6 +117,7 @@ public class OrderDAO {
 
                 // Create an Order object with extracted data
                 Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, createdAt, createdBy);
+                order.setNotes(rs.getString("notes"));
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -159,6 +161,7 @@ public class OrderDAO {
                 order.setPhone(rs.getString("phone"));
                 order.setStatus(rs.getString("status"));
                 order.setCreatedAt(rs.getDate("createdAt"));
+                order.setNotes(rs.getString("notes"));
                 order.setTotalCost(getTotal(orderId));
             }
         } catch (SQLException e) {

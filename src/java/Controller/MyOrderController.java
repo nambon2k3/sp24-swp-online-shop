@@ -5,9 +5,12 @@
 package Controller;
 
 import DAO.OrderDAO;
+import DAO.PostDAO;
 import DAO.ProductDAO;
+import Model.Category;
 import Model.Order;
 import Model.Product;
+import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -68,7 +71,7 @@ public class MyOrderController extends HttpServlet {
         int currentPage = 1;
         int ordersPerPage = 10; // Set the number of orders per page
 
-        int userId = 1; // (int) request.getSession().getAttribute("user");
+        int userId = ((User) request.getSession().getAttribute("user")).getId();
         
         if (request.getParameter("page") != null) {
             currentPage = Integer.parseInt(request.getParameter("page"));
@@ -76,13 +79,14 @@ public class MyOrderController extends HttpServlet {
 
         List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, userId);
         List<Product> products = productDAO.getThreeLastestProducts();
-
+        List<Category> categories = new PostDAO().getUniqueCategories();
         int totalOrders = orderDAO.getTotalOrderCount(userId);
         int totalPages = (int) Math.ceil((double) totalOrders / ordersPerPage);
 
         // Set order data in request attribute (security concern)
         request.setAttribute("orders", orders);
         request.setAttribute("products", products);
+        request.setAttribute("categories", categories);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));

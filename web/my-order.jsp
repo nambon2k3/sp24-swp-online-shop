@@ -36,7 +36,7 @@
             <div class="col-md-12 d-flex justify-content-center p-3">
 
                 <div id="sidebar" class="col-md-2 p-3" style="border: 1px solid rgb(144, 141, 141); height: 100vh;">
-                    <form method="get" action="/public/list-product" class="mr-0">
+                    <form method="get" action="../public/list-product" class="mr-0">
                         <div id="product-search">
                             <h3>Search Products</h3>
                             <input type="text" id="search-box" name="searchQuery" placeholder="Search for products..." class="form-control" value="${param.searchQuery}">

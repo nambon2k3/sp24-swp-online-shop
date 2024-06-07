@@ -5,7 +5,9 @@
 package Controller;
 
 import DAO.OrderDAO;
+import DAO.PostDAO;
 import DAO.ProductDAO;
+import Model.Category;
 import Model.Order;
 import Model.Product;
 import Model.ProductDetail;
@@ -71,7 +73,9 @@ public class OrderDetailController extends HttpServlet {
         Order order = orderDAO.getOrderById(orderId);
         List<ProductDetail> orderedProducts = orderDAO.getOrderedProductsByOrderId(orderId);
         List<Product> latestProducts = productDAO.getThreeLastestProducts();
-
+        List<Category> categories = new PostDAO().getUniqueCategories();
+        
+        request.setAttribute("categories", categories);
         request.setAttribute("order", order);
         request.setAttribute("orderedProducts", orderedProducts);
         request.setAttribute("latestProducts", latestProducts);

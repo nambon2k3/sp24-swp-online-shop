@@ -11,6 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Header</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     </head>
     <body>
         <!-- Navigation-->
@@ -33,11 +34,7 @@
                         </li>
                     </ul>
                     <form class="d-flex">
-                        <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/public/cart" style="margin-right: 25px">
-                            <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span id="cart" class="badge bg-dark text-white ms-1 rounded-pill"><%=new Cart().getTotal(1)%></span>
-                        </a>
+
                         <c:if test="${sessionScope.user == null}">
                             <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/login" style="margin-right: 25px">
                                 <i class="bi-user me-1"></i>
@@ -45,10 +42,14 @@
                             </a>
                         </c:if>
                         <c:if test="${sessionScope.user != null}">
+                            <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/public/cart" style="margin-right: 25px">
+                                <i class="bi-cart-fill me-1"></i>
+                                Cart
+                            </a>
                             <a class="btn btn-outline-dark mx-2" href="${pageContext.request.contextPath}/common/profile">
                                 Profile
                             </a>
-                                
+
                             <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/customer/my-order" style="margin-right: 25px">
                                 <i class="bi-user me-1"></i>
                                 My Order

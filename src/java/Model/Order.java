@@ -1,6 +1,7 @@
 package Model;
 
 import DAO.OrderDAO;
+import DAO.UserDAO;
 import java.util.Date;
 
 public class Order {
@@ -14,6 +15,7 @@ public class Order {
     private Date createdAt;
     private int createdBy;
     private double totalCost;
+    private String notes;
     
     public Order() {
     }
@@ -38,6 +40,18 @@ public class Order {
 
     public void setTotalCost(double totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+    
+    public String getGender(String email) {
+        return new UserDAO().getUserByEmail(email).getGender();
     }
     
     

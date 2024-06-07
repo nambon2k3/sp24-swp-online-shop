@@ -30,7 +30,7 @@
             <div class="row col-12" style="margin-bottom: 200px">
                 <!-- Sidebar -->
                 <div id="sidebar" class="col-md-2 p-3 mr-5" style="border: 1px solid rgb(144, 141, 141); height: 100vh;">
-                    <form method="get" action="/public/list-product" class="mr-0">
+                    <form method="get" action="../public/list-product" class="mr-0">
                         <div id="product-search">
                             <h3>Search Products</h3>
                             <input type="text" id="search-box" name="searchQuery" placeholder="Search for products..." class="form-control" value="${param.searchQuery}">
@@ -100,6 +100,7 @@
                 <p>Full Name: ${order.fullname}</p>
                 <p>Address: ${order.address}</p>
                 <p>Phone: ${order.phone}</p>
+                <p>Gender: ${order.getGender(sessionScope.user.email)}</p>
 
                 <!-- Ordered Products -->
                 <h3>Ordered Products</h3>
