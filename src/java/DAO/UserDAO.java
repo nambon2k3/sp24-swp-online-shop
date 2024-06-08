@@ -69,6 +69,7 @@ public class UserDAO {
                 user.setCreatedAt(rs.getDate("CreatedAt"));
                 user.setCreatedBy(rs.getInt("CreatedBy"));
                 user.setAvatar(rs.getString("Avatar"));
+                user.setChangeHistory(rs.getString("ChangeHistory"));
                 return user;
             }
         } catch (SQLException e) {
@@ -99,6 +100,7 @@ public class UserDAO {
                 user.setCreatedAt(rs.getDate("CreatedAt"));
                 user.setCreatedBy(rs.getInt("CreatedBy"));
                 user.setAvatar(rs.getString("Avatar"));
+                user.setChangeHistory(rs.getString("ChangeHistory"));
                 return user;
             }
         } catch (SQLException e) {
@@ -133,6 +135,7 @@ public class UserDAO {
                 user.setCreatedAt(rs.getDate("CreatedAt"));
                 user.setCreatedBy(rs.getInt("CreatedBy"));
                 user.setAvatar(rs.getString("Avatar"));
+                user.setChangeHistory(rs.getString("ChangeHistory"));
                 userList.add(user);
             }
         } catch (SQLException e) {
@@ -166,6 +169,7 @@ public class UserDAO {
                 user.setCreatedAt(rs.getDate("CreatedAt"));
                 user.setCreatedBy(rs.getInt("CreatedBy"));
                 user.setAvatar(rs.getString("Avatar"));
+                user.setChangeHistory(rs.getString("ChangeHistory"));
                 userList.add(user);
             }
         } catch (SQLException e) {
@@ -174,7 +178,7 @@ public class UserDAO {
         return userList;
     }
     
-    public List<User> getFilteredUsers(String fullName, String email, String phone, String gender, int pageNumber, int pageSize) {
+    public List<User> getFilteredUsers(String fullName, String email, String phone, String gender, Boolean status, int pageNumber, int pageSize) {
         List<User> filteredUserList = new ArrayList<>();
         String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [User] WHERE 1=1";
         // Add filter conditions
@@ -189,6 +193,9 @@ public class UserDAO {
         }
         if (gender != null && !gender.isEmpty()) {
             query += " AND Gender = '" + gender + "'";
+        }
+        if (status != null) {
+            query += " AND IsDeleted = '" + status.toString() + "'";
         }
         // Add pagination
         query += ") AS SubQuery WHERE RowNum BETWEEN ? AND ?";
@@ -213,6 +220,7 @@ public class UserDAO {
                 user.setCreatedAt(rs.getDate("CreatedAt"));
                 user.setCreatedBy(rs.getInt("CreatedBy"));
                 user.setAvatar(rs.getString("Avatar"));
+                user.setChangeHistory(rs.getString("ChangeHistory"));
                 filteredUserList.add(user);
             }
         } catch (SQLException e) {
@@ -221,7 +229,7 @@ public class UserDAO {
         return filteredUserList;
     }
     
-    public List<User> getFilteredUsers(String fullName, String email, String gender) {
+    public List<User> getFilteredUsers(String fullName, String email, String gender, Boolean status) {
         List<User> filteredUserList = new ArrayList<>();
         String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [User] WHERE 1=1";
         // Add filter conditions
@@ -233,6 +241,9 @@ public class UserDAO {
         }
         if (gender != null && !gender.isEmpty()) {
             query += " AND Gender = '" + gender + "'";
+        }
+        if (status != null) {
+            query += " AND IsDeleted = '" + status.toString() + "'";
         }
         // Add pagination
         query += ") AS SubQuery";
@@ -252,6 +263,7 @@ public class UserDAO {
                 staff.setCreatedAt(rs.getDate("CreatedAt"));
                 staff.setCreatedBy(rs.getInt("CreatedBy"));
                 staff.setAvatar(rs.getString("Avatar"));
+                staff.setChangeHistory(rs.getString("ChangeHistory"));
                 filteredUserList.add(staff);
             }
         } catch (SQLException e) {
@@ -262,7 +274,7 @@ public class UserDAO {
 
     // Update (Update User)
     public boolean updateUser(User user) {
-        String query = "UPDATE [User] SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=?, Avatar=? WHERE ID=?";
+        String query = "UPDATE [User] SET Email=?, Password=?, Fullname=?, Gender=?, Address=?, Phone=?, IsDeleted=?, CreatedBy=?, Avatar=?, ChangeHistory=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, user.getEmail());
@@ -274,7 +286,8 @@ public class UserDAO {
             ps.setBoolean(7, user.isIsDeleted());
             ps.setInt(8, user.getCreatedBy());
             ps.setString(9, user.getAvatar());
-            ps.setInt(10, user.getId());
+            ps.setString(10, user.getChangeHistory());
+            ps.setInt(11, user.getId());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
@@ -322,6 +335,7 @@ public class UserDAO {
                 user.setCreatedAt(rs.getDate("CreatedAt"));
                 user.setCreatedBy(rs.getInt("CreatedBy"));
                 user.setAvatar(rs.getString("Avatar"));
+                user.setChangeHistory(rs.getString("ChangeHistory"));
                 return user;
             }
         } catch (SQLException e) {

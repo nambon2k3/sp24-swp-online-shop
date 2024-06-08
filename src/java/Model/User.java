@@ -19,7 +19,16 @@ public class User {
     private Date createdAt;
     private int createdBy;
     private String avatar;
+    private String changeHistory;
 
+    public String getChangeHistory() {
+        return changeHistory;
+    }
+
+    public void setChangeHistory(String changeHistory) {
+        this.changeHistory = changeHistory;
+    }
+    
     public int getId() {
         return id;
     }
@@ -106,6 +115,12 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    @Override
+    public String toString() {
+        String time = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:ss dd-MM-yyyy"));
+        return "<strong>" + time + "</strong>" + ": email=" + email + ", fullname=" + fullname + ", gender=" + gender + ", address=" + address + ", phone=" + phone;
     }
     
 }
