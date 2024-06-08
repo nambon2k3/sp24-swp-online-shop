@@ -76,6 +76,7 @@ public class ListFeedBackController extends HttpServlet {
         request.setAttribute("categories", categories);
         request.setAttribute("orderedProducts", orderedProducts);
         request.setAttribute("latestProducts", latestProducts);
+        request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         request.getRequestDispatcher("/list-feedback.jsp").forward(request, response);
     } 
 
@@ -89,7 +90,7 @@ public class ListFeedBackController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        doGet(request, response);
     }
 
     /** 

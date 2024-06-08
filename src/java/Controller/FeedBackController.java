@@ -102,9 +102,9 @@ public class FeedBackController extends HttpServlet {
         feedback.setComment(request.getParameter("comment"));
         feedback.setImgeURL(imageBytes);
         feedback.setCreatedBy(user.getId());
-        new FeedbackDAO().addFeedbackVer2(feedback);
+        boolean isSuccess = new FeedbackDAO().addFeedbackVer2(feedback);
         
-        request.getRequestDispatcher("list-feedback").forward(request, response);
+        response.sendRedirect("list-feedback?isSuccess=" + isSuccess);
     }
 
     /** 
