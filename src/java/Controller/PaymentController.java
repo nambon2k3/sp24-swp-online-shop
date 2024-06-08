@@ -3,6 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Controller;
+
+import DAO.CartDAO;
+import DAO.OrderDAO;
+import Model.Cart;
+import Model.Order;
+import Model.OrderDetail;
 import Model.User;
 import com.google.gson.JsonObject;
 import java.io.IOException;
@@ -23,46 +29,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import Utils.Config;
+import com.google.gson.Gson;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "PaymentController", urlPatterns = {"/payment"})
+@WebServlet(name = "PaymentController", urlPatterns = {"/public/payment"})
 public class PaymentController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse respone) throws ServletException, IOException {
-        //format datetime for vnpay in vietnam
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
-        //get courseid
-        String courseId = request.getParameter("courseid");
-        String bank_code = request.getParameter("bankCode");
+
+        String amount_raw = request.getParameter("amount");
+        int amount = Integer.parseInt(request.getParameter("amount").substring(0, amount_raw.length() - 2)) * 100 * 25000;
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
+        String vnp_OrderInfo = "pay pay";
         String orderType = "other";
         String vnp_TxnRef = Config.getRandomNumber(8);
-        String vnp_OrderInfo = "";
-        if (request.getParameter("info") != null) {
-            vnp_OrderInfo = request.getParameter("info");
-        }
         String vnp_IpAddr = Config.getIpAddress(request);
         String vnp_TmnCode = Config.vnp_TmnCode;
-
-        int amount = Integer.parseInt(request.getParameter("amount").replaceAll(",", "")) * 100;
-        System.out.println(amount);
         Map vnp_Params = new HashMap<>();
-        vnp_Params.put("vnp_Version", vnp_Version);
+        vnp_Params.put("vnp_Version", vnp_Version); //Phiên bản cũ là 2.0.0, 2.0.1 thay đổi sang 2.1.0
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
-
+        String bank_code = request.getParameter("bankcode");
         if (bank_code != null && !bank_code.isEmpty()) {
             vnp_Params.put("vnp_BankCode", bank_code);
-        } else {
-            vnp_Params.put("vnp_BankCode", "NCB");
         }
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);
@@ -76,20 +72,20 @@ public class PaymentController extends HttpServlet {
         }
         vnp_Params.put("vnp_ReturnUrl", Config.vnp_Returnurl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
 
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
-        cld.add(Calendar.MINUTE, 15);
-        String vnp_ExpireDate = formatter.format(cld.getTime());
-        //Add Params of 2.1.0 Version
-        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+
         //Build data to hash and querystring
         List fieldNames = new ArrayList(vnp_Params.keySet());
         Collections.sort(fieldNames);
         StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
         Iterator itr = fieldNames.iterator();
+
         while (itr.hasNext()) {
             String fieldName = (String) itr.next();
             String fieldValue = (String) vnp_Params.get(fieldName);
@@ -112,24 +108,39 @@ public class PaymentController extends HttpServlet {
         String vnp_SecureHash = Config.hmacSHA512(Config.vnp_HashSecret, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
-        com.google.gson.JsonObject job = new JsonObject();
-        job.addProperty("code", "00");
-        job.addProperty("message", "success");
-        job.addProperty("data", paymentUrl);
-        //Gson gson = new Gson();
-        //respone.getWriter().write(gson.toJson(job));
+
 
         //Section : Add new payment
         //Get user payment
         User user = (User) request.getSession().getAttribute("user");
-        //Get bill amount
-        String billAmount = request.getParameter("amount").replaceAll(",", "");
         //Create bill
-        
+        String fullname = request.getParameter("fullname");
+        String address = request.getParameter("address");
+        String phone = request.getParameter("phone");
+        String notes = request.getParameter("notes");
 
+        Order order = new Order();
+        order.setFullname(fullname);
+        order.setAddress(address);
+        order.setPhone(phone);
+        order.setNotes(notes);
+        order.setUserId(user.getId());
+        int orderId = new OrderDAO().createOrder(order);
+        Config.orderID = orderId;
+        // Retrieve cart items from session or request (assuming a method getCartItems exists)
+        List<Cart> cartItems = new CartDAO().getAllCarts(user.getId());
+        System.out.println("orderId: " + orderId);
+        // Insert Order Details
+        for (Cart cartItem : cartItems) {
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrderId(orderId);
+            orderDetail.setCreatedBy(user.getId());
+            orderDetail.setProductDetailId(cartItem.getProductDetailId());
+            orderDetail.setQuantity(cartItem.getQuantity());
+            new OrderDAO().createOrderDetail(orderDetail);
+        }
+        new CartDAO().clearCart(user.getId());
         respone.sendRedirect(paymentUrl);
     }
 
 }
-
-

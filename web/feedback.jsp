@@ -19,6 +19,7 @@
         </style>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
 
     <body>
@@ -95,87 +96,39 @@
             </div>
             <div class="col-md-10">
 
-                <h2>Shopping Cart</h2>
+                <h2>Product Detail</h2>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Image</th>
-                            <th>Product Name</th>
-                            <th>Size</th>
-                            <th>Color</th>
-                            <th>Price</th>
-                            <th style="text-align: center">Quantity</th>
+                            <th>Thumbnail</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
                             <th>Total Cost</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:set value="0" var="total"/>
-                        <c:forEach var="item" items="${cartItems}">
-                            <tr>
-                                <td><img src="${item.productDetail.imageURL}" width="50" height="50" alt="alt"/></td>
-                                <td>${item.productDetail.getProductName()}</td>
-                                <td>${item.productDetail.size}</td>
-                                <td>${item.productDetail.color}</td>
-                                <td>
-                                    <c:if test="${item.productDetail.discount != null || item.productDetail.discount != 0}">
-                                        $${item.productDetail.price * (100.0- p.productDetail.discount)/100}
-                                        <c:set value="${total + item.productDetail.price * (100.0- p.productDetail.discount)/100}" var="total"/>
-                                    </c:if>
-                                    <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                        $${item.productDetail.price}
-                                        <c:set value="${total + item.productDetail.price}" var="total"/>
-                                    </c:if>
-                                </td>
-                                <td style="text-align: center">
-                                    <p>${item.quantity}</p>
-                                </td>
-                                <td>
-                                    <c:if test="${item.productDetail.discount != null || item.productDetail.discount != 0}">
-                                        $${item.quantity * (item.productDetail.price * (100.0- p.productDetail.discount)/100)}
-                                    </c:if>
-                                    <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                        $${item.quantity * (item.productDetail.price)}
-                                    </c:if>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <tr>
+                            <td><img src="${product.productDetail.imageURL}" alt="..." width="100" height="100"></td>
+                            <td>${product.productDetail.getProductName()}</td>
+                            <td>${product.productDetail.getCateogryName()}</td>
+                            <td>$${product.productDetail.discount != null &&  product.productDetail.discount != 0 ? (product.productDetail.price * (100-product.productDetail.discount)/100) : product.productDetail.price}</td>
+                            <td>${product.quantity}</td>
+                            <td>$${product.productDetail.discount != null &&  product.productDetail.discount != 0 ? (product.productDetail.price * (100-product.productDetail.discount)/100)*(product.quantity) : product.productDetail.price*product.quantity}</td>
+                            <td>
+                                <a href="${pageContext.request.contextPath}/public/product-detail?id=${product.productDetail.productId}&pdid=${product.productDetail.productDetailId}" class="btn btn-primary">Re-buy</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                <div>
-                    <c:if test="${totalPages > 1}">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <c:forEach begin="1" end="${totalPages}" var="pageNum">
-                                    <li class="page-item ${pageNum == currentPage ? 'active' : ''}">
-                                        <a class="page-link" href="cart?page=${pageNum}&searchQuery=${param.searchQuery}&category=${param.category}">${pageNum}</a>
-                                    </li>
-                                </c:forEach>
-                            </ul>
-                        </nav>
-                    </c:if>
-                </div>
-                <div>
-                    Total Order Price: $<span id="total-price">
-                        <c:set var="totalPrice" value="0" />
-                        <c:forEach var="item" items="${cartItemsFull}">
-                            <c:if test="${item.productDetail.discount != null || item.productDetail.discount != 0}">
-                                <c:set var="totalPrice" value="${totalPrice + item.quantity * (item.productDetail.price * (100.0- p.productDetail.discount)/100)}" />
-                            </c:if>
-                            <c:if test="${item.productDetail.discount == null || item.productDetail.discount == 0}">
-                                <c:set var="totalPrice" value="${totalPrice + item.quantity * (item.productDetail.price)}" />
-                            </c:if>
-
-                        </c:forEach>
-                        ${totalPrice}
-                    </span>
-                </div>
                 <br>
-                <h2>Cart Contact</h2>
-                <form action="../public/payment" method="post">
+                <h2>Feedback Contact</h2>
+                <form id="uploadForm" action="feedback" method="post">
+                    <input type="hidden" name="imageBase64" id="imageBase64">
+                    <input type="hidden" name="id" value="${product.id}">
                     <table class="table table-borderless">
-                        <input class="form-control" id="amount" name="amount" type="hidden" readonly value="${totalPrice}" />
-                        <input type="hidden" Checked="True" id="bankCode" name="bankcode" value="NCB">
-                        <input type="hidden" id="language" Checked="True" name="language" value="vn">
                         <tr>
                             <td>Full Name:</td>
                             <td><input type="text" class="form-control" name="fullname" value="${sessionScope.user.fullname}"></td> 
@@ -193,16 +146,38 @@
                             <td><input type="text" class="form-control" name="phone" value="${sessionScope.user.phone}"></td> 
                         </tr>
                         <tr>
-                            <td>Address:</td>
-                            <td><input type="text" class="form-control"  name="address" value="${sessionScope.user.address}"></td> 
+                            <td>Rating:</td>
+                            <td>
+                                <div class="d-flex">
+                                    <div class="mr-5">
+                                        <input type="radio"  name="rate" checked value="1"> <i class='bx bxs-star'></i>
+                                    </div>
+                                    <div class="mr-5">
+                                        <input type="radio"  name="rate" value="2"> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i>
+                                    </div>
+                                    <div class="mr-5">
+                                        <input type="radio"name="rate" value="3"> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i>
+                                    </div>
+                                    <div class="mr-5">
+                                        <input type="radio" name="rate" value="4"> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i>
+                                    </div>
+                                    <div>
+                                        <input type="radio"  name="rate" value="5"> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i> <i class='bx bxs-star'></i>
+                                    </div>
+                                </div>
+
+                            </td> 
                         </tr>
                         <tr>
-                            <td>Notes:</td>
-                            <td><input type="text" class="form-control" name="notes" value=""></td> 
+                            <td>Image</td>
+                            <td><input id="file" type="file" name="file" class="form-control"  name="address"></td> 
+                        </tr>
+                        <tr>
+                            <td>Comment: </td>
+                            <td><input type="text" class="form-control" name="comment" value=""></td> 
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <a href="cart"  class="btn btn-secondary">Change</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </td>
                         </tr>
@@ -210,12 +185,33 @@
 
 
                 </form>
-                
+
             </div>
 
         </div>
 
     </body>
+    
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+
+            if (file) {
+                event.preventDefault(); // Prevent form submission until image is processed
+
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const base64String = reader.result.split(',')[1];
+                    document.getElementById('imageBase64').value = base64String;
+
+                    // Now submit the form
+                    document.getElementById('uploadForm').submit();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 
 </html>
 

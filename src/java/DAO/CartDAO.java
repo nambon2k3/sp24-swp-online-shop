@@ -230,4 +230,15 @@ public class CartDAO {
         }
         return totalQuantity;
     }
+    
+    public void clearCart(int userId) {
+        try {
+            String query = "Delete from cart where userid = ?";
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, userId);
+            rs = stmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("clearCart: " + e.getMessage());
+        }
+    }
 }
