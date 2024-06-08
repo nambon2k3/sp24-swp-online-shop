@@ -54,7 +54,7 @@
                                 <i class="bi-user me-1"></i>
                                 My Order
                             </a>
-                            <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/customer/feedback">
+                            <a class="btn btn-outline-dark" href="${pageContext.request.contextPath}/customer/list-feedback">
                                 <i class="bi-user me-1"></i>
                                 Feedback
                             </a>

@@ -217,4 +217,22 @@ public class FeedbackDAO {
         }
         return false;
     }
+    
+    public boolean addFeedbackVer2(Feedback feedback) {
+        String query = "INSERT INTO [Feedback] (OrderDetailId, Rating, Comment, IsDeleted, CreatedBy, imgURL) VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, feedback.getOrderDetailId());
+            ps.setInt(2, feedback.getRating());
+            ps.setString(3, feedback.getComment());
+            ps.setBoolean(4, false);
+            ps.setInt(5, feedback.getCreatedBy());
+            ps.setBytes(6, feedback.getImgeURL());
+            int result = ps.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            Logger.getLogger(FeedbackDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return false;
+    }
 }

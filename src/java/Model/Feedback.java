@@ -10,6 +10,17 @@ public class Feedback {
     private boolean isDeleted;
     private Date createdAt;
     private int createdBy;
+    private byte[] imgeURL;
+
+    public byte[] getImgeURL() {
+        return imgeURL;
+    }
+
+    public void setImgeURL(byte[] imgeURL) {
+        this.imgeURL = imgeURL;
+    }
+    
+    
 
     public int getId() {
         return id;
