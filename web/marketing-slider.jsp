@@ -119,19 +119,20 @@
                                 <input type="hidden" name="sliderId" value="${slider.id}">
                                 <div class="form-group">
                                     <label for="imageUrl">Title</label>
-                                    <input type="text" class="form-control" id="imageUrl" name="title" value="${slider.title}" required>
+                                    <input type="text" class="form-control" id="title" name="title" value="${slider.title}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="imageUrl">Image URL</label>
-                                    <input type="text" class="form-control" id="imageUrl" name="imageUrl" value="${slider.imageUrl}" required>
+                                    <label for="imageUrl">Image</label>
+                                    <input type="file" class="form-control" id="imageFile" accept="image/*">
+                                    <input type="hidden" class="form-control" id="imageUrl" name="imageUrl" value="${slider.imageUrl}">
                                 </div>
                                 <div class="form-group">
                                     <label for="imageUrl">Backlink</label>
-                                    <input type="text" class="form-control" id="imageUrl" name="backlink" value="${slider.backlink}" required>
+                                    <input type="text" class="form-control" id="backlink" name="backlink" value="${slider.backlink}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="imageUrl">Note</label>
-                                    <input type="text" class="form-control" id="imageUrl" name="notes" value="${slider.notes}">
+                                    <input type="text" class="form-control" id="notes" name="notes" value="${slider.notes}">
                                 </div>
                                 <div class="form-group">
                                     <label for="status">Status</label>
@@ -226,6 +227,29 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            document.getElementById('imageFile').addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    // Check file size (limit to 2MB for example)
+                    const maxSize = 2 * 1024 * 1024;
+                    if (file.size > maxSize) {
+                        alert('File size exceeds the 2MB limit.');
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        // Convert the image file to Base64 URL
+                        const base64Url = event.target.result;
+                        document.getElementById('imageUrl').value = base64Url;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        </script>
+
 
         <!-- Bootstrap JS and jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

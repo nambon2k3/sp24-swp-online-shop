@@ -102,7 +102,6 @@ public class SliderDAO {
 
     // Read (Get filtered Sliders with pagination)
     public List<Slider> getFilteredSliders(String searchText, Boolean isDeleted, int pageNumber, int pageSize) {
-        searchText = searchText.toLowerCase();
         List<Slider> sliderList = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [Slider] WHERE 1=1");
         
