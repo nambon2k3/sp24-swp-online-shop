@@ -28,13 +28,16 @@ public class SliderDAO {
 
     // Create (Add new Slider)
     public boolean addSlider(Slider slider) {
-        String query = "INSERT INTO [Slider] (ImageUrl, IsDeleted, CreatedAt, CreatedBy) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO [Slider] (ImageUrl, IsDeleted, CreatedAt, CreatedBy, Title, Notes, Backlink) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, slider.getImageUrl());
             ps.setBoolean(2, slider.isIsDeleted());
             ps.setDate(3, new java.sql.Date(slider.getCreatedAt().getTime()));
             ps.setInt(4, slider.getCreatedBy());
+            ps.setString(5, slider.getTitle());
+            ps.setString(6, slider.getNotes());
+            ps.setString(7, slider.getBacklink());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
@@ -57,6 +60,9 @@ public class SliderDAO {
                 slider.setIsDeleted(rs.getBoolean("IsDeleted"));
                 slider.setCreatedAt(rs.getDate("CreatedAt"));
                 slider.setCreatedBy(rs.getInt("CreatedBy"));
+                slider.setTitle(rs.getString("Title"));
+                slider.setNotes(rs.getString("Notes"));
+                slider.setBacklink(rs.getString("Backlink"));
                 return slider;
             }
         } catch (SQLException e) {
@@ -83,6 +89,9 @@ public class SliderDAO {
                 slider.setIsDeleted(rs.getBoolean("IsDeleted"));
                 slider.setCreatedAt(rs.getDate("CreatedAt"));
                 slider.setCreatedBy(rs.getInt("CreatedBy"));
+                slider.setTitle(rs.getString("Title"));
+                slider.setNotes(rs.getString("Notes"));
+                slider.setBacklink(rs.getString("Backlink"));
                 sliderList.add(slider);
             }
         } catch (SQLException e) {
@@ -92,12 +101,13 @@ public class SliderDAO {
     }
 
     // Read (Get filtered Sliders with pagination)
-    public List<Slider> getFilteredSliders(String imageUrl, Boolean isDeleted, int pageNumber, int pageSize) {
+    public List<Slider> getFilteredSliders(String searchText, Boolean isDeleted, int pageNumber, int pageSize) {
+        searchText = searchText.toLowerCase();
         List<Slider> sliderList = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [Slider] WHERE 1=1");
         
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            queryBuilder.append(" AND ImageUrl LIKE ?");
+        if (searchText != null && !searchText.isEmpty()) {
+            queryBuilder.append(" AND Title LIKE ?");
         }
         if (isDeleted != null) {
             queryBuilder.append(" AND IsDeleted = ?");
@@ -111,8 +121,8 @@ public class SliderDAO {
         try {
             ps = conn.prepareStatement(query);
             int paramIndex = 1;
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                ps.setString(paramIndex++, "%" + imageUrl + "%");
+            if (searchText != null && !searchText.isEmpty()) {
+                ps.setString(paramIndex++, "%" + searchText + "%");
             }
             if (isDeleted != null) {
                 ps.setBoolean(paramIndex++, isDeleted);
@@ -127,6 +137,9 @@ public class SliderDAO {
                 slider.setIsDeleted(rs.getBoolean("IsDeleted"));
                 slider.setCreatedAt(rs.getDate("CreatedAt"));
                 slider.setCreatedBy(rs.getInt("CreatedBy"));
+                slider.setTitle(rs.getString("Title"));
+                slider.setNotes(rs.getString("Notes"));
+                slider.setBacklink(rs.getString("Backlink"));
                 sliderList.add(slider);
             }
         } catch (SQLException e) {
@@ -166,6 +179,9 @@ public class SliderDAO {
                 slider.setIsDeleted(rs.getBoolean("IsDeleted"));
                 slider.setCreatedAt(rs.getDate("CreatedAt"));
                 slider.setCreatedBy(rs.getInt("CreatedBy"));
+                slider.setTitle(rs.getString("Title"));
+                slider.setNotes(rs.getString("Notes"));
+                slider.setBacklink(rs.getString("Backlink"));
                 sliderList.add(slider);
             }
         } catch (SQLException e) {
@@ -176,14 +192,17 @@ public class SliderDAO {
 
     // Update (Update Slider)
     public boolean updateSlider(Slider slider) {
-        String query = "UPDATE [Slider] SET ImageUrl=?, IsDeleted=?, CreatedAt=?, CreatedBy=? WHERE ID=?";
+        String query = "UPDATE [Slider] SET ImageUrl=?, IsDeleted=?, CreatedAt=?, CreatedBy=?, Title=?, Notes=?, Backlink=? WHERE ID=?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, slider.getImageUrl());
             ps.setBoolean(2, slider.isIsDeleted());
             ps.setDate(3, new java.sql.Date(slider.getCreatedAt().getTime()));
             ps.setInt(4, slider.getCreatedBy());
-            ps.setInt(5, slider.getId());
+            ps.setString(5, slider.getTitle());
+            ps.setString(6, slider.getNotes());
+            ps.setString(7, slider.getBacklink());
+            ps.setInt(8, slider.getId());
             int result = ps.executeUpdate();
             return result > 0;
         } catch (SQLException e) {

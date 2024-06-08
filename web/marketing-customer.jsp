@@ -53,6 +53,13 @@
                         <option value="Female">Female</option>
                     </select>
                 </div>
+                <div class="form-group mr-2">
+                    <select class="form-control" name="status">
+                        <option value="">Select Status</option>
+                        <option value="true">Inactive</option>
+                        <option value="fale">Active</option>
+                    </select>
+                </div>
                 
                 <button type="submit" class="btn btn-primary mt-3">Search</button>
             </form>
@@ -186,6 +193,7 @@
                             <p><strong>Address:</strong> ${user.getAddress()}</p>
                             <p><strong>Phone:</strong> ${user.getPhone()}</p>
                             <p><strong>Status</strong> ${user.isDeleted ? 'Inactive' : 'Active'}</p>
+                            <div><strong>History Change</strong> ${user.changeHistory eq null ? 'No data' : user.changeHistory}</div>
                         </div>
                     </div>
                 </div>

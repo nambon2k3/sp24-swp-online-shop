@@ -55,9 +55,10 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Title</th>
                         <th>Image</th>
+                        <th>Backlink</th>
                         <th>Status</th>
-                        <th>Created At</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -65,9 +66,10 @@
                     <c:forEach var="slider" items="${sliderList}">
                         <tr>
                             <td>${slider.id}</td>
+                            <td>${slider.title}</td>
                             <td><img style="width: 200px" src="${slider.imageUrl}"></td>
+                            <td>${slider.backlink}</td>
                             <td>${slider.isDeleted ? 'Inactive' : 'Active'}</td>
-                            <td><fmt:formatDate value="${slider.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                             <td>
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#sliderInfoModal_${slider.id}">Info</button>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSliderModal_${slider.id}">Edit</button>
@@ -116,8 +118,20 @@
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="sliderId" value="${slider.id}">
                                 <div class="form-group">
+                                    <label for="imageUrl">Title</label>
+                                    <input type="text" class="form-control" id="imageUrl" name="title" value="${slider.title}" required>
+                                </div>
+                                <div class="form-group">
                                     <label for="imageUrl">Image URL</label>
-                                    <input type="text" class="form-control" id="imageUrl" name="imageUrl" value="${slider.imageUrl}">
+                                    <input type="text" class="form-control" id="imageUrl" name="imageUrl" value="${slider.imageUrl}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="imageUrl">Backlink</label>
+                                    <input type="text" class="form-control" id="imageUrl" name="backlink" value="${slider.backlink}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="imageUrl">Note</label>
+                                    <input type="text" class="form-control" id="imageUrl" name="notes" value="${slider.notes}">
                                 </div>
                                 <div class="form-group">
                                     <label for="status">Status</label>
@@ -147,6 +161,9 @@
                         <div class="modal-body">
                             <img class="w-100 mb-3" src="${slider.imageUrl}">
                             <p><strong>ID:</strong> ${slider.id}</p>
+                            <p><strong>Title:</strong> ${slider.title}</p>
+                            <p><strong>Notes:</strong> ${slider.notes}</p>
+                            <p><strong>Backlink:</strong> ${slider.backlink}</p>
                             <p><strong>Status:</strong> ${slider.isDeleted ? 'Inactive' : 'Active'}</p>
                             <p><strong>Created At:</strong> <fmt:formatDate value="${slider.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
                             <!--<p><strong>Created By:</strong> ${slider.createdBy}</p>-->
@@ -181,16 +198,28 @@
                                 <input type="text" class="form-control" id="imageUrl" name="imageUrl" required>
                             </div>
                             <div class="form-group">
+                                <label for="imageUrl">Title</label>
+                                <input type="text" class="form-control" id="imageUrl" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageUrl">Backlink</label>
+                                <input type="text" class="form-control" id="imageUrl" name="backlink" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageUrl">Note</label>
+                                <input type="text" class="form-control" id="imageUrl" name="notes">
+                            </div>
+                            <div class="form-group">
                                 <label for="isDeleted">Status</label>
                                 <select class="form-control" id="isDeleted" name="isDeleted">
                                     <option value="false">Active</option>
                                     <option value="true">Inactive</option>
                                 </select>
                             </div>
-<!--                            <div class="form-group">
-                                <label for="createdBy">Created By</label>
-                                <input type="text" class="form-control" id="createdBy" name="createdBy" required>
-                            </div>-->
+                            <!--                            <div class="form-group">
+                                                            <label for="createdBy">Created By</label>
+                                                            <input type="text" class="form-control" id="createdBy" name="createdBy" required>
+                                                        </div>-->
                             <button type="submit" class="btn btn-primary">Add Slider</button>
                         </form>
                     </div>
