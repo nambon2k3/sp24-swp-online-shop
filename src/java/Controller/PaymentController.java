@@ -109,7 +109,6 @@ public class PaymentController extends HttpServlet {
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
 
-
         //Section : Add new payment
         //Get user payment
         User user = (User) request.getSession().getAttribute("user");
@@ -131,13 +130,23 @@ public class PaymentController extends HttpServlet {
         List<Cart> cartItems = new CartDAO().getAllCarts(user.getId());
         System.out.println("orderId: " + orderId);
         // Insert Order Details
-        for (Cart cartItem : cartItems) {
+        if (request.getParameter("mode") != null) {
+            int productDetailId = Integer.parseInt(request.getParameter("productdetailId"));
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrderId(orderId);
             orderDetail.setCreatedBy(user.getId());
-            orderDetail.setProductDetailId(cartItem.getProductDetailId());
-            orderDetail.setQuantity(cartItem.getQuantity());
+            orderDetail.setProductDetailId(productDetailId);
+            orderDetail.setQuantity(Integer.parseInt(request.getParameter("quantity")));
             new OrderDAO().createOrderDetail(orderDetail);
+        } else {
+            for (Cart cartItem : cartItems) {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setOrderId(orderId);
+                orderDetail.setCreatedBy(user.getId());
+                orderDetail.setProductDetailId(cartItem.getProductDetailId());
+                orderDetail.setQuantity(cartItem.getQuantity());
+                new OrderDAO().createOrderDetail(orderDetail);
+            }
         }
         new CartDAO().clearCart(user.getId());
         respone.sendRedirect(paymentUrl);
