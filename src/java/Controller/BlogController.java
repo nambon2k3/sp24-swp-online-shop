@@ -71,7 +71,7 @@ public class BlogController extends HttpServlet {
         String search = request.getParameter("searchQuery");
         
         PostDAO postDAO = new PostDAO();
-        List<Post> posts = postDAO.getPosts(page, 8, category, "", "", search, "", "");
+        List<Post> posts = postDAO.getPosts(page, 8, category, "", "", search, "", "", "No");
         List<Category> categories = postDAO.getUniqueCategories();
         List<Post> latestPosts = postDAO.getLatestPosts();
         int totalPosts = postDAO.getTotalPosts(category, "", "", search);

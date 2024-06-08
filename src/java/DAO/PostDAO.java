@@ -30,7 +30,7 @@ public class PostDAO extends DBContext {
         }
     }
 
-    public List<Post> getPosts(int page, int pageSize, String category, String author, String status, String search, String sortBy, String sortOrder) {
+    public List<Post> getPosts(int page, int pageSize, String category, String author, String status, String search, String sortBy, String sortOrder, String isManage) {
         List<Post> posts = new ArrayList<>();
         int offset = (page - 1) * pageSize;
         StringBuilder query = new StringBuilder("SELECT po.ID, po.[CategoryId], po.Title, po.Content, po.IsDeleted, po.CreatedAt, po.imgURL, u.Fullname as AuthorName "
@@ -39,6 +39,10 @@ public class PostDAO extends DBContext {
                 + "JOIN [dbo].[Category] c ON po.CategoryId = c.ID "
                 + "WHERE 1=1");
 
+        if(isManage.equalsIgnoreCase("no")) {
+            query.append(" AND po.[IsDeleted] = 0");
+        }
+        
         if (category != null && !category.isEmpty()) {
             query.append(" AND c.Name = ?");
         }
