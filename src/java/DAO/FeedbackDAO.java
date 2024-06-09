@@ -98,12 +98,15 @@ public class FeedbackDAO {
     }
 
     // Read (Get filtered Feedbacks with pagination)
-    public List<Feedback> getFilteredFeedbacks(String comment, Boolean isDeleted, int pageNumber, int pageSize) {
+    public List<Feedback> getFilteredFeedbacks(String comment, Boolean isDeleted, String rating, int pageNumber, int pageSize) {
         List<Feedback> feedbackList = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [Feedback] WHERE 1=1");
 
         if (comment != null && !comment.isEmpty()) {
             queryBuilder.append(" AND Comment LIKE ?");
+        }
+        if (rating != null && !rating.isEmpty()) {
+            queryBuilder.append(" AND Rating = '" + rating + "' ");
         }
         if (isDeleted != null) {
             queryBuilder.append(" AND IsDeleted = ?");
@@ -143,12 +146,15 @@ public class FeedbackDAO {
         return feedbackList;
     }
     
-    public List<Feedback> getFilteredFeedbacks(String comment, Boolean isDeleted) {
+    public List<Feedback> getFilteredFeedbacks(String comment, Boolean isDeleted, String rating) {
         List<Feedback> feedbackList = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [Feedback] WHERE 1=1");
 
         if (comment != null && !comment.isEmpty()) {
             queryBuilder.append(" AND Comment LIKE ?");
+        }
+        if (rating != null && !rating.isEmpty()) {
+            queryBuilder.append(" AND Rating = '" + rating + "' ");
         }
         if (isDeleted != null) {
             queryBuilder.append(" AND IsDeleted = ?");

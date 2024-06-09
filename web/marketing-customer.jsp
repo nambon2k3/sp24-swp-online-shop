@@ -234,6 +234,17 @@
                             <div>
                                 <strong>History Change</strong>
                                 <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Update at</th>
+                                            <th>Email</th>
+                                            <th>Full Name</th>
+                                            <th>Gender</th>
+                                            <th>Address</th>
+                                            <th>Phone</th>
+                                            <th>Update by</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         ${user.changeHistory eq null ? '<tr><td>No data</td></tr>' : user.changeHistory}
                                     </tbody>

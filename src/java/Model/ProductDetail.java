@@ -133,6 +133,10 @@ public class ProductDetail {
     public String getCateogryName() {
         return new ProductDAO().getProductById(productId).getCategoryName();
     }
+    
+    public Product getProduct() {
+        return new ProductDAO().getProductById(productId);
+    }
 
     @Override
     public String toString() {
