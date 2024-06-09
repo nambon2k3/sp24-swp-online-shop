@@ -23,6 +23,17 @@ public class ProductDetail {
     private int discount;
     private Timestamp createdAt;
     private int createdBy;
+    private int orderDetailId;
+
+    public void setOrderDetailId(int orderDetailId) {
+        this.orderDetailId = orderDetailId;
+    }
+
+    public int getOrderDetailId() {
+        return orderDetailId;
+    }
+    
+    
     
     private int buyQuantity;
     

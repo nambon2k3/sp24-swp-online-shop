@@ -47,15 +47,16 @@
                 <div class="card">
                     <div class="container-fliud">
                         <div class="wrapper row">
-                            <div class="preview col-md-6">
-                                <div class="preview-pic tab-content">
-                                    <div class="tab-pane active" id="pic-1"><img src="${product.productDetail.imageURL}" /></div>
+                            <form id="form" action="payment" method="post">
+                                <div class="preview col-md-6">
+                                    <div class="preview-pic tab-content">
+                                        <div class="tab-pane active" id="pic-1"><img src="${product.productDetail.imageURL}" /></div>
                                 </div>
                                 <ul class="preview-thumbnail nav nav-tabs">
-                                <c:forEach items="${listDetails}" var="pd">
-                                    <li class="active"><a href="product-detail?pdid=${pd.productDetailId}&id=${product.productId}"><img
-                                                src="${pd.imageURL}"/></a></li>
-                                        </c:forEach>
+                                    <c:forEach items="${listDetails}" var="pd">
+                                        <li class="active"><a href="product-detail?pdid=${pd.productDetailId}&id=${product.productId}"><img
+                                                    src="${pd.imageURL}"/></a></li>
+                                            </c:forEach>
                                 </ul>
                             </div>
                             <div class="details col-md-6">
@@ -86,38 +87,52 @@
                                 </h5>
                                 <h5 class="colors">Quantity: 
                                     <input oninput="valid(this)" id="quantity" type="text" style="padding: 5px" value="1" name="quantity"> 
+                                    <input  type="hidden" id="productdetailId" value="${product.productDetail.productDetailId}" name="productdetailId"> 
+                                    <input  type="hidden"  name="mode" value="buy&feedback"> 
+                                    <input  type="hidden"  name="bankcode" value="NCB">
+                                    <input  type="hidden"  name="amount" id="amount" value=""> 
                                     <span style="font-weight: normal; font-style: italic"> (Available: ${product.productDetail.stock}) </span>
                                 </h5>
-                                
-                                
+
+
                                 <div class="action">
                                     <button class="add-to-cart btn btn-default" type="button" onclick="addToCart(${product.productDetail.productDetailId})">add to cart</button>
-                                    <button class="add-to-cart btn btn-default" type="button">buy & feedback</button>
+                                    <button type="submit" class="add-to-cart btn btn-default">buy & feedback</button>
                                 </div>
                             </div>
-                        </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
+        </div>
         <jsp:include page="footer.html"></jsp:include>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-        <script defer>
-            function valid(input) {
-                input.value= input.value.replace(/[^0-9]/g, '');
-                if(input.value > ${product.productDetail.stock}) input.value = ${product.productDetail.stock};
-                if(input.value < 1) input.value = 1;
-            }
-            function addToCart(id) {
-                let quantity = document.getElementById('quantity').value;
-                console.log(quantity);
-                fetch('add-cart?id=' + id+'&quantity='+quantity);
-                window.alert('ADDED Successfully');
-            }
+            <!-- Bootstrap core JS-->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- Core theme JS-->
+            <script src="../js/scripts.js"></script>
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+            <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+            <script defer>
+                                        function valid(input) {
+                                            input.value = input.value.replace(/[^0-9]/g, '');
+                                            if (input.value > ${product.productDetail.stock})
+                                                input.value = ${product.productDetail.stock};
+                                            if (input.value < 1)
+                                                input.value = 1;
+                                        }
+                                        function addToCart(id) {
+                                            let quantity = document.getElementById('quantity').value;
+                                            console.log(quantity);
+                                            fetch('add-cart?id=' + id + '&quantity=' + quantity);
+                                            window.alert('ADDED Successfully');
+                                        }
+
+                                        document.getElementById('form').addEventListener('submit', function (event) {
+                                                event.preventDefault(); // Prevent form submission until image is processed
+                                                document.getElementById('amount').value = (document.getElementById('quantity').value * 100 * ${product.productDetail.price * (1 - product.productDetail.discount/100)});
+                                                document.getElementById('form').submit();
+                                        });
         </script>
     </body>
 </html>

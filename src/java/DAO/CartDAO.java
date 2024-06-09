@@ -236,7 +236,7 @@ public class CartDAO {
             String query = "Delete from cart where userid = ?";
             stmt = connection.prepareStatement(query);
             stmt.setInt(1, userId);
-            rs = stmt.executeQuery();
+            stmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("clearCart: " + e.getMessage());
         }
