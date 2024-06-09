@@ -56,8 +56,8 @@
                 <div class="form-group mr-2">
                     <select class="form-control" name="status">
                         <option value="">Select Status</option>
-                        <option value="true" ${status eq 'true' ? 'selected' : ''}>Inactive</option>
-                        <option value="false" ${status eq 'false' ? 'selected' : ''}>Active</option>
+                        <option value="true" ${statusString eq 'true' ? 'selected' : ''}>Inactive</option>
+                        <option value="false" ${statusString eq 'false' ? 'selected' : ''}>Active</option>
                     </select>
                 </div>
                 <input type="hidden" name="page" id="pageInput" value="1">
