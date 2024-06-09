@@ -13,6 +13,17 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
         <!-- Font Awesome CSS for icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+        <style>
+            .modal-lg {
+                max-width: 80%;
+            }
+
+            .table th, .table td {
+                vertical-align: middle;
+            }
+
+        </style>
     </head>
     <body>
         <!-- Sidebar -->
@@ -176,7 +187,7 @@
 
             <!-- User Info Modal -->
             <div class="modal fade" id="userInfoModal_${user.id}" tabindex="-1" role="dialog" aria-labelledby="userInfoModalLabel_${user.id}" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="userInfoModalLabel_${user.id}">User Details</h5>
@@ -185,19 +196,54 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <img src="${user.avatar}" class="img-thumbnail mb-3" alt="Profile Image" style="width: 150px; height: 150px;">
-                            <p><strong>ID:</strong> ${user.id}</p>
-                            <p><strong>Full Name:</strong> ${user.fullname}</p>
-                            <p><strong>Email:</strong> ${user.getEmail()}</p>
-                            <p><strong>Gender:</strong> ${user.gender}</p>
-                            <p><strong>Address:</strong> ${user.getAddress()}</p>
-                            <p><strong>Phone:</strong> ${user.getPhone()}</p>
-                            <p><strong>Status</strong> ${user.isDeleted ? 'Inactive' : 'Active'}</p>
-                            <div><strong>History Change</strong> ${user.changeHistory eq null ? 'No data' : user.changeHistory}</div>
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="${user.avatar}" class="img-thumbnail mb-3" alt="Profile Image" style="width: 150px; height: 150px;">
+                            </div>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th>ID</th>
+                                        <td>${user.id}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Full Name</th>
+                                        <td>${user.fullname}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>${user.getEmail()}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Gender</th>
+                                        <td>${user.gender}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address</th>
+                                        <td>${user.getAddress()}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Phone</th>
+                                        <td>${user.getPhone()}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td>${user.isDeleted ? 'Inactive' : 'Active'}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div>
+                                <strong>History Change</strong>
+                                <table class="table">
+                                    <tbody>
+                                        ${user.changeHistory eq null ? '<tr><td>No data</td></tr>' : user.changeHistory}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
 
         </c:forEach>
