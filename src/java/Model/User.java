@@ -28,7 +28,7 @@ public class User {
     public void setChangeHistory(String changeHistory) {
         this.changeHistory = changeHistory;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -119,8 +119,28 @@ public class User {
 
     @Override
     public String toString() {
-        String time = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:ss dd-MM-yyyy"));
-        return "<strong>" + time + "</strong>" + ": email=" + email + ", fullname=" + fullname + ", gender=" + gender + ", address=" + address + ", phone=" + phone;
+        String time = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy"));
+        return "<tr>"
+                + "<td><strong>" + time + "</strong></td>"
+                + "<td>" + email + "</td>"
+                + "<td>" + fullname + "</td>"
+                + "<td>" + gender + "</td>"
+                + "<td>" + address + "</td>"
+                + "<td>" + phone + "</td>"
+                + "</tr>";
     }
     
+    public String toString(Staff staff) {
+        String time = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy"));
+        return "<tr>"
+                + "<td><strong>" + time + "</strong></td>"
+                + "<td>" + email + "</td>"
+                + "<td>" + fullname + "</td>"
+                + "<td>" + gender + "</td>"
+                + "<td>" + address + "</td>"
+                + "<td>" + phone + "</td>"
+                + "<td> Updated by: " + staff.getFullname() + "</td>"
+                + "</tr>";
+    }
+
 }
