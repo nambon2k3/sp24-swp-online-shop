@@ -59,6 +59,11 @@ public class MartketingCustomerController extends HttpServlet {
         request.setAttribute("currentPage", pageNumber);
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("fullName", fullName);
+        request.setAttribute("email", email);
+        request.setAttribute("phone", phone);
+        request.setAttribute("gender", gender);
+        request.setAttribute("statusString", statusString);
 
         request.getRequestDispatcher("../marketing-customer.jsp").forward(request, response);
     }

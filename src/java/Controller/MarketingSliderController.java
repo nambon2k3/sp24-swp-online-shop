@@ -54,6 +54,8 @@ public class MarketingSliderController extends HttpServlet {
         request.setAttribute("currentPage", pageNumber);
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("search", search);
+        request.setAttribute("status", status);
 
         request.getRequestDispatcher("../marketing-slider.jsp").forward(request, response);
     }

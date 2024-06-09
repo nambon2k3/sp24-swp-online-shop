@@ -37,17 +37,18 @@
             <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addSliderModal">Add Slider</button>
 
             <!--filter form-->
-            <form action="slider" method="get" class="form-inline mb-3">
+            <form id="searchForm" action="slider" method="get" class="form-inline mb-3">
                 <div class="form-group mr-2">
-                    <input type="text" class="form-control" name="search" placeholder="Search">
+                    <input type="text" class="form-control" name="search" placeholder="Search"value="${search}">
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="status">
                         <option value="">Select Status</option>
-                        <option value="true">Inactive</option>
-                        <option value="false">Active</option>
+                        <option value="true" ${status eq 'true' ? 'selected' : ''}>Inactive</option>
+                        <option value="false" ${status eq 'false' ? 'selected' : ''}>Active</option>
                     </select>
                 </div>
+                <input type="hidden" name="page" id="pageInput" value="1">
                 <button type="submit" class="btn btn-primary mt-3">Search</button>
             </form>
 
@@ -82,19 +83,19 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item">
-                        <a class="page-link" href="?page=1" aria-label="Previous">
+                        <button class="page-link" onclick="submitFormWithPage(1)" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
-                        </a>
+                        </button>
                     </li>
                     <c:forEach begin="1" end="${totalPages}" step="1" var="i">
                         <li class="page-item ${currentPage == i ? 'active' : ''}">
-                            <a class="page-link" href="?page=${i}">${i}</a>
+                            <button class="page-link" onclick="submitFormWithPage(${i})">${i}</button>
                         </li>
                     </c:forEach>
                     <li class="page-item">
-                        <a class="page-link" href="?page=${totalPages}" aria-label="Next">
+                        <button class="page-link" onclick="submitFormWithPage(${totalPages})" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
-                        </a>
+                        </button>
                     </li>
                 </ul>
             </nav>
@@ -123,8 +124,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="imageUrl">Image</label>
-                                    <input type="file" class="form-control" id="imageFile" accept="image/*">
-                                    <input type="hidden" class="form-control" id="imageUrl" name="imageUrl" value="${slider.imageUrl}">
+                                    <img id="image${slider.id}" class="w-100" src="${slider.imageUrl}">
+                                    <input type="file" class="form-control" id="imageFile${slider.id}" accept="image/*" onchange="updateImage(${slider.id})">
+                                    <input type="hidden" class="form-control" id="imageUrl${slider.id}" name="imageUrl" value="${slider.imageUrl}">
                                 </div>
                                 <div class="form-group">
                                     <label for="imageUrl">Backlink</label>
@@ -196,19 +198,21 @@
                             <!-- Form Inputs -->
                             <div class="form-group">
                                 <label for="imageUrl">Image URL</label>
-                                <input type="text" class="form-control" id="imageUrl" name="imageUrl" required>
+                                <img id="image0" class="w-100" src="">
+                                <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)" required>
+                                <input type="hidden" class="form-control" id="imageUrl0" name="imageUrl" value="${slider.imageUrl}">
                             </div>
                             <div class="form-group">
                                 <label for="imageUrl">Title</label>
-                                <input type="text" class="form-control" id="imageUrl" name="title" required>
+                                <input type="text" class="form-control" id="title" name="title" required>
                             </div>
                             <div class="form-group">
                                 <label for="imageUrl">Backlink</label>
-                                <input type="text" class="form-control" id="imageUrl" name="backlink" required>
+                                <input type="text" class="form-control" id="backlink" name="backlink" required>
                             </div>
                             <div class="form-group">
                                 <label for="imageUrl">Note</label>
-                                <input type="text" class="form-control" id="imageUrl" name="notes">
+                                <input type="text" class="form-control" id="notes" name="notes">
                             </div>
                             <div class="form-group">
                                 <label for="isDeleted">Status</label>
@@ -229,25 +233,35 @@
         </div>
 
         <script>
-            document.getElementById('imageFile').addEventListener('change', function () {
-                const file = this.files[0];
-                if (file) {
-                    // Check file size (limit to 2MB for example)
-                    const maxSize = 2 * 1024 * 1024;
+            function updateImage(sliderId) {
+                let fileInput = document.getElementById(`imageFile` + sliderId);
+                let image = document.getElementById(`image` + sliderId);
+                let hiddenInput = document.getElementById(`imageUrl` + sliderId);
+                console.log(fileInput, image, hiddenInput)
+
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
                     if (file.size > maxSize) {
-                        alert('File size exceeds the 2MB limit.');
+                        alert("The selected file is too large. Please select a file smaller than 2 MB.");
+                        fileInput.value = ''; // Clear the file input
                         return;
                     }
 
                     const reader = new FileReader();
-                    reader.onload = function (event) {
-                        // Convert the image file to Base64 URL
-                        const base64Url = event.target.result;
-                        document.getElementById('imageUrl').value = base64Url;
+
+                    reader.onload = function (e) {
+                        // Update the image src
+                        image.src = e.target.result;
+
+                        // Optionally, update the hidden input with the base64 data URL
+                        hiddenInput.value = e.target.result;
                     };
+
                     reader.readAsDataURL(file);
                 }
-            });
+            }
         </script>
 
 
@@ -270,6 +284,13 @@
                     "autoWidth": false
                 });
             });
+        </script>
+
+        <script>
+            function submitFormWithPage(page) {
+                document.getElementById('pageInput').value = page;
+                document.getElementById('searchForm').submit();
+            }
         </script>
 
     </body>

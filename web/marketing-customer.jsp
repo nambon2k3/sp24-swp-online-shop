@@ -36,31 +36,31 @@
             <!--<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addUserModal">Add User</button>-->
 
             <!--filter form-->
-            <form action="user" method="get" class="form-inline mb-3">
+            <form id="searchForm" action="user" method="get" class="form-inline mb-3">
                 <div class="form-group mr-2">
-                    <input type="text" class="form-control" name="fullName" placeholder="Full Name">
+                    <input type="text" class="form-control" name="fullName" placeholder="Full Name" value="${fullName}">
                 </div>
                 <div class="form-group mr-2">
-                    <input type="text" class="form-control" name="email" placeholder="Email">
+                    <input type="text" class="form-control" name="email" placeholder="Email" value="${email}">
                 </div>
                 <div class="form-group mr-2">
-                    <input type="text" class="form-control" name="phone" placeholder="Phone">
+                    <input type="text" class="form-control" name="phone" placeholder="Phone" value="${phone}">
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="gender">
                         <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                        <option value="Male" ${gender eq 'Male' ? 'selected' : ''}>Male</option>
+                        <option value="Female" ${gender eq 'Female' ? 'selected' : ''}>Female</option>
                     </select>
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="status">
                         <option value="">Select Status</option>
-                        <option value="true">Inactive</option>
-                        <option value="fale">Active</option>
+                        <option value="true" ${status eq 'true' ? 'selected' : ''}>Inactive</option>
+                        <option value="false" ${status eq 'false' ? 'selected' : ''}>Active</option>
                     </select>
                 </div>
-                
+                <input type="hidden" name="page" id="pageInput" value="1">
                 <button type="submit" class="btn btn-primary mt-3">Search</button>
             </form>
 
@@ -101,19 +101,19 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item">
-                        <a class="page-link" href="?page=1" aria-label="Previous">
+                        <button class="page-link" onclick="submitFormWithPage(1)" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
-                        </a>
+                        </button>
                     </li>
                     <c:forEach begin="1" end="${totalPages}" step="1" var="i">
                         <li class="page-item ${currentPage == i ? 'active' : ''}">
-                            <a class="page-link" href="?page=${i}">${i}</a>
+                            <button class="page-link" onclick="submitFormWithPage(${i})">${i}</button>
                         </li>
                     </c:forEach>
                     <li class="page-item">
-                        <a class="page-link" href="?page=${totalPages}" aria-label="Next">
+                        <button class="page-link" onclick="submitFormWithPage(${totalPages})" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
-                        </a>
+                        </button>
                     </li>
                 </ul>
             </nav>
@@ -265,16 +265,23 @@
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
         <script>
-            $(document).ready(function () {
-                $('#userTable').DataTable({
-                    "paging": false,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": false,
-                    "autoWidth": false
-                });
-            });
+                            $(document).ready(function () {
+                                $('#userTable').DataTable({
+                                    "paging": false,
+                                    "lengthChange": false,
+                                    "searching": false,
+                                    "ordering": true,
+                                    "info": false,
+                                    "autoWidth": false
+                                });
+                            });
+        </script>
+
+        <script>
+            function submitFormWithPage(page) {
+                document.getElementById('pageInput').value = page;
+                document.getElementById('searchForm').submit();
+            }
         </script>
 
     </body>

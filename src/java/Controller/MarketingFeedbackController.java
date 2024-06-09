@@ -48,6 +48,8 @@ public class MarketingFeedbackController extends HttpServlet {
         request.setAttribute("currentPage", pageNumber);
         request.setAttribute("pageSize", pageSize);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("searchComment", searchComment);
+        request.setAttribute("isDeleted", isDeleted);
 
         request.getRequestDispatcher("../marketing-feedback.jsp").forward(request, response);
     }
