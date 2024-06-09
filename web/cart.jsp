@@ -194,7 +194,9 @@
                 </div>
                 <br>
                 <a href="list-product" class="btn btn-secondary">Choose More Products</a>
-                <a href="cart-contact" class="btn btn-primary">Check Out</a>
+                <c:if test="${cartItemsFull.size() ne 0}">
+                    <a href="cart-contact" class="btn btn-primary">Check Out</a>
+                </c:if>
             </div>
 
         </div>
