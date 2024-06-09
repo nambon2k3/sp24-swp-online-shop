@@ -205,6 +205,7 @@ public class OrderDAO {
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
                 isCanceled = true;
+                new ProductDAO().updateQuantity(orderId, -1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -276,6 +277,9 @@ public class OrderDAO {
 
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, orderId);
+            if(status.equalsIgnoreCase("Paided")) {
+                new ProductDAO().updateQuantity(orderId, 1);
+            }
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -286,6 +290,8 @@ public class OrderDAO {
             throw new SQLException("Error while updating the order", e);
         }
     }
+
+    
 
     public List<OrderDetail> getOrderDetailsNotFeedbackedByUserId(int userId) {
         List<OrderDetail> orderDetails = new ArrayList<>();
