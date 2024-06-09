@@ -5,6 +5,7 @@
 package Model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Product {
     private int productId;
@@ -14,9 +15,18 @@ public class Product {
     private ProductDetail productDetail;
     private Timestamp createdAt;
     private int createdBy;
+    private List<ProductDetail> listProductDetail;
     // Getters and setters
     public int getProductId() {
         return productId;
+    }
+
+    public List<ProductDetail> getListProductDetail() {
+        return listProductDetail;
+    }
+
+    public void setListProductDetail(List<ProductDetail> listProductDetail) {
+        this.listProductDetail = listProductDetail;
     }
 
     public void setProductId(int productId) {

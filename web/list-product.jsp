@@ -14,6 +14,53 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="../css/styles.css" rel="stylesheet" />
+        <style>
+            .colors {
+                -webkit-box-flex: 1;
+                -webkit-flex-grow: 1;
+                -ms-flex-positive: 1;
+                flex-grow: 1;
+            }
+            .product-title, .price, .sizes, .colors {
+                text-transform: UPPERCASE;
+                font-weight: bold;
+            }
+
+            .checked, .price span {
+                color: #ff9f1a;
+            }
+
+            .product-title, .rating, .product-description, .price, .vote, .sizes {
+                margin-bottom: 15px;
+            }
+            .size {
+                margin-right: 10px;
+            }
+            .size:first-of-type {
+                margin-left: 40px;
+            }
+
+            .color {
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 10px;
+                height: 2em;
+                width: 2em;
+                border-radius: 2px;
+            }
+            .color:first-of-type {
+                margin-left: 20px;
+            }
+
+            .size.active{
+                background-color: black;
+                color: white
+            }
+            .size:hover {
+                cursor: pointer;
+                background-color: #555252
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
@@ -72,11 +119,54 @@
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="product-detail?id=${p.productId}">View details</a></div>
+                                    <div class="text-center mt-3">
+                                        <button  type="button" class="btn btn-outline-dark mt-auto text-center" data-bs-toggle="modal" data-bs-target="#exampleModal-${p.productId}">
+                                            Add To Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal-${p.productId}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Choose type</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h3 class="product-title">${p.productName}</h3>
+                                        <p class="product-description">${product.description}</p>
+                                        <h4 class="price">current price: <span><span style="color: grey; text-decoration: line-through; margin: 0 10px">${p.productDetail.price}$</span> ${p.productDetail.price * (1 - p.productDetail.discount/100)}$ </span></h4>
+                                        <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
+                                        <h5 class="sizes">sizes:
+                                            <span style="margin-right: 20px"></span>
+                                            <c:forEach items="${p.listProductDetail}" var="pd">
+                                                <span class="color size ${pd.size == p.productDetail.size ? 'active' : ''}" onclick="toggleActive(this, ${pd.productDetailId}, '${pd.color}', ${pd.stock})" data-toggle="tooltip" style="border: 1px solid black; text-align: center; align-content: center;" title="small">
+                                                    ${pd.size}
+                                                </span>
+                                            </c:forEach>
+                                        </h5>
+                                        <h5 class="sizes">colors:
+                                            <span id="selectedColor" class="color" style="background-color:  ${p.productDetail.color.toLowerCase()}"></span>
+                                        </h5>
+                                        <h5 class="colors">Quantity: 
+                                            <input oninput="valid2(this)" id="quantity" type="text" style="padding: 5px; width: 200px"  value="1" name="quantity"> 
+                                            <span style="font-weight: normal; font-style: italic; font-size: 16px"> (Available: <span id="stock">${p.productDetail.stock}</span>) </span>
+                                        </h5>
+                                        <input type="hidden" id="selectedProductDetailId" name="selectedProductDetailId" value="${p.productDetail.productDetailId}" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="addToCart(document.getElementById('selectedProductDetailId').value)">Submit</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </c:forEach> 
                 </div>
+
                 <!-- Pagination -->
                 <div class="row mb-5">
                     <form action="list-product" method="get" class="d-flex text-center justify-content-center align-items-lg-center">
@@ -96,10 +186,44 @@
         <script src="../js/scripts.js"></script>
 
         <script>
-            function valid(input) {
+                                            function valid(input) {
+                                                input.value = input.value.replace(/[^0-9]/g, '');
+                                                if (input.value > ${endPage})
+                                                    input.value = ${endPage};
+                                                if (input.value < 1)
+                                                    input.value = 1;
+                                            }
+
+
+                                            function toggleActive(element, productDetailId, color, stock) {
+                                                // Remove 'active' class from all spans
+                                                document.querySelectorAll('.color.size').forEach(span => {
+                                                    span.classList.remove('active');
+                                                });
+
+                                                // Add 'active' class to the clicked span
+                                                element.classList.add('active');
+                                                document.getElementById('stock').innerHTML = stock;
+                                                // Update the hidden input with the selected ProductDetail ID
+                                                document.getElementById('selectedProductDetailId').value = productDetailId;
+
+                                                // Update the color display
+                                                document.getElementById('selectedColor').style.backgroundColor = color.toLowerCase();
+                                            }
+                                            function addToCart(id) {
+                                                let quantity = document.getElementById('quantity').value;
+                                                console.log(quantity);
+                                                fetch('add-cart?id=' + id + '&quantity=' + quantity);
+                                                window.alert('ADDED Successfully');
+                                            }
+
+        </script>
+
+        <script>
+            function valid2(input) {
                 input.value = input.value.replace(/[^0-9]/g, '');
-                if (input.value > ${endPage})
-                    input.value = ${endPage};
+                if (input.value - document.getElementById('stock').innerHTML > 0)
+                    input.value = document.getElementById('stock').innerHTML;
                 if (input.value < 1)
                     input.value = 1;
             }
