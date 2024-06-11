@@ -1,6 +1,8 @@
 package Model;
 
+import DAO.OrderDAO;
 import java.util.Date;
+import javax.xml.bind.DatatypeConverter;
 
 public class Feedback {
     private int id;
@@ -78,6 +80,15 @@ public class Feedback {
         this.createdBy = createdBy;
     }
 
+    public OrderDetail getOrderDetail() {
+        return new OrderDAO().getOrderDetailById(orderDetailId);
+    }
     
+    public String getImage() {
+        if (imgeURL == null) return "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg";
+        
+        String imageBase64 = DatatypeConverter.printBase64Binary(imgeURL);
+        return "data:image/png;base64," + imageBase64;
+    }
 
 }

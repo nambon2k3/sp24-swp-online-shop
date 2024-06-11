@@ -35,17 +35,34 @@
             </c:if>
 
             <!--filter form-->
-            <form action="feedback" method="get" class="form-inline mb-3">
+            <form id="searchForm" action="feedback" method="get" class="form-inline mb-3">
                 <div class="form-group mr-2">
-                    <input type="text" class="form-control" name="search" placeholder="Search">
+                    <input type="text" class="form-control" name="searchComment" placeholder="Search comment"value="${searchComment}">
+                </div>
+                <div class="form-group mr-2">
+                    <input type="text" class="form-control" name="searchName" placeholder="Search product"value="${searchName}">
+                </div>
+                <div class="form-group mr-2">
+                    <input type="text" class="form-control" name="searchFullName" placeholder="Search fullname"value="${searchFullName}">
+                </div>
+                <div class="form-group mr-2">
+                    <select class="form-control" name="rating">
+                        <option value="">Select Rating</option>
+                        <option value="1" ${rating eq '1' ? 'selected' : ''}>1</option>
+                        <option value="2" ${rating eq '2' ? 'selected' : ''}>2</option>
+                        <option value="3" ${rating eq '3' ? 'selected' : ''}>3</option>
+                        <option value="4" ${rating eq '4' ? 'selected' : ''}>4</option>
+                        <option value="5" ${rating eq '5' ? 'selected' : ''}>5</option>
+                    </select>
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="status">
                         <option value="">Select Status</option>
-                        <option value="true">Inactive</option>
-                        <option value="false">Active</option>
+                        <option value="true" ${isDeleted ? 'selected' : ''}>Inactive</option>
+                        <option value="false" ${!isDeleted ? 'selected' : ''}>Active</option>
                     </select>
                 </div>
+                <input type="hidden" name="page" id="pageInput" value="1">
                 <button type="submit" class="btn btn-primary mt-3">Search</button>
             </form>
 
@@ -53,6 +70,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Product</th>
                         <th>Rating</th>
                         <th>Comment</th>
                         <th>Status</th>
@@ -63,6 +81,7 @@
                     <c:forEach var="feedback" items="${feedbackList}">
                         <tr>
                             <td>${feedback.id}</td>
+                            <td>${feedback.orderDetail.productDetail.product.productName}</td>
                             <td>${feedback.rating}</td>
                             <td>${fn:substring(feedback.comment, 0, 30)}...</td>
                             <td>${feedback.isDeleted ? 'Inactive' : 'Active'}</td>
@@ -78,19 +97,19 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item">
-                        <a class="page-link" href="?page=1" aria-label="Previous">
+                        <button class="page-link" onclick="submitFormWithPage(1)" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
-                        </a>
+                        </button>
                     </li>
                     <c:forEach begin="1" end="${totalPages}" step="1" var="i">
                         <li class="page-item ${currentPage == i ? 'active' : ''}">
-                            <a class="page-link" href="?page=${i}">${i}</a>
+                            <button class="page-link" onclick="submitFormWithPage(${i})">${i}</button>
                         </li>
                     </c:forEach>
                     <li class="page-item">
-                        <a class="page-link" href="?page=${totalPages}" aria-label="Next">
+                        <button class="page-link" onclick="submitFormWithPage(${totalPages})" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
-                        </a>
+                        </button>
                     </li>
                 </ul>
             </nav>
@@ -113,7 +132,7 @@
                             <form action="feedback" method="post">
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="feedbackId" value="${feedback.id}">
-                                <div class="form-group">
+                                <div class="form-group d-none">
                                     <label for="orderDetailId">Order Detail ID</label>
                                     <input type="text" class="form-control" id="orderDetailId" name="orderDetailId" value="${feedback.orderDetailId}" readonly>
                                 </div>
@@ -151,9 +170,20 @@
                         </div>
                         <div class="modal-body">
                             <p><strong>ID:</strong> ${feedback.id}</p>
-                            <p><strong>Order Detail ID:</strong> ${feedback.orderDetailId}</p>
+                            
+                            <p>
+                               <strong>User:</strong> ${feedback.orderDetail.order.fullname} <br>
+                               <strong>Address:</strong> ${feedback.orderDetail.order.address} <br>
+                               <strong>Phone:</strong> ${feedback.orderDetail.order.phone} <br>
+                            </p>
+                            <p>
+                                <strong>Product:</strong> ${feedback.orderDetail.productDetail.product.productName}
+                                <br><img class="w-75" src="${feedback.orderDetail.productDetail.imageURL}">
+                            </p>
+                            
                             <p><strong>Rating:</strong> ${feedback.rating}</p>
                             <p><strong>Comment:</strong> ${feedback.comment}</p>
+                            <p><strong>Image:</strong> <br><img class="w-75" src="${feedback.image}"></p>
                             <p><strong>Status:</strong> ${feedback.isDeleted ? 'Inactive' : 'Active'}</p>
                         </div>
                     </div>
@@ -161,51 +191,6 @@
             </div>
 
         </c:forEach>
-
-        <!-- Add Feedback Modal -->
-        <div class="modal fade" id="addFeedbackModal" tabindex="-1" role="dialog" aria-labelledby="addFeedbackModalLabel" aria-hidden="true">
-            <!-- Modal Content -->
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addFeedbackModalLabel">Add Feedback</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <!-- Modal Body -->
-                    <div class="modal-body">
-                        <!-- Add Feedback Form -->
-                        <form action="feedback" method="post">
-                            <!-- Hidden Field -->
-                            <input type="hidden" name="action" value="add">
-                            <!-- Form Inputs -->
-                            <div class="form-group">
-                                <label for="orderDetailId">Order Detail ID</label>
-                                <input type="text" class="form-control" id="orderDetailId" name="orderDetailId" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="rating">Rating</label>
-                                <input type="number" class="form-control" id="rating" name="rating" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="comment">Comment</label>
-                                <textarea class="form-control" id="comment" name="comment" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="isDeleted">Status</label>
-                                <select class="form-control" id="isDeleted" name="isDeleted">
-                                    <option value="false">Active</option>
-                                    <option value="true">Inactive</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Feedback</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Bootstrap JS and jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -216,16 +201,23 @@
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
         <script>
-            $(document).ready(function () {
-                $('#feedbackTable').DataTable({
-                    "paging": false,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": false,
-                    "autoWidth": false
-                });
-            });
+                            $(document).ready(function () {
+                                $('#feedbackTable').DataTable({
+                                    "paging": false,
+                                    "lengthChange": false,
+                                    "searching": false,
+                                    "ordering": true,
+                                    "info": false,
+                                    "autoWidth": false
+                                });
+                            });
+        </script>
+
+        <script>
+            function submitFormWithPage(page) {
+                document.getElementById('pageInput').value = page;
+                document.getElementById('searchForm').submit();
+            }
         </script>
 
     </body>

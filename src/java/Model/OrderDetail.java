@@ -1,5 +1,7 @@
 package Model;
 
+import DAO.OrderDAO;
+import DAO.ProductDAO;
 import java.util.Date;
 
 public class OrderDetail {
@@ -81,8 +83,9 @@ public class OrderDetail {
         this.createdBy = createdBy;
     }
 
-    
-    
+    public Order getOrder() {
+        return new OrderDAO().getOrderById(orderId);
+    }
     
 
 }
