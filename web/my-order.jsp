@@ -55,7 +55,7 @@
                 <div id="latest-products">
                     <h3>Latest Products</h3>
                     <c:forEach items="${products}" var="p">
-                        <a id="product" href="product-detail?id=${p.productId}" style="text-decoration: none; color: black;">
+                        <a id="product" href="../public/product-detail?id=${p.productId}" style="text-decoration: none; color: black;">
                             <table class="p-2">
                                 <tr>
                                     <td><img src="${p.productDetail.imageURL}" style="width:50px; height: 50px" alt="..." /></td>
