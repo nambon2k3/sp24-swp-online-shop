@@ -147,8 +147,9 @@ public class PaymentController extends HttpServlet {
                 orderDetail.setQuantity(cartItem.getQuantity());
                 new OrderDAO().createOrderDetail(orderDetail);
             }
+            new CartDAO().clearCart(user.getId());
         }
-        new CartDAO().clearCart(user.getId());
+       
         respone.sendRedirect(paymentUrl);
     }
 
