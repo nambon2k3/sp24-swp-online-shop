@@ -58,8 +58,8 @@
                 <div class="form-group mr-2">
                     <select class="form-control" name="status">
                         <option value="">Select Status</option>
-                        <option value="true" ${isDeleted ? 'selected' : ''}>Inactive</option>
-                        <option value="false" ${!isDeleted ? 'selected' : ''}>Active</option>
+                        <option value="true" ${isDeleted eq 'true' ? 'selected' : ''}>Inactive</option>
+                        <option value="false" ${isDeleted eq 'false' ? 'selected' : ''}>Active</option>
                     </select>
                 </div>
                 <input type="hidden" name="page" id="pageInput" value="1">
