@@ -141,7 +141,7 @@
                                 <td>
                                     <form action="update-cart" method="post" style="display:inline;">
                                         <input type="hidden" name="cartId" value="${item.id}">
-                                        <input type="number" name="quantity" value="${item.quantity}" min="1"
+                                        <input type="number"  name="quantity" value="${item.quantity}" min="1" max="${item.productDetail.stock}"
                                                class="form-control" style="width: 80px; display:inline;">
                                         <button type="submit" class="btn btn-sm btn-primary">Update</button>
                                     </form>
@@ -157,7 +157,7 @@
                                 <td>
                                     <form action="delete-cart" method="post" style="display:inline;">
                                         <input type="hidden" name="cartId" value="${item.id}">
-                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
                                     </form>
                                 </td>
                             </tr>

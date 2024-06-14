@@ -93,16 +93,39 @@ public class OrderDAO {
     }
 
     // Method to get orders with pagination
-    public List<Order> getOrdersByPage(int currentPage, int ordersPerPage, int userId) {
+    public List<Order> getOrdersByPage(int currentPage, int ordersPerPage, int userId, String orderDate, String orderTime, String orderStatus) {
         List<Order> orders = new ArrayList<>();
         int start = (currentPage - 1) * ordersPerPage;
 
         try {
-            String sql = "SELECT * FROM [dbo].[Order] WHERE [UserID] = ? ORDER BY createdAt OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+            String sql = "SELECT * FROM [dbo].[Order] WHERE 1=1 ";
+
+            if (orderDate != null && !orderDate.isEmpty()) {
+                sql += " AND CONVERT(date, [CreatedAt]) = ?";
+            }
+            if (orderTime != null && !orderTime.isEmpty()) {
+                sql += " AND CONVERT(time, [CreatedAt]) >= ?";
+            }
+            if (orderStatus != null && !orderStatus.isEmpty()) {
+                sql += " AND status = ?";
+            }
+            
+            sql += " AND [UserID] = ? ORDER BY createdAt OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+            
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, userId);
-            statement.setInt(2, start);
-            statement.setInt(3, ordersPerPage);
+            int index = 1;
+            if (orderDate != null && !orderDate.isEmpty()) {
+                statement.setString(index++, orderDate);
+            }
+            if (orderTime != null && !orderTime.isEmpty()) {
+                statement.setString(index++, orderTime);
+            }
+            if (orderStatus != null && !orderStatus.isEmpty()) {
+                statement.setString(index++, orderStatus);
+            }
+            statement.setInt(index++, userId);
+            statement.setInt(index++, start);
+            statement.setInt(index, ordersPerPage);
 
             rs = statement.executeQuery();
             while (rs.next()) {
@@ -128,12 +151,33 @@ public class OrderDAO {
     }
 
     // Method to get the total number of orders
-    public int getTotalOrderCount(int userId) {
+    public int getTotalOrderCount(int userId, String orderDate, String orderTime, String orderStatus) {
         int count = 0;
         try {
             String sql = "SELECT COUNT(*) FROM [dbo].[Order] WHERE [UserID] = ?";
+            if (orderDate != null && !orderDate.isEmpty()) {
+                sql += " AND CONVERT(date, [CreatedAt]) = ?";
+            }
+            if (orderTime != null && !orderTime.isEmpty()) {
+                sql += " AND CONVERT(time, [CreatedAt]) >= ?";
+            }
+            if (orderStatus != null && !orderStatus.isEmpty()) {
+                sql += " AND status = ?";
+            }
+            
             PreparedStatement statement = connection.prepareStatement(sql);
+            int index = 2;
             statement.setInt(1, userId);
+            if (orderDate != null && !orderDate.isEmpty()) {
+                statement.setString(index++, orderDate);
+            }
+            if (orderTime != null && !orderTime.isEmpty()) {
+                statement.setString(index++, orderTime);
+            }
+            if (orderStatus != null && !orderStatus.isEmpty()) {
+                statement.setString(index++, orderStatus);
+            }
+            
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 count = rs.getInt(1);
@@ -198,7 +242,7 @@ public class OrderDAO {
     public boolean cancelOrder(int orderId) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE [Order] SET status = 'Canceled' WHERE ID = ?";
+            String sql = "UPDATE [Order] SET status = 'Request cancel' WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
@@ -216,7 +260,7 @@ public class OrderDAO {
     public boolean confirmOrder(int orderId) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE [Order] SET status = 'Received' WHERE ID = ?";
+            String sql = "UPDATE [Order] SET status = 'Confirmed' WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
@@ -238,7 +282,7 @@ public class OrderDAO {
             preparedStatement.setString(2, order.getFullname());
             preparedStatement.setString(3, order.getAddress());
             preparedStatement.setString(4, order.getPhone());
-            preparedStatement.setString(5, "Created");
+            preparedStatement.setString(5, order.getStatus());
             preparedStatement.setBoolean(6, false);
             preparedStatement.setInt(7, order.getUserId());
             preparedStatement.setString(8, order.getNotes());
@@ -277,7 +321,7 @@ public class OrderDAO {
 
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, orderId);
-            if(status.equalsIgnoreCase("Paided")) {
+            if (status.equalsIgnoreCase("Paided")) {
                 new ProductDAO().updateQuantity(orderId, 1);
             }
 
@@ -290,8 +334,6 @@ public class OrderDAO {
             throw new SQLException("Error while updating the order", e);
         }
     }
-
-    
 
     public List<OrderDetail> getOrderDetailsNotFeedbackedByUserId(int userId) {
         List<OrderDetail> orderDetails = new ArrayList<>();

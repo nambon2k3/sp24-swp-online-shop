@@ -94,6 +94,7 @@
                 </div>
             </div>
             <div class="col-md-10">
+                <h2>My Orders</h2>
                 <c:if test="${isSuccess ne null && isSuccess}">
                     <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
                         <strong>Save success!</strong> You should check in on some of those fields below.
@@ -106,7 +107,30 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </c:if>
-                <h2>My Orders</h2>
+                <form method="GET" action="my-order" class="form-inline mb-3">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="orderDate" class="sr-only">Order Date:</label>
+                        <input type="date" id="orderDate" name="orderDate" class="form-control" value="${orderDate}" placeholder="Order Date">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="orderTime" class="sr-only">Order Time:</label>
+                        <input type="time" id="orderTime" name="orderTime" class="form-control" value="${orderTime}" placeholder="Order Time">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="orderStatus" class="sr-only">Order Status:</label>
+                        <select id="orderStatus" name="orderStatus" class="form-control">
+                            <option value="">All</option>
+                            <option value="Received" ${orderStatus eq"Received" ? "selected" : ""}>Received</option>
+                            <option value="Shipping" ${orderStatus eq"Shipping" ? "selected" : ""}>Processing</option>
+                            <option value="Received" ${orderStatus eq"Received" ? "selected" : ""}>Shipped</option>
+                            <option value="Request Cancel" ${orderStatus eq "Request Cancel" ? "selected" : ""}>Request Cancel</option>
+                            <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Canceled</option>
+                            <option value="Confirmed" ${orderStatus eq"Confirmed" ? "selected" : ""}>Delivered</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Filter</button>
+                </form>
+                
                 <table class="table">
                     <thead>
                         <tr>
@@ -129,10 +153,10 @@
                                 <td>$${item.totalCost}</td>
                                 <td>${item.status}</td>
                                 <td>
-                                    <c:if test="${item.status eq 'shipping'}">
+                                    <c:if test="${item.status eq 'Received'}">
                                         <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Received</a>
                                     </c:if>
-                                    
+
                                 </td>
                             </tr>
                         </c:forEach>
@@ -143,19 +167,19 @@
                     <ul class="pagination justify-content-center">
                         <c:if test="${currentPage > 1}">
                             <li class="page-item">
-                                <a class="page-link" href="?page=${currentPage - 1}" aria-label="Previous">
+                                <a class="page-link" href="?page=${currentPage - 1}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                         </c:if>
                         <c:forEach var="i" begin="1" end="${totalPages}">
                             <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                <a class="page-link" href="?page=${i}">${i}</a>
+                                <a class="page-link" href="?page=${i}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}">${i}</a>
                             </li>
                         </c:forEach>
                         <c:if test="${currentPage < totalPages}">
                             <li class="page-item">
-                                <a class="page-link" href="?page=${currentPage + 1}" aria-label="Next">
+                                <a class="page-link" href="?page=${currentPage + 1}&orderDate=${orderDate}&orderTime=${orderTime}&orderStatus=${orderStatus}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>

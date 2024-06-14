@@ -111,6 +111,8 @@ public class PaymentController extends HttpServlet {
 
         //Section : Add new payment
         //Get user payment
+        String method = request.getParameter("method");
+        
         User user = (User) request.getSession().getAttribute("user");
         //Create bill
         String fullname = request.getParameter("fullname");
@@ -123,6 +125,7 @@ public class PaymentController extends HttpServlet {
         order.setAddress(address);
         order.setPhone(phone);
         order.setNotes(notes);
+        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Paied" : "COD");
         order.setUserId(user.getId());
         int orderId = new OrderDAO().createOrder(order);
         Config.orderID = orderId;
@@ -149,8 +152,13 @@ public class PaymentController extends HttpServlet {
             }
             new CartDAO().clearCart(user.getId());
         }
-       
-        respone.sendRedirect(paymentUrl);
+        
+        if(method.equalsIgnoreCase("vnpay")) {
+            respone.sendRedirect(paymentUrl);
+        } else {
+            respone.sendRedirect("../customer/my-order");
+        }
+        
     }
 
 }

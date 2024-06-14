@@ -94,6 +94,13 @@
                                     <span style="font-weight: normal; font-style: italic"> (Available: ${product.productDetail.stock}) </span>
                                 </h5>
 
+                                <h5>
+                                    <strong>Payment method:</strong>
+                                    <input type="radio" name="method" value="VNPAY" checked> <strong>VNPAY</strong> 
+                                    <input type="radio"  name="method" value="COD" ${product.productDetail.price * (1 - product.productDetail.discount/100) > 45 ? "disabled" : ""}> <strong>COD</strong> ${product.productDetail.price * (1 - product.productDetail.discount/100) > 45 ? "(Order > 45$ not allow COD)" : ""}
+
+                                </h5>
+
 
                                 <div class="action">
                                     <button class="add-to-cart btn btn-default" type="button" onclick="addToCart(${product.productDetail.productDetailId})">add to cart</button>
@@ -129,9 +136,9 @@
                                         }
 
                                         document.getElementById('form').addEventListener('submit', function (event) {
-                                                event.preventDefault(); // Prevent form submission until image is processed
-                                                document.getElementById('amount').value = (document.getElementById('quantity').value * 100 * ${product.productDetail.price * (1 - product.productDetail.discount/100)});
-                                                document.getElementById('form').submit();
+                                            event.preventDefault(); // Prevent form submission until image is processed
+                                            document.getElementById('amount').value = (document.getElementById('quantity').value * 100 * ${product.productDetail.price * (1 - product.productDetail.discount/100)});
+                                            document.getElementById('form').submit();
                                         });
         </script>
     </body>

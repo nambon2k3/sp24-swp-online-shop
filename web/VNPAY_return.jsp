@@ -112,9 +112,12 @@
                         <td class="title">Payment Status:</td>
                         <td class="info">
                             <%
+                                
+                                boolean isSuccess = false;
                                 if (signValue.equals(vnp_SecureHash)) {
                                     if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
                                         out.print("Success");
+                                        isSuccess = true;
                                         new OrderDAO().updateOrder("Paided", Config.orderID);
                                     } else {
                                         out.print("Failed");
@@ -125,6 +128,7 @@
                                     new OrderDAO().updateOrder("Pay Failed", Config.orderID);
                                     out.print("invalid signature");
                                 }
+                                response.sendRedirect("public/cart?isSuccess=" + isSuccess);
                             %>
                         </td>
                     </tr>

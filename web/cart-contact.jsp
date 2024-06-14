@@ -201,11 +201,16 @@
                             <td><input type="text" class="form-control" name="notes" value=""></td> 
                         </tr>
                         <tr>
+                            <td>Payment method:</td>
+                            <td><input type="radio" name="method" value="VNPAY" checked> VNPAY <br><input type="radio"  name="method" value="COD" ${totalPrice > 45 ? "disabled" : ""}> COD ${totalPrice > 45 ? "(Order > 45$ not allow COD)" : ""}</td> 
+                        </tr>
+                        <tr>
                             <td colspan="2">
                                 <a href="cart"  class="btn btn-secondary">Change</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </td>
                         </tr>
+                        
                     </table>
 
 
