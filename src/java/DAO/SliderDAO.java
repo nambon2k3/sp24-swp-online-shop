@@ -99,6 +99,32 @@ public class SliderDAO {
         }
         return sliderList;
     }
+    
+    // Read (Get all Sliders with pagination)
+    public List<Slider> getAllSliders() {
+        List<Slider> sliderList = new ArrayList<>();
+        String query = "SELECT * FROM [Slider] where [IsDeleted] = 0";
+
+        try {
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Slider slider = new Slider();
+                slider.setId(rs.getInt("ID"));
+                slider.setImageUrl(rs.getString("ImageUrl"));
+                slider.setIsDeleted(rs.getBoolean("IsDeleted"));
+                slider.setCreatedAt(rs.getDate("CreatedAt"));
+                slider.setCreatedBy(rs.getInt("CreatedBy"));
+                slider.setTitle(rs.getString("Title"));
+                slider.setNotes(rs.getString("Notes"));
+                slider.setBacklink(rs.getString("Backlink"));
+                sliderList.add(slider);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(SliderDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return sliderList;
+    }
 
     // Read (Get filtered Sliders with pagination)
     public List<Slider> getFilteredSliders(String searchText, Boolean isDeleted, int pageNumber, int pageSize) {
