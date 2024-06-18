@@ -53,13 +53,13 @@ public class AdminDashboardController extends HttpServlet {
         LocalDateTime endDate = endDateStr != null ? LocalDateTime.parse(endDateStr + "T00:00:00") : LocalDateTime.now();
 
         // Retrieve order counts based on status and date range
-        request.setAttribute("order_success", new AdminDAO().getOrdersByStatus("Delivered").size());
+        request.setAttribute("order_success", new AdminDAO().getOrdersByStatus("Shipped").size());
         request.setAttribute("order_cancel", new AdminDAO().getOrdersByStatus("Canceled").size());
-        request.setAttribute("order_pending", new AdminDAO().getOrdersByStatus("Pending").size());
+        request.setAttribute("order_pending", new AdminDAO().getOrdersByStatus("Submitted").size());
 
-        request.setAttribute("order_success_filter", new AdminDAO().getOrdersByStatusAndDateRange("Delivered", startDate, endDate).size());
+        request.setAttribute("order_success_filter", new AdminDAO().getOrdersByStatusAndDateRange("Shipped", startDate, endDate).size());
         request.setAttribute("order_cancel_filter", new AdminDAO().getOrdersByStatusAndDateRange("Canceled", startDate, endDate).size());
-        request.setAttribute("order_pending_filter", new AdminDAO().getOrdersByStatusAndDateRange("Pending", startDate, endDate).size());
+        request.setAttribute("order_pending_filter", new AdminDAO().getOrdersByStatusAndDateRange("Submitted", startDate, endDate).size());
 
         // Retrieve total cost of orders from previous years
         request.setAttribute("total_now", new AdminDAO().getTotalCostOfPreviousNYears(0));
