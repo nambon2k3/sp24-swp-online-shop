@@ -395,7 +395,7 @@ public class OrderDAO {
             preparedStatement.setString(4, order.getPhone());
             preparedStatement.setString(5, order.getStatus());
             preparedStatement.setBoolean(6, false);
-            preparedStatement.setInt(7, order.getUserId());
+            preparedStatement.setInt(7, 4);
             preparedStatement.setString(8, order.getNotes());
             preparedStatement.executeUpdate();
 
