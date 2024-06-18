@@ -267,6 +267,11 @@ public class OrderDAO {
                 "SELECT COUNT(*) as totalOrders " +
                 "FROM [Order] o " +
                 "WHERE o.CreatedAt BETWEEN ? AND ?");
+            
+            if(staff.getRole() != 4) {
+                query.append(" AND o.CreatedBy = " );
+                query.append(String.valueOf(staff.getId()));
+            }
 
             if (salesperson != null && !salesperson.isEmpty()) {
                 query.append(" AND o.CreatedBy = ?");
