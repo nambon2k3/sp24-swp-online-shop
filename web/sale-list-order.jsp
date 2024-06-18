@@ -52,11 +52,10 @@
                         <select id="orderStatus" name="orderStatus" class="form-control">
                             <option value="" ${param.orderStatus == null ? 'selected' : ''}>All</option>
                             <option value="Received" ${param.orderStatus == 'Received' ? 'selected' : ''}>Received</option>
-                            <option value="Processing" ${param.orderStatus == 'Processing' ? 'selected' : ''}>Processing</option>
+                            <option value="Processing" ${param.orderStatus == 'Submitted' ? 'selected' : ''}>Submitted</option>
                             <option value="Shipped" ${param.orderStatus == 'Shipped' ? 'selected' : ''}>Shipped</option>
                             <option value="Request Cancel" ${param.orderStatus == 'Request Cancel' ? 'selected' : ''}>Request Cancel</option>
                             <option value="Canceled" ${param.orderStatus == 'Canceled' ? 'selected' : ''}>Canceled</option>
-                            <option value="Delivered" ${param.orderStatus == 'Delivered' ? 'selected' : ''}>Delivered</option>
                         </select>
                     </div>
                     <div class="col-12 mt-3">

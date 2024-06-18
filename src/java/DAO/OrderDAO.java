@@ -7,6 +7,7 @@ package DAO;
 import Model.Order;
 import Model.OrderDetail;
 import Model.ProductDetail;
+import Model.User;
 import jakarta.servlet.ServletException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -438,6 +439,48 @@ public class OrderDAO {
             throw new SQLException("Error while updating the order", e);
         }
     }
+    
+    public boolean updateOrderStatus(String status, int orderId){
+        String UPDATE_ORDER_SQL = "UPDATE [Order] SET status = ? WHERE id = ?";
+        boolean isSuccess = false;
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
+
+            preparedStatement.setString(1, status);
+            preparedStatement.setInt(2, orderId);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows > 0) {
+                isSuccess = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("updateOrderStatus: " + e.getMessage());
+        }
+        
+        return isSuccess;
+    }
+    
+    public boolean updateOrderSale(String saleId, int orderId){
+        String UPDATE_ORDER_SQL = "UPDATE [Order] SET [CreatedBy] = ? WHERE id = ?";
+        boolean isSuccess = false;
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
+
+            preparedStatement.setString(1, saleId);
+            preparedStatement.setInt(2, orderId);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows > 0) {
+                isSuccess = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("updateOrderStatus: " + e.getMessage());
+        }
+        
+        return isSuccess;
+    }
 
     public List<OrderDetail> getOrderDetailsNotFeedbackedByUserId(int userId) {
         List<OrderDetail> orderDetails = new ArrayList<>();
@@ -554,6 +597,25 @@ public class OrderDAO {
         trends.put("revenue", revenue);
 
         return trends;
+    }
+    
+    
+    
+    public List<User> getAllSale() {
+        String sql = "select distinct [CreatedBy] from [dbo].[Order]";
+        
+        List<User> users = new ArrayList<>();
+        try {
+            stmt = connection.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while (rs.next()) {                
+                User user = new UserDAO().getUserById(rs.getInt(1));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            System.out.println("getAllSale: " + e.getMessage());
+        }
+        return users;
     }
 
 }

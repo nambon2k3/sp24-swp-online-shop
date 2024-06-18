@@ -141,13 +141,13 @@
                 <!-- Order Actions -->
                 <c:if test="${order.status ne 'Received'}">
                     <div class="mt-4">
-                    <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Cancel Order</a>
-                </div>
+                        <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Cancel Order</a>
+                    </div>
                 </c:if>
-                
+
             </div>
         </div>
-                    <jsp:include page="footer.html"></jsp:include>
+        <jsp:include page="footer.html"></jsp:include>
     </body>
 </html>
 
