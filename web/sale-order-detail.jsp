@@ -43,7 +43,7 @@
             <p>Address: ${order.address}</p>
             <p>Phone: ${order.phone}</p>
             <p>Gender: ${order.user.gender}</p>
-            <p>Sale name: ${order.user.fullname}</p>
+            <p>Sale name: ${order.sale.fullname}</p>
 
             <!-- Ordered Products -->
             <h3>Ordered Products</h3>
@@ -89,19 +89,21 @@
                     <button type="submit" class="btn btn-success">Update</button>
                 </form>
             </div>
+            <c:if test="${sessionScope.staff.role eq 4}">
+                <div class="mt-4">
+                    <form method="get" action="update-order-status" class="form-inline mb-3">
+                        <input type="hidden" name="orderId" value="${order.id}">
+                        <label for="orderStatus" class="form-label mr-5"><strong>Assign to:</strong> </label>
+                        <select id="orderStatus" name="saleId" class="form-control mr-5">
+                            <c:forEach items="${sales}" var="item">
+                                <option value="${item.id}">${item.fullname}</option>
+                            </c:forEach>
+                        </select>
+                        <button type="submit" class="btn btn-success">Assign</button>
+                    </form>
+                </div>
+            </c:if>
 
-            <div class="mt-4">
-                <form method="get" action="update-order-status" class="form-inline mb-3">
-                    <input type="hidden" name="orderId" value="${order.id}">
-                    <label for="orderStatus" class="form-label mr-5"><strong>Assign to:</strong> </label>
-                    <select id="orderStatus" name="saleId" class="form-control mr-5">
-                        <c:forEach items="${sales}" var="item">
-                            <option value="${item.id}">${item.fullname}</option>
-                        </c:forEach>
-                    </select>
-                    <button type="submit" class="btn btn-success">Assign</button>
-                </form>
-            </div>
         </div>
         <!-- Bootstrap JS and jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -1,6 +1,7 @@
 package Model;
 
 import DAO.OrderDAO;
+import DAO.StaffDAO;
 import DAO.UserDAO;
 import java.util.Date;
 
@@ -60,6 +61,9 @@ public class Order {
         return new UserDAO().getUserById(userId);
     }
     
+    public Staff getSale() {
+        return new StaffDAO().getStaffById(createdBy);
+    }
 
     public int getId() {
         return id;

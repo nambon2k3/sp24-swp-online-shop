@@ -43,10 +43,13 @@
                         <label for="endDate" class="form-label">End Date</label>
                         <input type="date" id="endDate" name="endDate" class="form-control" value="${param.endDate}">
                     </div>
-                    <div class="col-md-3">
-                        <label for="salesperson" class="form-label">Salesperson</label>
-                        <input type="text" id="salesperson" name="salesperson" class="form-control" value="${param.salesperson}">
-                    </div>
+                    <c:if test="${sessionScope.staff.role eq 4}">
+                        <div class="col-md-3">
+                            <label for="salesperson" class="form-label">Salesperson</label>
+                            <input type="text" id="salesperson" name="salesperson" class="form-control" value="${param.salesperson}">
+                        </div>
+                    </c:if>
+
                     <div class="col-md-3">
                         <label for="orderStatus" class="form-label">Order Status</label>
                         <select id="orderStatus" name="orderStatus" class="form-control">

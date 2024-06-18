@@ -7,6 +7,7 @@ package DAO;
 import Model.Order;
 import Model.OrderDetail;
 import Model.ProductDetail;
+import Model.Staff;
 import Model.User;
 import jakarta.servlet.ServletException;
 import java.sql.Connection;
@@ -192,7 +193,7 @@ public class OrderDAO {
         }
         return count;
     }
-    public List<Order> getOrdersByPage(int currentPage, int ordersPerPage, String startDate, String endDate, String salesperson, String orderStatus) {
+    public List<Order> getOrdersByPage(int currentPage, int ordersPerPage, String startDate, String endDate, String salesperson, String orderStatus, Staff staff) {
         List<Order> orders = new ArrayList<>();
         int start = (currentPage - 1) * ordersPerPage;
 
@@ -201,6 +202,11 @@ public class OrderDAO {
                 "SELECT * " +
                 "FROM [Order] o " +
                 "WHERE o.CreatedAt BETWEEN ? AND ?");
+            
+            if(staff.getRole() != 4) {
+                query.append(" AND o.CreatedBy = " );
+                query.append(String.valueOf(staff.getId()));
+            }
 
             if (salesperson != null && !salesperson.isEmpty()) {
                 query.append(" AND o.CreatedBy = ?");
@@ -253,7 +259,7 @@ public class OrderDAO {
         return orders;
     }
 
-    public int getTotalOrderCount(String startDate, String endDate, String salesperson, String orderStatus){
+    public int getTotalOrderCount(String startDate, String endDate, String salesperson, String orderStatus, Staff staff){
         int totalOrders = 0;
 
         try {

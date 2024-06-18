@@ -10,6 +10,7 @@ import DAO.ProductDAO;
 import Model.Category;
 import Model.Order;
 import Model.Product;
+import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -86,9 +87,11 @@ public class SaleOrderController extends HttpServlet {
             endDate = "9999-01-01";
         }
         
-        List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, startDate, endDate, salesperson, orderStatus);
+        Staff staff = (Staff) request.getSession().getAttribute("staff");
+        
+        List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, startDate, endDate, salesperson, orderStatus, staff);
         List<Category> categories = new PostDAO().getUniqueCategories();
-        int totalOrders = orderDAO.getTotalOrderCount(startDate, endDate, salesperson, orderStatus);
+        int totalOrders = orderDAO.getTotalOrderCount(startDate, endDate, salesperson, orderStatus, staff);
         int totalPages = (int) Math.ceil((double) totalOrders / ordersPerPage);
         
         request.setAttribute("orders", orders);
