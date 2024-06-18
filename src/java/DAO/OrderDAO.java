@@ -153,7 +153,7 @@ public class OrderDAO {
         }
         return orders;
     }
-
+    
     // Method to get the total number of orders
     public int getTotalOrderCount(int userId, String orderDate, String orderTime, String orderStatus) {
         int count = 0;
@@ -190,6 +190,106 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return count;
+    }
+    public List<Order> getOrdersByPage(int currentPage, int ordersPerPage, String startDate, String endDate, String salesperson, String orderStatus) {
+        List<Order> orders = new ArrayList<>();
+        int start = (currentPage - 1) * ordersPerPage;
+
+        try {
+            StringBuilder query = new StringBuilder(
+                "SELECT * " +
+                "FROM [Order] o " +
+                "WHERE o.CreatedAt BETWEEN ? AND ?");
+
+            if (salesperson != null && !salesperson.isEmpty()) {
+                query.append(" AND o.CreatedBy = ?");
+            }
+            if (orderStatus != null && !orderStatus.isEmpty()) {
+                query.append(" AND o.Status = ?");
+            }
+
+            query.append(" ORDER BY o.CreatedAt DESC " +
+                         "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+            PreparedStatement stmt = connection.prepareStatement(query.toString());
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+
+            int paramIndex = 3;
+            if (salesperson != null && !salesperson.isEmpty()) {
+                stmt.setString(paramIndex++, salesperson);
+            }
+            if (orderStatus != null && !orderStatus.isEmpty()) {
+                stmt.setString(paramIndex++, orderStatus);
+            }
+
+            stmt.setInt(paramIndex++, start);
+            stmt.setInt(paramIndex++, ordersPerPage);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                // Extract data from ResultSet
+                int id = rs.getInt("ID");
+                int userId = rs.getInt("userId");
+                String fullName = rs.getString("Fullname");
+                String address = rs.getString("Address");
+                String phone = rs.getString("Phone");
+                String status = rs.getString("Status");
+                boolean isDeleted = rs.getBoolean("IsDeleted");
+                Timestamp createdAt = rs.getTimestamp("CreatedAt");
+                int createdBy = rs.getInt("CreatedBy");
+
+                // Create an Order object with extracted data
+                Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, createdAt, createdBy);
+                order.setNotes(rs.getString("notes"));
+                orders.add(order);
+            }
+        } catch (SQLException ex) {
+            System.out.println("getOrdersByPage: " + ex.getMessage());
+        }
+
+        return orders;
+    }
+
+    public int getTotalOrderCount(String startDate, String endDate, String salesperson, String orderStatus){
+        int totalOrders = 0;
+
+        try {
+            StringBuilder query = new StringBuilder(
+                "SELECT COUNT(*) as totalOrders " +
+                "FROM [Order] o " +
+                "WHERE o.CreatedAt BETWEEN ? AND ?");
+
+            if (salesperson != null && !salesperson.isEmpty()) {
+                query.append(" AND o.CreatedBy = ?");
+            }
+            if (orderStatus != null && !orderStatus.isEmpty()) {
+                query.append(" AND o.Status = ?");
+            }
+
+            PreparedStatement stmt = connection.prepareStatement(query.toString());
+            stmt.setString(1, startDate);
+            stmt.setString(2, endDate);
+
+            int paramIndex = 3;
+            if (salesperson != null && !salesperson.isEmpty()) {
+                stmt.setString(paramIndex++, salesperson);
+            }
+            if (orderStatus != null && !orderStatus.isEmpty()) {
+                stmt.setString(paramIndex++, orderStatus);
+            }
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                totalOrders = rs.getInt("totalOrders");
+            }
+        } catch (SQLException ex) {
+            System.out.println("getTotalOrderCount: " + ex.getMessage());
+        }
+
+        return totalOrders;
     }
 
     // Method to fetch order details by order ID
