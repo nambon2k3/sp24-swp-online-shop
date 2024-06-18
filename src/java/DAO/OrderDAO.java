@@ -7,6 +7,7 @@ package DAO;
 import Model.Order;
 import Model.OrderDetail;
 import Model.ProductDetail;
+import jakarta.servlet.ServletException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +15,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.sql.Statement;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -109,9 +113,9 @@ public class OrderDAO {
             if (orderStatus != null && !orderStatus.isEmpty()) {
                 sql += " AND status = ?";
             }
-            
+
             sql += " AND [UserID] = ? ORDER BY createdAt OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-            
+
             PreparedStatement statement = connection.prepareStatement(sql);
             int index = 1;
             if (orderDate != null && !orderDate.isEmpty()) {
@@ -164,7 +168,7 @@ public class OrderDAO {
             if (orderStatus != null && !orderStatus.isEmpty()) {
                 sql += " AND status = ?";
             }
-            
+
             PreparedStatement statement = connection.prepareStatement(sql);
             int index = 2;
             statement.setInt(1, userId);
@@ -177,7 +181,7 @@ public class OrderDAO {
             if (orderStatus != null && !orderStatus.isEmpty()) {
                 statement.setString(index++, orderStatus);
             }
-            
+
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 count = rs.getInt(1);
@@ -397,6 +401,59 @@ public class OrderDAO {
         }
 
         return orderDetail;
+    }
+
+    public Map<String, Object> getOrderTrends(String startDate, String endDate, String salesperson)  {
+        Map<String, Integer> totalOrders = new HashMap<>();
+        Map<String, Integer> successfulOrders = new HashMap<>();
+        Map<String, Double> revenue = new HashMap<>();
+
+        try {
+            String orderQuery = "SELECT o.CreatedAt, o.Status, od.quantity, p.price "
+                    + "FROM [Order] o "
+                    + "JOIN [OrderDetail] od ON o.ID = od.OrderID "
+                    + "JOIN [ProductDetail] p ON od.ProductDetailID = p.ID "
+                    + "WHERE o.CreatedAt BETWEEN ? AND ?";
+
+            if (salesperson != null && !salesperson.isEmpty()) {
+                orderQuery += " AND o.CreatedBy = ?";
+            }
+
+            PreparedStatement orderStmt = connection.prepareStatement(orderQuery);
+            orderStmt.setString(1, startDate);
+            orderStmt.setString(2, endDate);
+
+            if (salesperson != null && !salesperson.isEmpty()) {
+                orderStmt.setString(3, salesperson);
+            }
+
+            ResultSet rs = orderStmt.executeQuery();
+
+            while (rs.next()) {
+                String date = rs.getString("CreatedAt").split(" ")[0];
+                boolean isSuccess = rs.getString("Status").equalsIgnoreCase("Success");
+                int quantity = rs.getInt("quantity");
+                double price = rs.getDouble("price");
+
+                totalOrders.put(date, totalOrders.getOrDefault(date, 0) + 1);
+                if (isSuccess) {
+                    successfulOrders.put(date, successfulOrders.getOrDefault(date, 0) + 1);
+                }
+                revenue.put(date, revenue.getOrDefault(date, 0.0) + (quantity * price));
+            }
+        } catch (SQLException ex) {
+            System.out.println("getOrderTrends: " + ex.getMessage());
+        }
+
+        Map<String, Object> trends = new HashMap<>();
+        System.out.println(totalOrders);
+        System.out.println(successfulOrders);
+        System.out.println(revenue);
+        trends.put("totalOrders", totalOrders);
+        trends.put("successfulOrders", successfulOrders);
+        trends.put("revenue", revenue);
+
+        return trends;
     }
 
 }
