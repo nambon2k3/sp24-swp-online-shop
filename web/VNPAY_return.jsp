@@ -17,6 +17,8 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="DAO.OrderDAO"%>
+<%@page import="Model.User"%>
+<%@page import="Utils.EmailService"%>
 <%@page import="Utils.Config"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
@@ -120,7 +122,7 @@
                                         isSuccess = true;
                                         new OrderDAO().updateOrder("Submitted", Config.orderID);
                                         EmailService.sendEmail(((User) request.getSession().getAttribute("user")).getEmail(), "Confirm Order", "We have receive your order!" + "Payment guidles: " 
-                                        + request.getParameter("vnp_OrderInfo") + ", Amount:" String.format("%,.0f",Double.parseDouble(request.getParameter("vnp_Amount"))/100) + ", Transaction Code: " + request.getParameter("vnp_TransactionNo"));
+                                        + request.getParameter("vnp_OrderInfo") + ", Amount:" + String.format("%,.0f",Double.parseDouble(request.getParameter("vnp_Amount"))/100) + ", Transaction Code: " + request.getParameter("vnp_TransactionNo"));
                                     } else {
                                         out.print("Failed");
                                         new OrderDAO().updateOrder("Pay Failed", Config.orderID);
