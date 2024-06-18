@@ -6,8 +6,6 @@
 package Controller;
 
 import DAO.OrderDAO;
-import Model.User;
-import Utils.EmailService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,8 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Legion
  */
-@WebServlet(name="ConfirmOrderController", urlPatterns={"/customer/confirm-order"})
-public class ConfirmOrderController extends HttpServlet {
+@WebServlet(name="AssignOrderController", urlPatterns={"/sale/assign-order"})
+public class AssignOrderController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -38,10 +36,10 @@ public class ConfirmOrderController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ConfirmOrderController</title>");  
+            out.println("<title>Servlet AssignOrderController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ConfirmOrderController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet AssignOrderController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,12 +57,12 @@ public class ConfirmOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
-        User user = (User) request.getSession().getAttribute("user");
-        OrderDAO orderDAO = new OrderDAO();        
-        boolean isSuccess = orderDAO.confirmOrder(orderId);
-        EmailService.sendEmail(user.getEmail(), "Thanks Card", "Thanks for trying our product, we want to hear your feedback! Link feedback: http://localhost:8080/swp-online-shop/customer/order-detail?orderId=" + orderId);
+
+        OrderDAO orderDAO = new OrderDAO();
+        
+        boolean isSuccess = orderDAO.updateOrderStatus(request.getParameter("saleId"), orderId);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
-        response.sendRedirect("my-order?isSuccess=" + isSuccess);
+        response.sendRedirect("order-detail?isSuccess=" + isSuccess + "&orderId="+orderId);
     } 
 
     /** 
