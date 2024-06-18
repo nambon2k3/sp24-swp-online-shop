@@ -75,20 +75,22 @@
                 <strong>Total Order Price:</strong> $${order.totalCost}
             </div>
             <!-- Order Actions -->
-            <div class="mt-4">
-                <form method="get" action="update-order-status" class="form-inline mb-3">
-                    <input type="hidden" name="orderId" value="${order.id}">
-                    <label for="orderStatus" class="form-label mr-5"><strong>Update Order Status:</strong> </label>
-                    <select id="orderStatus" name="orderStatus" class="form-control mr-5">
-                        <option value="Received" ${order.status == 'Received' ? 'selected' : ''}>Received</option>
-                        <option value="Submitted" ${order.status == 'Submitted' ? 'selected' : ''}>Submitted</option>
-                        <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
-                        <option value="Request Cancel" ${order.status == 'Request Cancel' ? 'selected' : ''}>Request Cancel</option>
-                        <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
-                    </select>
-                    <button type="submit" class="btn btn-success">Update</button>
-                </form>
-            </div>
+            <c:if test="${sessionScope.staff.role ne 4}">
+                <div class="mt-4">
+                    <form method="get" action="update-order-status" class="form-inline mb-3">
+                        <input type="hidden" name="orderId" value="${order.id}">
+                        <label for="orderStatus" class="form-label mr-5"><strong>Update Order Status:</strong> </label>
+                        <select id="orderStatus" name="orderStatus" class="form-control mr-5">
+                            <option value="Received" ${order.status == 'Received' ? 'selected' : ''}>Received</option>
+                            <option value="Submitted" ${order.status == 'Submitted' ? 'selected' : ''}>Submitted</option>
+                            <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
+                            <option value="Request Cancel" ${order.status == 'Request Cancel' ? 'selected' : ''}>Request Cancel</option>
+                            <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
+                        </select>
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </form>
+                </div>
+            </c:if>
             <c:if test="${sessionScope.staff.role eq 4}">
                 <div class="mt-4">
                     <form method="get" action="update-order-status" class="form-inline mb-3">

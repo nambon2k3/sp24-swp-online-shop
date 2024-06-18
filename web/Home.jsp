@@ -15,22 +15,48 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .carousel-item img {
+                width: 100%;
+                height: auto;
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
-            <!-- Header-->
-            <header class="py-5" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://w0.peakpx.com/wallpaper/752/914/HD-wallpaper-sabito-s-haori-kimetsu-no-yaiba-pattern.jpg);">
-                <div class="container px-4 px-lg-5 my-5">
-                    <div class="text-center text-white">
-                        <h1 class="display-4 fw-bolder">Shop in style</h1>
-                        <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
-                    </div>
-                </div>
-            </header>
-            <!-- Section-->
-            <section class="py-5">
-                <div class="container px-4 px-lg-5 mt-5">
-                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div id="carouselExampleCaptions" class="carousel slide">
+                <div class="carousel-indicators">
+                <c:forEach var="index" begin="0" end="${sliders.size()- 1}"> 
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="${index}" ${index  == 0 ? "class=\"active\" aria-current=\"true\"": ""} aria-label="Slide ${index}"></button>
+                </c:forEach>
+            </div>
+            <div class="carousel-inner">
+                <c:set value="1" var="index"/>
+                <c:forEach var="slider" items="${sliders}" >
+                    <a href="${slider.backlink}" class="carousel-item ${index eq 1 ? "active" : ""}">
+                        <img src="${slider.imageUrl}" class="d-block w-100" style="height: 600px" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>${slider.title}</h5>
+                            <p>${slider.notes}</p>
+                        </div>
+                    </a>
+                        <c:set value="${index + 1}" var="index"/>
+                </c:forEach>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>   
+        <!-- Section-->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     <c:forEach items="${products}" var="p">
                         <div class="col mb-5">
                             <div class="card h-100">
@@ -77,6 +103,28 @@
             </div>   
         </section>
 
+        <!-- Section-->
+        <section class="py-5">
+            <div id="posts" class="mt-5">
+                <h2>Posts</h2>
+                <div class="row">
+                    <c:forEach var="post" items="${posts}">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <a href="${post.detailsLink}">
+                                    <img src="${post.thumbnail}" class="card-img-top" alt="${post.title}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${post.title}</h5>
+                                        <p class="card-text">${post.briefInfo}</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+            </div>
+        </section>            
+
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
@@ -84,10 +132,24 @@
 
         <script>
             function valid(input) {
-                input.value= input.value.replace(/[^0-9]/g, '');
-                if(input.value > ${endPage}) input.value = ${endPage};
-                if(input.value < 1) input.value = 1;
+                input.value = input.value.replace(/[^0-9]/g, '');
+                if (input.value > ${endPage})
+                    input.value = ${endPage};
+                if (input.value < 1)
+                    input.value = 1;
             }
+
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.carousel').carousel({
+                    interval: 3000,
+                    pause: 'hover'
+                });
+            });
         </script>
         <!-- đáy -->
         <jsp:include page="footer.html"></jsp:include>

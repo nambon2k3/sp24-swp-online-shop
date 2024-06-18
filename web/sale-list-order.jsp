@@ -55,7 +55,7 @@
                         <select id="orderStatus" name="orderStatus" class="form-control">
                             <option value="" ${param.orderStatus == null ? 'selected' : ''}>All</option>
                             <option value="Received" ${param.orderStatus == 'Received' ? 'selected' : ''}>Received</option>
-                            <option value="Processing" ${param.orderStatus == 'Submitted' ? 'selected' : ''}>Submitted</option>
+                            <option value="Submitted" ${param.orderStatus == 'Submitted' ? 'selected' : ''}>Submitted</option>
                             <option value="Shipped" ${param.orderStatus == 'Shipped' ? 'selected' : ''}>Shipped</option>
                             <option value="Request Cancel" ${param.orderStatus == 'Request Cancel' ? 'selected' : ''}>Request Cancel</option>
                             <option value="Canceled" ${param.orderStatus == 'Canceled' ? 'selected' : ''}>Canceled</option>

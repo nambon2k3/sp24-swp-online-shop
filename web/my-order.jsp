@@ -121,11 +121,10 @@
                         <select id="orderStatus" name="orderStatus" class="form-control">
                             <option value="">All</option>
                             <option value="Received" ${orderStatus eq"Received" ? "selected" : ""}>Received</option>
-                            <option value="Shipping" ${orderStatus eq"Shipping" ? "selected" : ""}>Processing</option>
-                            <option value="Received" ${orderStatus eq"Received" ? "selected" : ""}>Shipped</option>
+                            <option value="Submitted" ${orderStatus eq"Shipping" ? "selected" : ""}>Submitted</option>
+                            <option value="Shipped" ${orderStatus eq"Received" ? "selected" : ""}>Shipped</option>
                             <option value="Request Cancel" ${orderStatus eq "Request Cancel" ? "selected" : ""}>Request Cancel</option>
                             <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Canceled</option>
-                            <option value="Confirmed" ${orderStatus eq"Confirmed" ? "selected" : ""}>Delivered</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary mb-2">Filter</button>
@@ -153,7 +152,7 @@
                                 <td>$${item.totalCost}</td>
                                 <td>${item.status}</td>
                                 <td>
-                                    <c:if test="${item.status eq 'Received'}">
+                                    <c:if test="${item.status eq 'Shipped'}">
                                         <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Received</a>
                                     </c:if>
 
