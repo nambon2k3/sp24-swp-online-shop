@@ -119,6 +119,8 @@
                                         out.print("Success");
                                         isSuccess = true;
                                         new OrderDAO().updateOrder("Paided", Config.orderID);
+                                        EmailService.sendEmail(((User) request.getSession().getAttribute("user")).getEmail(), "Confirm Order", "We have receive your order!" + "Payment guidles: " 
+                                        + request.getParameter("vnp_OrderInfo") + ", Amount:" String.format("%,.0f",Double.parseDouble(request.getParameter("vnp_Amount"))/100) + ", Transaction Code: " + request.getParameter("vnp_TransactionNo"));
                                     } else {
                                         out.print("Failed");
                                         new OrderDAO().updateOrder("Pay Failed", Config.orderID);
