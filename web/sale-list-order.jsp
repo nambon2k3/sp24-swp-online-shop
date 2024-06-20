@@ -73,6 +73,7 @@
                         <th>ID</th>
                         <th>Order Date</th>
                         <th>Customer Name</th>
+                        <th>Sale Name</th>
                         <th>Address</th>
                         <th>Phone</th>
                         <th>Total</th>
@@ -85,6 +86,7 @@
                             <td><a href="order-detail?orderId=${item.id}">${item.id}</a></td>
                             <td>${item.createdAt}</td>
                             <td>${item.user.fullname}</td>
+                            <td>${item.staff.fullname}</td>
                             <td>${item.address}</td>
                             <td>${item.phone}</td>
                             <td>$${item.totalCost}</td>

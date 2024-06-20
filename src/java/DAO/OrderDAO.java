@@ -201,15 +201,17 @@ public class OrderDAO {
             StringBuilder query = new StringBuilder(
                 "SELECT * " +
                 "FROM [Order] o " +
-                "WHERE o.CreatedAt BETWEEN ? AND ?");
+                "JOIN Staff s on s.ID = o.CreatedBy" +
+                " WHERE o.CreatedAt BETWEEN ? AND ?");
             
             if(staff.getRole() != 4) {
-                query.append(" AND o.CreatedBy = " );
+                query.append(" AND o.CreatedBy = ");
                 query.append(String.valueOf(staff.getId()));
             }
 
             if (salesperson != null && !salesperson.isEmpty()) {
-                query.append(" AND o.CreatedBy = ?");
+                String condition = " AND s.[fullname] LIKE '%" + salesperson + "%' ";
+                query.append(condition);
             }
             if (orderStatus != null && !orderStatus.isEmpty()) {
                 query.append(" AND o.Status = ?");
@@ -223,9 +225,6 @@ public class OrderDAO {
             stmt.setString(2, endDate);
 
             int paramIndex = 3;
-            if (salesperson != null && !salesperson.isEmpty()) {
-                stmt.setString(paramIndex++, salesperson);
-            }
             if (orderStatus != null && !orderStatus.isEmpty()) {
                 stmt.setString(paramIndex++, orderStatus);
             }
@@ -266,7 +265,8 @@ public class OrderDAO {
             StringBuilder query = new StringBuilder(
                 "SELECT COUNT(*) as totalOrders " +
                 "FROM [Order] o " +
-                "WHERE o.CreatedAt BETWEEN ? AND ?");
+                "JOIN Staff s on s.ID = o.CreatedBy" +
+                " WHERE o.CreatedAt BETWEEN ? AND ?");
             
             if(staff.getRole() != 4) {
                 query.append(" AND o.CreatedBy = " );
@@ -274,7 +274,8 @@ public class OrderDAO {
             }
 
             if (salesperson != null && !salesperson.isEmpty()) {
-                query.append(" AND o.CreatedBy = ?");
+                String condition = " AND s.[fullname] LIKE '%" + salesperson + "%' ";
+                query.append(condition);
             }
             if (orderStatus != null && !orderStatus.isEmpty()) {
                 query.append(" AND o.Status = ?");
@@ -285,9 +286,6 @@ public class OrderDAO {
             stmt.setString(2, endDate);
 
             int paramIndex = 3;
-            if (salesperson != null && !salesperson.isEmpty()) {
-                stmt.setString(paramIndex++, salesperson);
-            }
             if (orderStatus != null && !orderStatus.isEmpty()) {
                 stmt.setString(paramIndex++, orderStatus);
             }
