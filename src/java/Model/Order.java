@@ -137,6 +137,11 @@ public class Order {
         this.createdBy = createdBy;
     }
 
+    @Override
+    public String toString() {
+        return "Order{" + "id=" + id + ", userId=" + userId + ", fullname=" + fullname + ", address=" + address + ", phone=" + phone + ", status=" + status + ", isDeleted=" + isDeleted + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", totalCost=" + totalCost + ", notes=" + notes + ", user=" + user + '}';
+    }
+
     
     
 

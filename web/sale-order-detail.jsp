@@ -74,37 +74,60 @@
             <div>
                 <strong>Total Order Price:</strong> $${order.totalCost}
             </div>
-            <!-- Order Actions -->
-            <c:if test="${sessionScope.staff.role ne 4}">
-                <div class="mt-4">
-                    <form method="get" action="update-order-status" class="form-inline mb-3">
-                        <input type="hidden" name="orderId" value="${order.id}">
-                        <label for="orderStatus" class="form-label mr-5"><strong>Update Order Status:</strong> </label>
-                        <select id="orderStatus" name="orderStatus" class="form-control mr-5">
-                            <option value="Received" ${order.status == 'Received' ? 'selected' : ''}>Received</option>
-                            <option value="Submitted" ${order.status == 'Submitted' ? 'selected' : ''}>Submitted</option>
-                            <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
-                            <option value="Request Cancel" ${order.status == 'Request Cancel' ? 'selected' : ''}>Request Cancel</option>
-                            <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
-                        </select>
-                        <button type="submit" class="btn btn-success">Update</button>
-                    </form>
-                </div>
-            </c:if>
-            <c:if test="${sessionScope.staff.role eq 4}">
-                <div class="mt-4">
-                    <form method="get" action="update-order-status" class="form-inline mb-3">
-                        <input type="hidden" name="orderId" value="${order.id}">
-                        <label for="orderStatus" class="form-label mr-5"><strong>Assign to:</strong> </label>
-                        <select id="orderStatus" name="saleId" class="form-control mr-5">
-                            <c:forEach items="${sales}" var="item">
-                                <option value="${item.id}">${item.fullname}</option>
-                            </c:forEach>
-                        </select>
-                        <button type="submit" class="btn btn-success">Assign</button>
-                    </form>
-                </div>
-            </c:if>
+
+
+            <div class="mt-4">
+                <form method="get" action="update-order-status" class="form-inline mb-3">
+                    <table class="table">
+                        <c:if test="${sessionScope.staff.role eq 4}">
+                            <tr>
+                                <td>
+                                    <label for="orderStatus" class="form-label mr-5"><strong>Assign to:</strong> </label>
+                                </td>
+                                <td>
+                                    <select id="orderStatus" name="saleId" class="form-control mr-5">
+                                        <c:forEach items="${sales}" var="item">
+                                            <option value="${item.id}" ${item.id == order.createdBy ? 'selected' : ''}>${item.fullname}</option>
+                                        </c:forEach>
+                                    </select>
+                                </td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${order.status ne 'Received'}">
+                            <tr>
+                                <td>
+                                    <label for="orderStatus" class="form-label mr-5"><strong>Update Order Status:</strong> </label>
+                                </td>
+
+                                <td>
+                                    <select id="orderStatus" name="orderStatus" class="form-control mr-5">
+                                        <option value="Received" ${order.status == 'Received' ? 'selected' : ''}>Received</option>
+                                        <option value="Submitted" ${order.status == 'Submitted' ? 'selected' : ''}>Submitted</option>
+                                        <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                        <option value="Request Cancel" ${order.status == 'Request Cancel' ? 'selected' : ''}>Request Cancel</option>
+                                        <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </c:if>
+                        <tr>
+                            <td>
+                                <label for="orderStatus" class="form-label mr-5"><strong>Notes: </strong> </label>
+                            </td>
+                            <td>
+                                <textarea name="notes" class="form-control">
+                                    ${order.notes}
+                                </textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="hidden" name="orderId" value="${order.id}"></td>
+                            <td><button type="submit" class="btn btn-success">Update</button></td>
+                        </tr>
+                    </table>
+
+                </form>
+            </div>
 
         </div>
         <!-- Bootstrap JS and jQuery -->

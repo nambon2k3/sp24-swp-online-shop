@@ -57,10 +57,13 @@ public class UpdateOrderStatusController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
-
+        String notes = request.getParameter("notes");
+        String saleId = request.getParameter("saleId");
+        
         OrderDAO orderDAO = new OrderDAO();
         
-        boolean isSuccess = orderDAO.updateOrderStatus(request.getParameter("orderStatus"), orderId);
+        
+        boolean isSuccess = orderDAO.updateOrderStatus(request.getParameter("orderStatus"), orderId, notes, saleId);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         response.sendRedirect("order-detail?isSuccess=" + isSuccess + "&orderId="+orderId);
     } 

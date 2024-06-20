@@ -12,6 +12,7 @@ import Model.Category;
 import Model.Order;
 import Model.Product;
 import Model.ProductDetail;
+import Model.Staff;
 import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -70,7 +71,7 @@ public class SaleOrderDetailController extends HttpServlet {
 
         Order order = orderDAO.getOrderById(orderId);
         List<ProductDetail> orderedProducts = orderDAO.getOrderedProductsByOrderId(orderId);
-        List<User> sales = orderDAO.getAllSale();
+        List<Staff> sales = orderDAO.getAllSale();
         request.setAttribute("order", order);
         request.setAttribute("sales", sales);
         request.setAttribute("orderedProducts", orderedProducts);

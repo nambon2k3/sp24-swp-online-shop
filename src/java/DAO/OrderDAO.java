@@ -320,8 +320,9 @@ public class OrderDAO {
                 order.setFullname(rs.getString("fullname"));
                 order.setAddress(rs.getString("address"));
                 order.setPhone(rs.getString("phone"));
-                order.setStatus(rs.getString("status"));
+                order.setStatus(rs.getString("Status"));
                 order.setCreatedAt(rs.getDate("createdAt"));
+                order.setCreatedBy(rs.getInt("createdBy"));
                 order.setNotes(rs.getString("notes"));
                 order.setTotalCost(getTotal(orderId));
             }
@@ -459,6 +460,29 @@ public class OrderDAO {
 
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, orderId);
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows > 0) {
+                isSuccess = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("updateOrderStatus: " + e.getMessage());
+        }
+        
+        return isSuccess;
+    }
+    
+    public boolean updateOrderStatus(String status, int orderId, String notes, String saleId){
+        String UPDATE_ORDER_SQL = "UPDATE [Order] SET status = ?, notes = ?, createdBy = ? WHERE id = ?";
+        boolean isSuccess = false;
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
+
+            preparedStatement.setString(1, status);
+            preparedStatement.setString(2, notes);
+            preparedStatement.setString(3, saleId);
+            preparedStatement.setInt(4, orderId);
 
             int affectedRows = preparedStatement.executeUpdate();
 
@@ -612,21 +636,21 @@ public class OrderDAO {
     
     
     
-    public List<User> getAllSale() {
-        String sql = "select distinct [CreatedBy] from [dbo].[Order]";
+    public List<Staff> getAllSale() {
+        String sql = "select distinct [ID] from [dbo].[Staff] where role = 3";
         
-        List<User> users = new ArrayList<>();
+        List<Staff> staffs = new ArrayList<>();
         try {
             stmt = connection.prepareStatement(sql);
             rs = stmt.executeQuery();
             while (rs.next()) {                
-                User user = new UserDAO().getUserById(rs.getInt(1));
-                users.add(user);
+                Staff staff = new StaffDAO().getStaffById(rs.getInt(1));
+                staffs.add(staff);
             }
         } catch (SQLException e) {
             System.out.println("getAllSale: " + e.getMessage());
         }
-        return users;
+        return staffs;
     }
 
 }
