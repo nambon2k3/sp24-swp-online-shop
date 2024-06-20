@@ -4,8 +4,10 @@
  */
 package Controller;
 
+import DAO.PostDAO;
 import DAO.ProductDAO;
 import DAO.SliderDAO;
+import Model.Post;
 import Model.Product;
 import Model.Slider;
 import java.io.IOException;
@@ -73,7 +75,13 @@ public class HomeController extends HttpServlet {
         
         List<Slider> sliders = new SliderDAO().getAllSliders();
         
+        PostDAO postDAO = new PostDAO();
+        
+        List<Post> posts = postDAO.getPosts(1, 6, "", "", "", "", "", "", "No");
+        System.out.println(posts);
+        
         request.setAttribute("products", products);
+        request.setAttribute("posts", posts);
         request.setAttribute("sliders", sliders);
         request.setAttribute("endPage", endPage);
         request.setAttribute("page", pageNumber);

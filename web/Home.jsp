@@ -35,13 +35,13 @@
                 <c:set value="1" var="index"/>
                 <c:forEach var="slider" items="${sliders}" >
                     <a href="${slider.backlink}" class="carousel-item ${index eq 1 ? "active" : ""}">
-                        <img src="${slider.imageUrl}" class="d-block w-100" style="height: 600px" alt="...">
+                        <img src="${slider.imageUrl}" class="d-block w-100" style="height: 600px; object-fit: contain" alt="...">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>${slider.title}</h5>
                             <p>${slider.notes}</p>
                         </div>
                     </a>
-                        <c:set value="${index + 1}" var="index"/>
+                    <c:set value="${index + 1}" var="index"/>
                 </c:forEach>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
@@ -104,25 +104,31 @@
         </section>
 
         <!-- Section-->
-        <section class="py-5">
-            <div id="posts" class="mt-5">
-                <h2>Posts</h2>
+        <hr>
+        <h2 class="text-center">Try Our Blogs</h2>
+        <section class="py-5 d-flex justify-content-center">
+            <div id="posts" class="mt-5 col-lg-9">
+                
                 <div class="row">
                     <c:forEach var="post" items="${posts}">
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <a href="${post.detailsLink}">
-                                    <img src="${post.thumbnail}" class="card-img-top" alt="${post.title}">
+                                <a href="public/post-detail?id=${post.id}">
+                                    <img src="${post.imgURL}" class="card-img-top" alt="${post.title}">
                                     <div class="card-body">
                                         <h5 class="card-title">${post.title}</h5>
-                                        <p class="card-text">${post.briefInfo}</p>
+                                        <p class="card-text">${fn:substring(post.content, 0, 50)}...</p>
                                     </div>
                                 </a>
                             </div>
                         </div>
                     </c:forEach>
                 </div>
+                <div class="row d-flex justify-content-center">
+                    <a class="btn btn-primary col-lg-2" href="public/list-blog">See more</a>
+                </div>
             </div>
+            
         </section>            
 
         <!-- Bootstrap core JS-->
