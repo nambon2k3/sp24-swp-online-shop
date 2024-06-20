@@ -4,7 +4,9 @@
  */
 package Controller;
 
+import DAO.SaleDAO;
 import DAO.OrderDAO;
+import DAO.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -19,7 +22,7 @@ import java.util.Map;
  * @author Legion
  */
 @WebServlet(name = "SaleDashBoardController", urlPatterns = {"/sale/dashboard"})
-public class SaleDashBoardController extends HttpServlet {
+public class SaleDashboardController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,36 +50,37 @@ public class SaleDashBoardController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String salesperson = request.getParameter("salesperson");
-        String startDate = request.getParameter("startDate");
-        String endDate = request.getParameter("endDate");
-        OrderDAO orderDAO = new OrderDAO(); 
-        if(startDate == null || startDate.isEmpty()) {
-            startDate = "1990-08-24";
-        }
-        
-        if(endDate == null || endDate.isEmpty()) {
-            endDate = "9999-01-01";
-        }
+        // Get the start date and end date from request parameters
+        String startDateStr = request.getParameter("start_date");
+        String endDateStr = request.getParameter("end_date");
 
-        Map<String, Object> trends = orderDAO.getOrderTrends(startDate, endDate, salesperson);
-        request.setAttribute("totalOrders", trends.get("totalOrders"));
-        request.setAttribute("successfulOrders", trends.get("successfulOrders"));
-        request.setAttribute("revenue", trends.get("revenue"));
+        // Set default values if start date or end date are null
+        LocalDateTime startDate = startDateStr != null ? LocalDateTime.parse(startDateStr + "T00:00:00") : LocalDateTime.now().minusDays(7);
+        LocalDateTime endDate = endDateStr != null ? LocalDateTime.parse(endDateStr + "T00:00:00") : LocalDateTime.now();
 
-        request.getRequestDispatcher("/sale-dashboard.jsp").forward(request, response);
+        // Retrieve order counts based on status and date range
+        request.setAttribute("order_success", new SaleDAO().getOrdersByStatus("Shipped").size());
+        request.setAttribute("order_cancel", new SaleDAO().getOrdersByStatus("Canceled").size());
+        request.setAttribute("order_pending", new SaleDAO().getOrdersByStatus("Submitted").size());
+
+        request.setAttribute("order_success_filter", new SaleDAO().getOrdersByStatusAndDateRange("Shipped", startDate, endDate).size());
+        request.setAttribute("order_cancel_filter", new SaleDAO().getOrdersByStatusAndDateRange("Canceled", startDate, endDate).size());
+        request.setAttribute("order_pending_filter", new SaleDAO().getOrdersByStatusAndDateRange("Submitted", startDate, endDate).size());
+
+        // Retrieve total cost of orders from previous years
+        request.setAttribute("total_now", new SaleDAO().getTotalCostOfPreviousNYears(0));
+        request.setAttribute("total_prev", new SaleDAO().getTotalCostOfPreviousNYears(1));
+
+        // Set start and end dates
+        request.setAttribute("startDate", startDate.toString().substring(0, 10));
+        request.setAttribute("endDate", endDate.toString().substring(0, 10));
+
+
+        request.getRequestDispatcher("../sale-dashboard.jsp").forward(request, response);
     }
 
     /**
