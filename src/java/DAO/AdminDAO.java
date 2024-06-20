@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class AdminDAO {
 
@@ -71,22 +72,31 @@ public class AdminDAO {
     // Get total cost of orders from the previous n years
     public double getTotalCostOfPreviousNYears(int n) {
         double totalCost = 0.0;
-//        LocalDateTime currentDate = LocalDateTime.now();
-//        LocalDateTime previousStartDate = currentDate.minusYears(n).withDayOfYear(1).with(LocalTime.MIN); // Start of year n years ago
-//        LocalDateTime previousEndDate = currentDate.minusYears(n - 1).withDayOfYear(1).with(LocalTime.MIN).minusSeconds(1); // End of year n-1 years ago
-//
-//        String query = "SELECT SUM(TotalCost) AS TotalCost FROM Orders WHERE OrderDate >= ? AND OrderDate <= ?";
-//        try {
-//            ps = conn.prepareStatement(query);
-//            ps.setTimestamp(1, Timestamp.valueOf(previousStartDate));
-//            ps.setTimestamp(2, Timestamp.valueOf(previousEndDate));
-//            rs = ps.executeQuery();
-//            if (rs.next()) {
-//                totalCost = rs.getDouble("TotalCost");
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime previousStartDate = currentDate.minusYears(n).withDayOfYear(1).with(LocalTime.MIN); // Start of year n years ago
+        LocalDateTime previousEndDate = currentDate.minusYears(n - 1).withDayOfYear(1).with(LocalTime.MIN).minusSeconds(1); // End of year n-1 years ago
+
+        String query = "SELECT * FROM [Order] WHERE CreatedAt >= ? AND CreatedAt <= ?";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setTimestamp(1, Timestamp.valueOf(previousStartDate));
+            ps.setTimestamp(2, Timestamp.valueOf(previousEndDate));
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("ID"));
+                order.setUserId(rs.getInt("UserID"));
+                order.setCreatedAt(rs.getDate("CreatedAt"));
+                order.setStatus(rs.getString("Status"));
+                order.setFullname(rs.getString("Fullname"));
+                order.setPhone(rs.getString("Phone"));
+                order.setAddress(rs.getString("Address"));
+                
+                totalCost += order.getTotalCost();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return totalCost;
     }
 

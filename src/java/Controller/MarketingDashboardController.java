@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import DAO.MarketingDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,6 +22,12 @@ public class MarketingDashboardController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        MarketingDAO dao = new MarketingDAO();
+        
+        request.setAttribute("post", dao.getStatiticTrend("Post"));
+        request.setAttribute("product", dao.getStatiticTrend("Product"));
+        request.setAttribute("user", dao.getStatiticTrend("User"));
+        request.setAttribute("feedback", dao.getStatiticTrend("Feedback"));
         
         request.getRequestDispatcher("../marketing-dashboard.jsp").forward(request, response);
     }

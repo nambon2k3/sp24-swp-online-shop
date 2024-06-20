@@ -45,6 +45,6 @@
 <nav class="sidebar">
     <ul>
         <li><a href="dashboard"><i class="fas fa-chart-line mr-2"></i>Dashboard</a></li>
-        <li><a href="sale-order"><i class="fas fa-user-friends mr-2"></i>Orders</a></li>
+        <li><a href="sale-order"><i class="fas fa-shopping-cart mr-2"></i>Orders</a></li>
     </ul>
 </nav>
