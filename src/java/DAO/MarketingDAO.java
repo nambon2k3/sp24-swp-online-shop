@@ -34,7 +34,7 @@ public class MarketingDAO {
         }
     }
 
-    public String getStatiticTrend(String table) {
+    public String getStatisticTrend(String table) {
         StringBuilder result = new StringBuilder();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
@@ -66,42 +66,45 @@ public class MarketingDAO {
         return result.toString();
     }
 
-    public String getStatiticTrend(String table, Date startDate, Date endDate) {
+    public String getStatisticTrend(String table, Date startDate) {
         StringBuilder result = new StringBuilder();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        // Calendar for iterating over dates
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(endDate); // Set the end date
+        calendar.setTime(startDate);
 
-        try {
-            // Prepare SQL query
+        for (int i = 0; i < 7; i++) {
+            Date currentDate = calendar.getTime();
+            String formattedDate = dateFormat.format(currentDate);
+
             String query = "SELECT COUNT(*) AS UserCount FROM [" + table + "] WHERE CAST(CreatedAt AS DATE) = ?";
-            ps = conn.prepareStatement(query);
-
-            // Iterate over dates from endDate to startDate
-            while (!calendar.getTime().before(startDate)) {
-                Date currentDate = calendar.getTime();
-                String formattedDate = dateFormat.format(currentDate);
-
-                // Set the formatted date parameter in the prepared statement
+            try {
+                ps = conn.prepareStatement(query);
                 ps.setString(1, formattedDate);
                 rs = ps.executeQuery();
-
                 if (rs.next()) {
-                    int userCount = rs.getInt("Count");
-                    if (result.length() > 0) {
+                    int userCount = rs.getInt("UserCount");
+                    if (i > 0) {
                         result.append(",");
                     }
                     result.append(userCount);
                 }
-
-                // Move calendar to previous day
-                calendar.add(Calendar.DATE, -1);
+            } catch (SQLException e) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                    if (ps != null) {
+                        ps.close();
+                    }
+                } catch (SQLException e) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
             }
 
-        } catch (SQLException e) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+            // Move calendar to previous day
+            calendar.add(Calendar.DATE, -1);
         }
 
         return result.toString();

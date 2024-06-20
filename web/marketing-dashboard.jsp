@@ -21,22 +21,18 @@
         <div class="main-content container text-center">
             <h1 class="mb-4">Marketing Dashboard</h1>
 
-<!--             Date Picker Form 
-            <form id="dateForm" class="mb-4">
+            <!-- Date Picker Form -->
+            <form id="dateForm" class="mb-4" method="get">
                 <div class="form-row justify-content-center">
                     <div class="col-auto">
                         <label for="startDate">Start Date:</label>
-                        <input type="date" id="startDate" name="startDate" class="form-control">
+                        <input type="date" id="startDate" name="startDate" class="form-control" required>
                     </div>
                     <div class="col-auto">
-                        <label for="endDate">End Date:</label>
-                        <input type="date" id="endDate" name="endDate" class="form-control">
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary mt-4">Update Charts</button>
+                        <button type="submit" class="btn btn-primary mt-4">Filter</button>
                     </div>
                 </div>
-            </form>-->
+            </form>
 
             <div class="row">
 
