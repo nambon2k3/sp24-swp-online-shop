@@ -121,8 +121,8 @@
                         <select id="orderStatus" name="orderStatus" class="form-control">
                             <option value="">All</option>
                             <option value="Received" ${orderStatus eq"Received" ? "selected" : ""}>Received</option>
-                            <option value="Submitted" ${orderStatus eq"Shipping" ? "selected" : ""}>Submitted</option>
-                            <option value="Shipped" ${orderStatus eq"Received" ? "selected" : ""}>Shipped</option>
+                            <option value="Submitted" ${orderStatus eq"Submitted" ? "selected" : ""}>Submitted</option>
+                            <option value="Shipped" ${orderStatus eq"Shipped" ? "selected" : ""}>Shipped</option>
                             <option value="Request Cancel" ${orderStatus eq "Request Cancel" ? "selected" : ""}>Request Cancel</option>
                             <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Canceled</option>
                         </select>

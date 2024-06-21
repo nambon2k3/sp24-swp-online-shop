@@ -375,7 +375,7 @@ public class OrderDAO {
     public boolean confirmOrder(int orderId) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE [Order] SET status = 'Confirmed' WHERE ID = ?";
+            String sql = "UPDATE [Order] SET status = 'Received' WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
