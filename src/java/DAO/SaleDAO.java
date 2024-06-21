@@ -91,7 +91,7 @@ public class SaleDAO {
                 order.setFullname(rs.getString("Fullname"));
                 order.setPhone(rs.getString("Phone"));
                 order.setAddress(rs.getString("Address"));
-                
+
                 totalCost += order.getTotalCost();
             }
         } catch (SQLException e) {
@@ -119,7 +119,38 @@ public class SaleDAO {
                 order.setFullname(rs.getString("Fullname"));
                 order.setPhone(rs.getString("Phone"));
                 order.setAddress(rs.getString("Address"));
-                
+
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    // Read (Get Orders by Status and Date Range)
+    public List<Order> getOrdersByStatusAndDateRange(String status, LocalDateTime startDate, LocalDateTime endDate, String salename) {
+        if (salename==null || salename.isEmpty())
+            return getOrdersByStatusAndDateRange(status, startDate, endDate);
+        
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT o.* FROM [Order] o JOIN Staff s ON o.CreatedBy = s.ID WHERE Status = ? AND [CreatedAt] >= ? AND [CreatedAt] <= ? AND s.Fullname LIKE '%" + salename + "%'";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setString(1, status);
+            ps.setTimestamp(2, Timestamp.valueOf(startDate));
+            ps.setTimestamp(3, Timestamp.valueOf(endDate));
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("ID"));
+                order.setUserId(rs.getInt("UserID"));
+                order.setCreatedAt(rs.getDate("CreatedAt"));
+                order.setStatus(rs.getString("Status"));
+                order.setFullname(rs.getString("Fullname"));
+                order.setPhone(rs.getString("Phone"));
+                order.setAddress(rs.getString("Address"));
+
                 orders.add(order);
             }
         } catch (SQLException e) {

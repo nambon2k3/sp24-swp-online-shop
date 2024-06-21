@@ -57,6 +57,7 @@ public class SaleDashboardController extends HttpServlet {
         // Get the start date and end date from request parameters
         String startDateStr = request.getParameter("start_date");
         String endDateStr = request.getParameter("end_date");
+        String sale = request.getParameter("sale");
 
         // Set default values if start date or end date are null
         LocalDateTime startDate = startDateStr != null ? LocalDateTime.parse(startDateStr + "T00:00:00") : LocalDateTime.now().minusDays(7);
@@ -67,9 +68,9 @@ public class SaleDashboardController extends HttpServlet {
         request.setAttribute("order_cancel", new SaleDAO().getOrdersByStatus("Canceled").size());
         request.setAttribute("order_pending", new SaleDAO().getOrdersByStatus("Submitted").size());
 
-        request.setAttribute("order_success_filter", new SaleDAO().getOrdersByStatusAndDateRange("Shipped", startDate, endDate).size());
-        request.setAttribute("order_cancel_filter", new SaleDAO().getOrdersByStatusAndDateRange("Canceled", startDate, endDate).size());
-        request.setAttribute("order_pending_filter", new SaleDAO().getOrdersByStatusAndDateRange("Submitted", startDate, endDate).size());
+        request.setAttribute("order_success_filter", new SaleDAO().getOrdersByStatusAndDateRange("Shipped", startDate, endDate, sale).size());
+        request.setAttribute("order_cancel_filter", new SaleDAO().getOrdersByStatusAndDateRange("Canceled", startDate, endDate, sale).size());
+        request.setAttribute("order_pending_filter", new SaleDAO().getOrdersByStatusAndDateRange("Submitted", startDate, endDate, sale).size());
 
         // Retrieve total cost of orders from previous years
         request.setAttribute("total_now", new SaleDAO().getTotalCostOfPreviousNYears(0));
