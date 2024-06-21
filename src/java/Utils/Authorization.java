@@ -32,7 +32,7 @@ public class Authorization implements Filter {
         if (url.contains("/admin/") && role != 1) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/Unauthorization.jsp");
             return;
-        } else if (url.contains("/sale/") && role != 3) {
+        } else if (url.contains("/sale/") && role != 3 && role != 4) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/Unauthorization.jsp");
             return;
         } else if (url.contains("/marketing/") && role != 2) {
