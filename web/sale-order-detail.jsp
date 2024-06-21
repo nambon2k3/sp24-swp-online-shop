@@ -102,6 +102,10 @@
 
                                 <td>
                                     <select id="orderStatus" name="orderStatus" class="form-control mr-5">
+                                        <c:if test="${order.status  ne 'Shipped'}">
+                                            <option value="${order.status}" selected="">${order.status}</option>
+                                        </c:if>
+                                        
                                         <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
                                         <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
                                     </select>

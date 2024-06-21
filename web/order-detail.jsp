@@ -139,7 +139,7 @@
                     <strong>Total Order Price:</strong> $${order.totalCost}
                 </div>
                 <!-- Order Actions -->
-                <c:if test="${order.status ne 'Received'}">
+                <c:if test="${order.status ne 'Received' && order.status ne 'Canceled'}">
                     <div class="mt-4">
                         <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Cancel Order</a>
                     </div>
