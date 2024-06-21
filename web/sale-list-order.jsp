@@ -91,12 +91,6 @@
                             <td>${item.phone}</td>
                             <td>$${item.totalCost}</td>
                             <td>${item.status}</td>
-                            <td>
-                                <c:if test="${item.status eq 'Received'}">
-                                    <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Received</a>
-                                </c:if>
-
-                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>
