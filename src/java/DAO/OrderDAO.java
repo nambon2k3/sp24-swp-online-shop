@@ -436,7 +436,7 @@ public class OrderDAO {
 
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, orderId);
-            if (status.equalsIgnoreCase("Paided")) {
+            if (status.equalsIgnoreCase("Submitted")) {
                 new ProductDAO().updateQuantity(orderId, 1);
             }
 
