@@ -77,7 +77,7 @@ public class OrderDAO {
     }
 
     public double getTotal(int orderId) {
-        String sql = "SELECT SUM(pd.price * od.quantity) AS total_cost "
+        String sql = "SELECT SUM(pd.price * (100 - pd.discount)/100 * od.quantity) AS total_cost "
                 + "FROM [swp-online-shop].[dbo].[Order] o "
                 + "INNER JOIN [swp-online-shop].[dbo].[OrderDetail] od ON o.ID = od.OrderID "
                 + "INNER JOIN [swp-online-shop].[dbo].[ProductDetail] pd ON od.[ProductDetailID] = pd.ID "
