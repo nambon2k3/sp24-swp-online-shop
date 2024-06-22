@@ -157,7 +157,7 @@
                                     <label for="productName">Product Name</label>
                                     <input type="text" class="form-control" id="productName" name="productName" value="${product.productName}" required>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group d-none">
                                     <label for="categoryName">Category</label>
                                     <input type="text" class="form-control" id="categoryName" name="categoryName" value="${product.categoryName}" required>
                                 </div>
@@ -168,6 +168,14 @@
                                 <div class="form-group d-none">
                                     <label for="createdBy">Created By</label>
                                     <input type="text" class="form-control" id="createdBy" name="createdBy" value="${product.createdBy}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="productName">Price</label>
+                                    <input type="text" class="form-control" id="price" name="price" value="${product.detail.price}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="productName">Quantity</label>
+                                    <input type="text" class="form-control" id="quantity" name="quantity" value="${product.detail.stock}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="isDeleted">Is Deleted</label>
@@ -273,7 +281,14 @@
                                     </c:forEach>
                                 </select>
                             </div>
-
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input type="text" class="form-control" id="price" name="price" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Quantity</label>
+                                <input type="text" class="form-control" id="quantity" name="quantity" required>
+                            </div>
                             <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea class="form-control" id="description" name="description" rows="3"></textarea>

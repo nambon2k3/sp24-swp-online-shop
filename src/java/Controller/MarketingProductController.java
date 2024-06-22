@@ -79,7 +79,9 @@ public class MarketingProductController extends HttpServlet  {
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
         String description = request.getParameter("description");
         String imageUrl = request.getParameter("imageUrl");
-        
+        double price = Double.parseDouble(request.getParameter("price"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+
         // Create a new Product object
         Product newProduct = new Product();
         newProduct.setProductName(productName);
@@ -94,6 +96,8 @@ public class MarketingProductController extends HttpServlet  {
         ProductDetail productDetail = new ProductDetail();
         productDetail.setProductId(productId);
         productDetail.setImageURL(imageUrl);
+        productDetail.setPrice(price);
+        productDetail.setStock(quantity);
         
         new ProductDAO().addProductDetail(productDetail);
 
@@ -114,6 +118,8 @@ public class MarketingProductController extends HttpServlet  {
         boolean isDeleted = Boolean.parseBoolean(request.getParameter("isDeleted"));
         int createdBy = Integer.parseInt(request.getParameter("createdBy"));
         String imageUrl = request.getParameter("imageUrl");
+        double price = Double.parseDouble(request.getParameter("price"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
 
         // Create a Product object with the updated data
         Product product = new Product();
@@ -122,9 +128,12 @@ public class MarketingProductController extends HttpServlet  {
         product.setCategoryName(categoryName);
         product.setDescription(description);
         product.setIsDeleted(isDeleted);
+
         
         ProductDetail productDetail = new ProductDAO().getProductDetailByProductId(productId);
         productDetail.setImageURL(imageUrl);
+        productDetail.setPrice(price);
+        productDetail.setStock(quantity);
         new ProductDAO().updateProductDetail(productDetail);
 
         // Update the product in the database
