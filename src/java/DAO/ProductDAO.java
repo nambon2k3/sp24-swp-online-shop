@@ -236,6 +236,7 @@ public class ProductDAO extends DBContext {
                     product = new Product();
                     product.setProductId(resultSet.getInt("ProductID"));
                     product.setProductName(resultSet.getString("ProductName"));
+                    product.setCategoryId(resultSet.getInt("CategoryID"));
                     product.setCategoryName(resultSet.getString("CategoryName"));
                     product.setCreatedAt(resultSet.getTimestamp("ProductCreatedAt"));
                     product.setCreatedBy(resultSet.getInt("ProductCreatedBy"));
@@ -462,12 +463,12 @@ public class ProductDAO extends DBContext {
         }
 
     }
-    
+
     public void updateProductDetailQuantity(int productDetailId, int quantity) {
-        String UPDATE_PRODUCT_DETAIL_QUANTITY_SQL = 
-        "UPDATE ProductDetail " +
-        "SET [Stock] = [Stock] - ? " +
-        "WHERE ID = ?";
+        String UPDATE_PRODUCT_DETAIL_QUANTITY_SQL
+                = "UPDATE ProductDetail "
+                + "SET [Stock] = [Stock] - ? "
+                + "WHERE ID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_DETAIL_QUANTITY_SQL)) {
 
             preparedStatement.setInt(1, quantity);
@@ -478,5 +479,144 @@ public class ProductDAO extends DBContext {
             System.out.println("updateProductDetailQuantity: " + e.getMessage());
         }
     }
-    
+
+    public boolean addProduct(Product product) {
+        boolean success = false;
+        String query = "INSERT INTO Product (Name, CategoryID, CreatedBy, Description, IsDeleted) "
+                + "VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, product.getProductName());
+            statement.setInt(2, product.getCategoryId());
+            statement.setInt(3, product.getCreatedBy());
+            statement.setString(4, product.getDescription());
+            statement.setBoolean(5, product.getIsDeleted());
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                success = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return success;
+    }
+
+    public boolean updateProduct(Product product) {
+        boolean success = false;
+        String query = "UPDATE Product SET Name = ?, Description = ?, IsDeleted = ? "
+                + "WHERE ID = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, product.getProductName());
+            statement.setString(2, product.getDescription());
+            statement.setInt(3, product.getIsDeleted() ? 1 : 0);
+            statement.setInt(4, product.getProductId());
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                success = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return success;
+    }
+
+    public List<Product> getFilteredProducts(String name, String category, Boolean isDeleted, int pageNumber, int pageSize) {
+        List<Product> productList = new ArrayList<>();
+        int offset = (pageNumber - 1) * pageSize;
+
+        String query = "SELECT p.ID as ProductID, p.Name as ProductName, p.CategoryID, p.IsDeleted, c.Name as CategoryName, "
+                + "p.CreatedAt, p.CreatedBy, p.Description "
+                + "FROM Product p "
+                + "INNER JOIN Category c ON p.CategoryID = c.ID "
+                + "WHERE (p.Name LIKE ? OR ? IS NULL) "
+                + "AND (c.Name LIKE ? OR ? IS NULL) ";
+
+        // Append condition for isDeleted if it's not null
+        if (isDeleted != null) {
+            query += "AND p.IsDeleted = ? ";
+        }
+
+        query += "ORDER BY p.ID "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            int parameterIndex = 1;
+            stmt.setString(parameterIndex++, name != null ? "%" + name + "%" : null);
+            stmt.setString(parameterIndex++, name != null ? "%" + name + "%" : null);
+            stmt.setString(parameterIndex++, category != null ? "%" + category + "%" : null);
+            stmt.setString(parameterIndex++, category != null ? "%" + category + "%" : null);
+
+            // Set isDeleted parameter if it's not null
+            if (isDeleted != null) {
+                stmt.setBoolean(parameterIndex++, isDeleted);
+            }
+
+            stmt.setInt(parameterIndex++, offset);
+            stmt.setInt(parameterIndex++, pageSize);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Product product = new Product();
+                    product.setProductId(rs.getInt("ProductID"));
+                    product.setProductName(rs.getString("ProductName"));
+                    product.setCategoryId(rs.getInt("CategoryID"));
+                    product.setCategoryName(rs.getString("CategoryName"));
+                    product.setCreatedAt(rs.getTimestamp("CreatedAt"));
+                    product.setCreatedBy(rs.getInt("CreatedBy"));
+                    product.setDescription(rs.getString("Description"));
+                    product.setIsDeleted(rs.getBoolean("IsDeleted"));
+
+                    productList.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return productList;
+    }
+
+    public int getFilteredProducts(String name, String category, Boolean isDeleted) {
+        int totalProducts = 0;
+
+        String query = "SELECT COUNT(*) "
+                + "FROM Product p "
+                + "INNER JOIN Category c ON p.CategoryID = c.ID "
+                + "WHERE (p.Name LIKE ? OR ? IS NULL) "
+                + "AND (c.Name LIKE ? OR ? IS NULL) ";
+
+        // Append condition for isDeleted if it's not null
+        if (isDeleted != null) {
+            query += "AND p.IsDeleted = ? ";
+        }
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            int parameterIndex = 1;
+            stmt.setString(parameterIndex++, name != null ? "%" + name + "%" : null);
+            stmt.setString(parameterIndex++, name != null ? "%" + name + "%" : null);
+            stmt.setString(parameterIndex++, category != null ? "%" + category + "%" : null);
+            stmt.setString(parameterIndex++, category != null ? "%" + category + "%" : null);
+
+            // Set isDeleted parameter if it's not null
+            if (isDeleted != null) {
+                stmt.setBoolean(parameterIndex++, isDeleted);
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    totalProducts = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalProducts;
+    }
+
 }

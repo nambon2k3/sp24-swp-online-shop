@@ -4,6 +4,7 @@
  */
 package Model;
 
+import DAO.ProductDAO;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class Product {
     private ProductDetail productDetail;
     private Timestamp createdAt;
     private int createdBy;
+    private Boolean isDeleted;
+    private int categoryId;
     private List<ProductDetail> listProductDetail;
     // Getters and setters
     public int getProductId() {
@@ -85,8 +88,29 @@ public class Product {
     public String toString() {
         return "Product{" + "productId=" + productId + ", productName=" + productName + ", categoryName=" + categoryName + ", description=" + description + ", productDetail=" + productDetail + ", createdAt=" + createdAt + ", createdBy=" + createdBy + '}';
     }
-    
-    
 
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+    
+    public String getThumb() {
+        return new ProductDAO().getProductDetailByProductId(productId).getImageURL();
+    }
+
+    public ProductDetail getDetail() {
+        return new ProductDAO().getProductDetailByProductId(productId);
+    }
   
 }
