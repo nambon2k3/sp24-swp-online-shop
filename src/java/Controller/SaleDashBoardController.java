@@ -79,6 +79,7 @@ public class SaleDashboardController extends HttpServlet {
         // Set start and end dates
         request.setAttribute("startDate", startDate.toString().substring(0, 10));
         request.setAttribute("endDate", endDate.toString().substring(0, 10));
+        request.setAttribute("sale", sale);
 
 
         request.getRequestDispatcher("../sale-dashboard.jsp").forward(request, response);

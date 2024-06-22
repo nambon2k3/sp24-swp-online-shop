@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
 import DAO.MarketingDAO;
@@ -15,45 +11,48 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.ParseException;
 
-
 @WebServlet(name = "MarketingDashboardController", urlPatterns = {"/marketing/dashboard"})
 public class MarketingDashboardController extends HttpServlet {
-
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String startDateParam = request.getParameter("startDate");
+        String endDateParam = request.getParameter("endDate");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        
-        if (startDateParam != null) {
+        String startDate = null;
+        String endDate = null;
+
+        if (startDateParam != null && endDateParam != null) {
             try {
-                startDate = sdf.parse(startDateParam);
+                // Validate dates by parsing
+                Date start = sdf.parse(startDateParam);
+                Date end = sdf.parse(endDateParam);
+                startDate = sdf.format(start);
+                endDate = sdf.format(end);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         } else {
-            startDate = new Date(); // Default to current date if no startDate provided
+            Date today = new Date();
+            startDate = sdf.format(today); // Default to current date if no startDate provided
+            endDate = sdf.format(today); // Default to current date if no endDate provided
         }
-        
+
         MarketingDAO dao = new MarketingDAO();
-        
-        request.setAttribute("post", dao.getStatisticTrend("Post", startDate));
-        request.setAttribute("product", dao.getStatisticTrend("Product", startDate));
-        request.setAttribute("user", dao.getStatisticTrend("User", startDate));
-        request.setAttribute("feedback", dao.getStatisticTrend("Feedback", startDate));
-        
+
+        request.setAttribute("post", dao.getStatisticTrend("Post", startDate, endDate));
+        request.setAttribute("product", dao.getStatisticTrend("Product", startDate, endDate));
+        request.setAttribute("user", dao.getStatisticTrend("User", startDate, endDate));
+        request.setAttribute("feedback", dao.getStatisticTrend("Feedback", startDate, endDate));
+
         request.getRequestDispatcher("../marketing-dashboard.jsp").forward(request, response);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        doGet(request, response);
     }
-
-
 }

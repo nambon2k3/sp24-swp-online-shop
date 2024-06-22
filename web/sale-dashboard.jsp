@@ -47,7 +47,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <label for="end_date">Sale name:</label>
-                                <input type="text" id="end_date" name="sale" class="form-control" required value="${salename}">
+                                <input type="text" id="end_date" name="sale" class="form-control" required value="${sale}">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Filter</button>

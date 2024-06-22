@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -109,5 +110,47 @@ public class MarketingDAO {
 
         return result.toString();
     }
+    
+    public String getStatisticTrend(String table, String startDate, String endDate) {
+        StringBuilder result = new StringBuilder();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+
+        try {
+            Date start = dateFormat.parse(startDate);
+            Date end = dateFormat.parse(endDate);
+
+            calendar.setTime(start);
+            while (!calendar.getTime().after(end)) {
+                Date currentDate = calendar.getTime();
+                String formattedDate = dateFormat.format(currentDate);
+
+                String query = "SELECT COUNT(*) AS Count FROM [" + table + "] WHERE CAST(CreatedAt AS DATE) = ?";
+                try (PreparedStatement ps = conn.prepareStatement(query)) {
+                    ps.setString(1, formattedDate);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            int userCount = rs.getInt("Count");
+                            if (result.length() > 0) {
+                                result.append(",");
+                            }
+                            result.append(userCount);
+                        }
+                    }
+                } catch (SQLException e) {
+                    Logger.getLogger(MarketingDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+
+                // Move calendar to next day
+                calendar.add(Calendar.DATE, 1);
+            }
+
+        } catch (ParseException e) {
+            Logger.getLogger(MarketingDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        return result.toString();
+    }
+
 
 }

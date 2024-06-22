@@ -132,9 +132,9 @@ public class SaleDAO {
     public List<Order> getOrdersByStatusAndDateRange(String status, LocalDateTime startDate, LocalDateTime endDate, String salename) {
         if (salename==null || salename.isEmpty())
             return getOrdersByStatusAndDateRange(status, startDate, endDate);
-        
+        System.out.println(salename);
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT o.* FROM [Order] o JOIN Staff s ON o.CreatedBy = s.ID WHERE Status = ? AND [CreatedAt] >= ? AND [CreatedAt] <= ? AND s.Fullname LIKE '%" + salename + "%'";
+        String query = "SELECT o.* FROM [Order] o JOIN Staff s ON o.CreatedBy = s.ID WHERE Status = ? AND o.[CreatedAt] >= ? AND o.[CreatedAt] <= ? AND s.Fullname LIKE '%" + salename + "%'";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, status);
