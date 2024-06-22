@@ -1,6 +1,7 @@
 package DAO;
 
 import Model.Order;
+import Model.OrderDetail;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -92,7 +93,35 @@ public class AdminDAO {
                 order.setPhone(rs.getString("Phone"));
                 order.setAddress(rs.getString("Address"));
                 
-                totalCost += order.getTotalCost();
+                totalCost += new OrderDAO().getTotal(order.getId());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalCost;
+    }
+    
+    public double getTotalCostByCategory(int id) {
+        double totalCost = 0.0;
+
+        String query = "SELECT * FROM [Order]";
+        try {
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("ID"));
+                order.setUserId(rs.getInt("UserID"));
+                order.setCreatedAt(rs.getDate("CreatedAt"));
+                order.setStatus(rs.getString("Status"));
+                order.setFullname(rs.getString("Fullname"));
+                order.setPhone(rs.getString("Phone"));
+                order.setAddress(rs.getString("Address"));
+                
+                OrderDetail orderDetail = new OrderDAO().getOrderDetailById(order.getId());
+                
+                if (orderDetail.getDetail().getProduct().getCategoryId() == id)
+                    totalCost += new OrderDAO().getTotal(order.getId());
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -135,7 +135,7 @@ public class ProductDetail {
     }
     
     public Product getProduct() {
-        return new ProductDAO().getProductById(productId);
+        return new ProductDAO().getProductByIdDcm(productId);
     }
 
     @Override

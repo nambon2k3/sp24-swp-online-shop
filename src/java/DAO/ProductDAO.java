@@ -251,6 +251,44 @@ public class ProductDAO extends DBContext {
 
         return product;
     }
+    
+    public Product getProductByIdDcm(int productId) {
+        Product product = null;
+
+        String productSql = "SELECT "
+                + "p.ID AS ProductID, "
+                + "p.Name AS ProductName, "
+                + "c.Name AS CategoryName, "
+                + "c.ID AS CategoryID, "
+                + "p.CreatedAt AS ProductCreatedAt, "
+                + "p.description AS description, "
+                + "p.CreatedBy AS ProductCreatedBy "
+                + "FROM Product p "
+                + "INNER JOIN Category c ON p.CategoryID = c.ID "
+                + "WHERE p.ID = ?";
+
+        try (PreparedStatement productStatement = connection.prepareStatement(productSql)) {
+            productStatement.setInt(1, productId);
+
+            try (ResultSet resultSet = productStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    product = new Product();
+                    product.setProductId(resultSet.getInt("ProductID"));
+                    product.setProductName(resultSet.getString("ProductName"));
+                    product.setCategoryId(resultSet.getInt("CategoryID"));
+                    product.setCategoryName(resultSet.getString("CategoryName"));
+                    product.setCreatedAt(resultSet.getTimestamp("ProductCreatedAt"));
+                    product.setCreatedBy(resultSet.getInt("ProductCreatedBy"));
+                    product.setDescription(resultSet.getString("description"));
+                    product.setProductDetail(getProductDetailByProductId(productId));
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("getProductById: " + ex.getMessage());
+        }
+
+        return product;
+    }
 
     public ProductDetail getProductDetailById(int productDetailId) {
         ProductDetail productDetail = null;

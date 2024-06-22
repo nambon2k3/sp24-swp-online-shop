@@ -1,7 +1,9 @@
 package Controller;
 
 import DAO.AdminDAO;
+import DAO.CategoryDAO;
 import DAO.UserDAO;
+import Model.Category;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -10,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @WebServlet(name = "AdminDashboard", urlPatterns = {"/admin/dashboard"})
 public class AdminDashboardController extends HttpServlet {
@@ -31,18 +34,23 @@ public class AdminDashboardController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        AdminDAO dao = new AdminDAO();
+        
+        List<Category> category = new CategoryDAO().getCategories();
+        String cateString = "";
+        String cateCost = "";
+        
+        for (Category c : category) {
+            if (!cateString.isBlank()) cateString += ",";
+            if (!cateCost.isBlank()) cateCost += ",";
+            
+            cateString += "'" + c.getCategoryName() + "'";
+            cateCost += (int)Math.floor(dao.getTotalCostByCategory(c.getID()));
+        }
 
         // Get the start date and end date from request parameters
         String startDateStr = request.getParameter("start_date");
@@ -74,6 +82,9 @@ public class AdminDashboardController extends HttpServlet {
         // Set start and end dates
         request.setAttribute("startDate", startDate.toString().substring(0, 10));
         request.setAttribute("endDate", endDate.toString().substring(0, 10));
+        
+        request.setAttribute("cateString", cateString);
+        request.setAttribute("cateCost", cateCost);
 
         // Forward the request to the JSP
         request.getRequestDispatcher("../admin-dashboard.jsp").forward(request, response);

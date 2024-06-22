@@ -31,6 +31,12 @@
                     <h3>Revenues</h3> <!-- Added title -->
                     <canvas id="revenuesChart"></canvas>
                 </div>
+
+                <!-- Total Cost of Each Category -->
+                <div class="col-md-12">
+                    <h2>Total Cost by Category</h2> <!-- Added title -->
+                    <canvas id="totalCostByCategoryChart"></canvas>
+                </div>
             </div>
 
             <!-- Customers -->
@@ -120,7 +126,7 @@
                 data: {
                     labels: ['Previous year', 'This year'],
                     datasets: [{
-                            label: 'Revenues',
+                            label: 'Revenues $',
                             data: [${total_prev}, ${total_now}], // Use dynamic data
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.7)',
@@ -242,6 +248,33 @@
                     responsive: true
                 }
             });
+
+            // Total Cost by Category Chart
+            var totalCostByCategoryCtx = document.getElementById('totalCostByCategoryChart').getContext('2d');
+            var totalCostByCategoryChart = new Chart(totalCostByCategoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: [${cateString}], // Use dynamic data for category names
+                    datasets: [{
+                            label: 'Total Cost $',
+                            data: [${cateCost}], // Use dynamic data for total costs
+                            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                    }
+                }
+            });
+
 
         </script>
 
