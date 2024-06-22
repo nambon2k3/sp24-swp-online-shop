@@ -155,7 +155,7 @@ public class OrderDAO {
         }
         return orders;
     }
-    
+
     // Method to get the total number of orders
     public int getTotalOrderCount(int userId, String orderDate, String orderTime, String orderStatus) {
         int count = 0;
@@ -193,18 +193,19 @@ public class OrderDAO {
         }
         return count;
     }
+
     public List<Order> getOrdersByPage(int currentPage, int ordersPerPage, String startDate, String endDate, String salesperson, String orderStatus, Staff staff) {
         List<Order> orders = new ArrayList<>();
         int start = (currentPage - 1) * ordersPerPage;
 
         try {
             StringBuilder query = new StringBuilder(
-                "SELECT * " +
-                "FROM [Order] o " +
-                "JOIN Staff s on s.ID = o.CreatedBy" +
-                " WHERE o.CreatedAt BETWEEN ? AND ?");
-            
-            if(staff.getRole() != 4) {
+                    "SELECT * "
+                    + "FROM [Order] o "
+                    + "JOIN Staff s on s.ID = o.CreatedBy"
+                    + " WHERE o.CreatedAt BETWEEN ? AND ?");
+
+            if (staff.getRole() != 4) {
                 query.append(" AND o.CreatedBy = ");
                 query.append(String.valueOf(staff.getId()));
             }
@@ -217,8 +218,8 @@ public class OrderDAO {
                 query.append(" AND o.Status = ?");
             }
 
-            query.append(" ORDER BY o.CreatedAt DESC " +
-                         "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+            query.append(" ORDER BY o.CreatedAt DESC "
+                    + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
             PreparedStatement stmt = connection.prepareStatement(query.toString());
             stmt.setString(1, startDate);
@@ -258,18 +259,18 @@ public class OrderDAO {
         return orders;
     }
 
-    public int getTotalOrderCount(String startDate, String endDate, String salesperson, String orderStatus, Staff staff){
+    public int getTotalOrderCount(String startDate, String endDate, String salesperson, String orderStatus, Staff staff) {
         int totalOrders = 0;
 
         try {
             StringBuilder query = new StringBuilder(
-                "SELECT COUNT(*) as totalOrders " +
-                "FROM [Order] o " +
-                "JOIN Staff s on s.ID = o.CreatedBy" +
-                " WHERE o.CreatedAt BETWEEN ? AND ?");
-            
-            if(staff.getRole() != 4) {
-                query.append(" AND o.CreatedBy = " );
+                    "SELECT COUNT(*) as totalOrders "
+                    + "FROM [Order] o "
+                    + "JOIN Staff s on s.ID = o.CreatedBy"
+                    + " WHERE o.CreatedAt BETWEEN ? AND ?");
+
+            if (staff.getRole() != 4) {
+                query.append(" AND o.CreatedBy = ");
                 query.append(String.valueOf(staff.getId()));
             }
 
@@ -389,6 +390,45 @@ public class OrderDAO {
         return isCanceled;
     }
 
+    public int getSaleIdWithLeastOrder() {
+        String SQL = "WITH StaffOrderCounts AS (\n"
+                + "    SELECT \n"
+                + "        s.ID AS StaffID,\n"
+                + "        s.Fullname,\n"
+                + "        s.Email,\n"
+                + "        COUNT(o.ID) AS OrderCount\n"
+                + "    FROM \n"
+                + "        [swp-online-shop].[dbo].[Staff] s\n"
+                + "    LEFT JOIN \n"
+                + "        [swp-online-shop].[dbo].[Order] o\n"
+                + "    ON \n"
+                + "        s.ID = o.CreatedBy\n"
+                + "    WHERE \n"
+                + "        s.Role = 3\n"
+                + "    GROUP BY \n"
+                + "        s.ID, s.Fullname, s.Email\n"
+                + ")\n"
+                + "SELECT TOP 1\n"
+                + "    StaffID,\n"
+                + "    Fullname,\n"
+                + "    Email,\n"
+                + "    OrderCount\n"
+                + "FROM \n"
+                + "    StaffOrderCounts\n"
+                + "ORDER BY \n"
+                + "    OrderCount ASC;";
+        try {
+            PreparedStatement ps = connection.prepareStatement(SQL);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("getSaleIdWithLeastOrder: " + e.getMessage());
+        }
+        return 4;
+    }
+
     public int createOrder(Order order) {
         int orderId = 0;
         String INSERT_ORDER_SQL = "INSERT INTO [Order] (userId, fullname, address, phone, status, isDeleted, createdBy, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -399,7 +439,7 @@ public class OrderDAO {
             preparedStatement.setString(4, order.getPhone());
             preparedStatement.setString(5, order.getStatus());
             preparedStatement.setBoolean(6, false);
-            preparedStatement.setInt(7, 4);
+            preparedStatement.setInt(7, getSaleIdWithLeastOrder());
             preparedStatement.setString(8, order.getNotes());
             preparedStatement.executeUpdate();
 
@@ -449,8 +489,8 @@ public class OrderDAO {
             throw new SQLException("Error while updating the order", e);
         }
     }
-    
-    public boolean updateOrderStatus(String status, int orderId){
+
+    public boolean updateOrderStatus(String status, int orderId) {
         String UPDATE_ORDER_SQL = "UPDATE [Order] SET status = ? WHERE id = ?";
         boolean isSuccess = false;
         try (
@@ -467,11 +507,11 @@ public class OrderDAO {
         } catch (SQLException e) {
             System.out.println("updateOrderStatus: " + e.getMessage());
         }
-        
+
         return isSuccess;
     }
-    
-    public boolean updateOrderStatus(String status, int orderId, String notes, String saleId){
+
+    public boolean updateOrderStatus(String status, int orderId, String notes, String saleId) {
         String UPDATE_ORDER_SQL = "UPDATE [Order] SET status = ?, notes = ?, createdBy = ? WHERE id = ?";
         boolean isSuccess = false;
         try (
@@ -490,11 +530,11 @@ public class OrderDAO {
         } catch (SQLException e) {
             System.out.println("updateOrderStatus: " + e.getMessage());
         }
-        
+
         return isSuccess;
     }
-    
-    public boolean updateOrderSale(String saleId, int orderId){
+
+    public boolean updateOrderSale(String saleId, int orderId) {
         String UPDATE_ORDER_SQL = "UPDATE [Order] SET [CreatedBy] = ? WHERE id = ?";
         boolean isSuccess = false;
         try (
@@ -511,7 +551,7 @@ public class OrderDAO {
         } catch (SQLException e) {
             System.out.println("updateOrderStatus: " + e.getMessage());
         }
-        
+
         return isSuccess;
     }
 
@@ -579,7 +619,7 @@ public class OrderDAO {
         return orderDetail;
     }
 
-    public Map<String, Object> getOrderTrends(String startDate, String endDate, String salesperson)  {
+    public Map<String, Object> getOrderTrends(String startDate, String endDate, String salesperson) {
         Map<String, Integer> totalOrders = new HashMap<>();
         Map<String, Integer> successfulOrders = new HashMap<>();
         Map<String, Double> revenue = new HashMap<>();
@@ -631,17 +671,15 @@ public class OrderDAO {
 
         return trends;
     }
-    
-    
-    
+
     public List<Staff> getAllSale() {
         String sql = "select distinct [ID] from [dbo].[Staff] where role = 3";
-        
+
         List<Staff> staffs = new ArrayList<>();
         try {
             stmt = connection.prepareStatement(sql);
             rs = stmt.executeQuery();
-            while (rs.next()) {                
+            while (rs.next()) {
                 Staff staff = new StaffDAO().getStaffById(rs.getInt(1));
                 staffs.add(staff);
             }

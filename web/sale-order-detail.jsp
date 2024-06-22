@@ -78,7 +78,7 @@
 
             <div class="mt-4">
                 <form method="get" action="update-order-status" class="form-inline mb-3">
-                    <c:if test="${order.status ne 'Received' && order.status ne 'Canceled'}">
+                    <c:if test="${order.status ne 'Received' && order.status ne 'Canceled' && order.status ne 'Submitted'}">
                         <table class="table">
                             <c:if test="${sessionScope.staff.role eq 4}">
                                 <tr>
@@ -105,9 +105,13 @@
                                         <c:if test="${order.status  ne 'Shipped'}">
                                             <option value="${order.status}" selected="">${order.status}</option>
                                         </c:if>
+                                        <c:if test="${order.status  eq 'Shipping'}">
+                                            <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                        </c:if>
+                                        <c:if test="${order.status  eq 'Request cancel'}">
+                                            <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
+                                        </c:if>
                                         
-                                        <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
-                                        <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
                                     </select>
                                 </td>
                             </tr>
@@ -129,6 +133,11 @@
                         </table>
                     </c:if>
                 </form>
+                <c:if test="${order.status eq 'Submitted'}">
+                    <a class="btn btn-success" href="approve-order?orderId=${order.id}">
+                        Approved
+                    </a>
+                </c:if>
             </div>
 
         </div>
