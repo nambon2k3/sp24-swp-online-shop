@@ -3,6 +3,7 @@ package Controller;
 import DAO.CategoryDAO;
 import DAO.ProductDAO;
 import Model.Product;
+import Model.ProductDetail;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -76,7 +77,8 @@ public class MarketingProductController extends HttpServlet  {
         String productName = request.getParameter("productName");
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
         String description = request.getParameter("description");
-
+        String imageUrl = request.getParameter("imageUrl");
+        
         // Create a new Product object
         Product newProduct = new Product();
         newProduct.setProductName(productName);
@@ -85,11 +87,16 @@ public class MarketingProductController extends HttpServlet  {
         newProduct.setCreatedBy(1);
         newProduct.setIsDeleted(Boolean.FALSE);
 
-
         // Add the product to the database
-        boolean success = productDAO.addProduct(newProduct);
+        int productId = productDAO.addProduct(newProduct);
+        
+        ProductDetail productDetail = new ProductDetail();
+        productDetail.setProductId(productId);
+        productDetail.setImageURL(imageUrl);
+        
+        new ProductDAO().addProductDetail(productDetail);
 
-        if (success) {
+        if (productId != -1) {
             // Redirect to product list page after successful addition
             response.sendRedirect("product?success");
         } else {
@@ -105,13 +112,19 @@ public class MarketingProductController extends HttpServlet  {
         String description = request.getParameter("description");
         boolean isDeleted = Boolean.parseBoolean(request.getParameter("isDeleted"));
         int createdBy = Integer.parseInt(request.getParameter("createdBy"));
+        String imageUrl = request.getParameter("imageUrl");
 
         // Create a Product object with the updated data
-        Product product = productDAO.getProductById(productId);
+        Product product = new Product();
+        product.setProductId(productId);
         product.setProductName(productName);
         product.setCategoryName(categoryName);
         product.setDescription(description);
         product.setIsDeleted(isDeleted);
+        
+        ProductDetail productDetail = new ProductDAO().getProductDetailByProductId(productId);
+        productDetail.setImageURL(imageUrl);
+        new ProductDAO().updateProductDetail(productDetail);
 
         // Update the product in the database
         boolean success = productDAO.updateProduct(product);

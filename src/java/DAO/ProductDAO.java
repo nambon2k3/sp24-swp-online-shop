@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 /**
  *
@@ -480,12 +481,12 @@ public class ProductDAO extends DBContext {
         }
     }
 
-    public boolean addProduct(Product product) {
-        boolean success = false;
+    public int addProduct(Product product) {
+        int generatedId = -1; // Initialize to a default value if insertion fails
         String query = "INSERT INTO Product (Name, CategoryID, CreatedBy, Description, IsDeleted) "
                 + "VALUES (?, ?, ?, ?, ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, product.getProductName());
             statement.setInt(2, product.getCategoryId());
             statement.setInt(3, product.getCreatedBy());
@@ -494,13 +495,17 @@ public class ProductDAO extends DBContext {
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                success = true;
+                // Retrieve the generated keys
+                ResultSet rs = statement.getGeneratedKeys();
+                if (rs.next()) {
+                    generatedId = rs.getInt(1); // Assuming the generated key is an integer
+                }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
-        return success;
+        return generatedId;
     }
 
     public boolean updateProduct(Product product) {
@@ -617,6 +622,56 @@ public class ProductDAO extends DBContext {
         }
 
         return totalProducts;
+    }
+
+    public boolean addProductDetail(ProductDetail productDetail) {
+        boolean success = false;
+        String query = "INSERT INTO ProductDetail (ProductID, ImageURL, Size, Color, Stock, price, discount) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, productDetail.getProductId());
+            statement.setString(2, productDetail.getImageURL());
+            statement.setString(3, productDetail.getSize());
+            statement.setString(4, productDetail.getColor());
+            statement.setInt(5, productDetail.getStock());
+            statement.setDouble(6, productDetail.getPrice());
+            statement.setInt(7, productDetail.getDiscount());
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                success = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return success;
+    }
+    
+    public boolean updateProductDetail(ProductDetail productDetail) {
+        boolean success = false;
+        String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, Color = ?, Stock = ?, price = ?, discount = ? "
+                     + "WHERE ID = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, productDetail.getImageURL());
+            statement.setString(2, productDetail.getSize());
+            statement.setString(3, productDetail.getColor());
+            statement.setInt(4, productDetail.getStock());
+            statement.setDouble(5, productDetail.getPrice());
+            statement.setInt(6, productDetail.getDiscount());
+            statement.setInt(7, productDetail.getProductDetailId());
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                success = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return success;
     }
 
 }

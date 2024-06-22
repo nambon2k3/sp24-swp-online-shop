@@ -70,6 +70,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Image</th>
                         <th>Product Name</th>
                         <th>Category</th>
                         <th>Price</th>
@@ -82,6 +83,7 @@
                     <c:forEach var="product" items="${productList}">
                         <tr>
                             <td>${product.productId}</td>
+                            <td class="text-center"><img class="w-25 rounded" src="${product.thumb}"></td>
                             <td>${product.productName}</td>
                             <td>${product.categoryName}</td>
                             <td>${product.detail.price}</td>
@@ -139,6 +141,12 @@
                                 <!-- Hidden Field -->
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="productId" value="${product.productId}">
+                                 <div class="form-group">
+                                    <label for="imageUrl">Image</label>
+                                    <img id="image${product.productId}" class="w-100" src="${product.thumb}">
+                                    <input type="file" class="form-control" id="imageFile${product.productId}" accept="image/*" onchange="updateImage(${product.productId})">
+                                    <input type="hidden" class="form-control" id="imageUrl${product.productId}" name="imageUrl" value="${product.thumb}">
+                                </div>
                                 <div class="form-group">
                                     <label for="productName">Product Name</label>
                                     <input type="text" class="form-control" id="productName" name="productName" value="${product.productName}" required>
@@ -242,6 +250,12 @@
                         <input type="hidden" name="action" value="add">
                         <div class="modal-body">
                             <div class="form-group">
+                                <label for="imageUrl">Image</label>
+                                <img id="image0" class="w-100" src="">
+                                <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)" required>
+                                <input type="hidden" class="form-control" id="imageUrl0" name="imageUrl" value="">
+                            </div>
+                            <div class="form-group">
                                 <label for="productName">Product Name</label>
                                 <input type="text" class="form-control" id="productName" name="productName" required>
                             </div>
@@ -277,23 +291,57 @@
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
         <script>
-                            $(document).ready(function () {
-                                // Initialize DataTable
-                                $('#productTable').DataTable({
-                                    "paging": false,
-                                    "lengthChange": false,
-                                    "searching": false,
-                                    "ordering": true,
-                                    "info": false,
-                                    "autoWidth": false
-                                });
-                            });
+                                    $(document).ready(function () {
+                                        // Initialize DataTable
+                                        $('#productTable').DataTable({
+                                            "paging": false,
+                                            "lengthChange": false,
+                                            "searching": false,
+                                            "ordering": true,
+                                            "info": false,
+                                            "autoWidth": false
+                                        });
+                                    });
 
-                            // Function to submit form with page number
-                            function submitFormWithPage(page) {
-                                $('#pageInput').val(page);
-                                $('#searchForm').submit();
-                            }
+                                    // Function to submit form with page number
+                                    function submitFormWithPage(page) {
+                                        $('#pageInput').val(page);
+                                        $('#searchForm').submit();
+                                    }
+        </script>
+
+        <script>
+            function updateImage(sliderId) {
+                let fileInput = document.getElementById(`imageFile` + sliderId);
+                let image = document.getElementById(`image` + sliderId);
+                let hiddenInput = document.getElementById(`imageUrl` + sliderId);
+                console.log(fileInput, image, hiddenInput)
+
+                // check file uploaded
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+                    if (file.size > maxSize) {
+                        alert("The selected file is too large. Please select a file smaller than 2 MB.");
+                        fileInput.value = ''; // Clear the file input
+                        return;
+                    }
+
+                    // dịch image thành url
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        // Update the image src
+                        image.src = e.target.result;
+
+                        // Optionally, update the hidden input with the base64 data URL
+                        hiddenInput.value = e.target.result;
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            }
         </script>
     </body>
 </html>
