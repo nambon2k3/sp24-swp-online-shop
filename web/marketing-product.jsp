@@ -52,7 +52,13 @@
                     <input type="text" class="form-control" name="name" placeholder="Product Name" value="${name}">
                 </div>
                 <div class="form-group mr-2">
-                    <input type="text" class="form-control" name="category" placeholder="Category" value="${category}">
+<!--                    <input type="text" class="form-control" name="category" placeholder="Category" value="${category}">-->
+                    <select class="form-control" id="categoryId" name="category" required>
+                        <option value="-1">Select Category</option>
+                        <c:forEach var="c" items="${categories}">
+                            <option value="${c.getID()}" ${category eq c.getID() ? 'selected' : ''}>${c.categoryName}</option>
+                        </c:forEach>
+                    </select>
                 </div>
                 <div class="form-group mr-2">
                     <select class="form-control" name="isDeleted">
@@ -141,7 +147,7 @@
                                 <!-- Hidden Field -->
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="productId" value="${product.productId}">
-                                 <div class="form-group">
+                                <div class="form-group">
                                     <label for="imageUrl">Image</label>
                                     <img id="image${product.productId}" class="w-100" src="${product.thumb}">
                                     <input type="file" class="form-control" id="imageFile${product.productId}" accept="image/*" onchange="updateImage(${product.productId})">

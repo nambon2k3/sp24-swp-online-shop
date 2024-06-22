@@ -31,7 +31,7 @@ public class MarketingProductController extends HttpServlet  {
 
         // Filter parameters
         String name = request.getParameter("name");
-        String category = request.getParameter("category");
+        int category = Integer.parseInt(request.getParameter("category"));
         String isDeletedString = request.getParameter("isDeleted");
         Boolean isDeleted = (isDeletedString == null || isDeletedString.isEmpty()) ? null : Boolean.valueOf(isDeletedString);
 

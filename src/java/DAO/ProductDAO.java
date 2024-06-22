@@ -530,7 +530,7 @@ public class ProductDAO extends DBContext {
         return success;
     }
 
-    public List<Product> getFilteredProducts(String name, String category, Boolean isDeleted, int pageNumber, int pageSize) {
+    public List<Product> getFilteredProducts(String name, int categoryId, Boolean isDeleted, int pageNumber, int pageSize) {
         List<Product> productList = new ArrayList<>();
         int offset = (pageNumber - 1) * pageSize;
 
@@ -538,8 +538,12 @@ public class ProductDAO extends DBContext {
                 + "p.CreatedAt, p.CreatedBy, p.Description "
                 + "FROM Product p "
                 + "INNER JOIN Category c ON p.CategoryID = c.ID "
-                + "WHERE (p.Name LIKE ? OR ? IS NULL) "
-                + "AND (c.Name LIKE ? OR ? IS NULL) ";
+                + "WHERE (p.Name LIKE ? OR ? IS NULL) ";
+
+        // Append condition for categoryId if it's not -1
+        if (categoryId != -1) {
+            query += "AND p.CategoryID = ? ";
+        }
 
         // Append condition for isDeleted if it's not null
         if (isDeleted != null) {
@@ -553,8 +557,11 @@ public class ProductDAO extends DBContext {
             int parameterIndex = 1;
             stmt.setString(parameterIndex++, name != null ? "%" + name + "%" : null);
             stmt.setString(parameterIndex++, name != null ? "%" + name + "%" : null);
-            stmt.setString(parameterIndex++, category != null ? "%" + category + "%" : null);
-            stmt.setString(parameterIndex++, category != null ? "%" + category + "%" : null);
+
+            // Set categoryId parameter if it's not -1
+            if (categoryId != -1) {
+                stmt.setInt(parameterIndex++, categoryId);
+            }
 
             // Set isDeleted parameter if it's not null
             if (isDeleted != null) {
@@ -586,14 +593,18 @@ public class ProductDAO extends DBContext {
         return productList;
     }
 
-    public int getFilteredProducts(String name, String category, Boolean isDeleted) {
+    public int getFilteredProducts(String name, int categoryId, Boolean isDeleted) {
         int totalProducts = 0;
 
         String query = "SELECT COUNT(*) "
                 + "FROM Product p "
                 + "INNER JOIN Category c ON p.CategoryID = c.ID "
-                + "WHERE (p.Name LIKE ? OR ? IS NULL) "
-                + "AND (c.Name LIKE ? OR ? IS NULL) ";
+                + "WHERE (p.Name LIKE ? OR ? IS NULL) ";
+
+        // Append condition for categoryId if it's not -1
+        if (categoryId != -1) {
+            query += "AND p.CategoryID = ? ";
+        }
 
         // Append condition for isDeleted if it's not null
         if (isDeleted != null) {
@@ -604,8 +615,11 @@ public class ProductDAO extends DBContext {
             int parameterIndex = 1;
             stmt.setString(parameterIndex++, name != null ? "%" + name + "%" : null);
             stmt.setString(parameterIndex++, name != null ? "%" + name + "%" : null);
-            stmt.setString(parameterIndex++, category != null ? "%" + category + "%" : null);
-            stmt.setString(parameterIndex++, category != null ? "%" + category + "%" : null);
+
+            // Set categoryId parameter if it's not -1
+            if (categoryId != -1) {
+                stmt.setInt(parameterIndex++, categoryId);
+            }
 
             // Set isDeleted parameter if it's not null
             if (isDeleted != null) {
@@ -648,11 +662,11 @@ public class ProductDAO extends DBContext {
 
         return success;
     }
-    
+
     public boolean updateProductDetail(ProductDetail productDetail) {
         boolean success = false;
         String query = "UPDATE ProductDetail SET ImageURL = ?, Size = ?, Color = ?, Stock = ?, price = ?, discount = ? "
-                     + "WHERE ID = ?";
+                + "WHERE ID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, productDetail.getImageURL());
