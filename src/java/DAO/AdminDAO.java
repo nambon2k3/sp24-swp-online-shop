@@ -119,25 +119,15 @@ public class AdminDAO {
     public double getTotalCostByCategory(int id) {
         double totalCost = 0.0;
 
-        String query = "SELECT * FROM [Order]";
+        String query = "SELECT ROUND(CAST(SUM(pd.price * od.quantity / 100 * (100 - pd.discount)) AS FLOAT), 2) as TotalCost FROM OrderDetail od, ProductDetail pd, Product p WHERE od.ProductDetailID = pd.ID AND pd.ProductID = p.ID AND (? = -1 OR p.CategoryID = ?)";
         try {
             ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.setInt(2, id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                Order order = new Order();
-                order.setId(rs.getInt("ID"));
-                order.setUserId(rs.getInt("UserID"));
-                order.setCreatedAt(rs.getDate("CreatedAt"));
-                order.setStatus(rs.getString("Status"));
-                order.setFullname(rs.getString("Fullname"));
-                order.setPhone(rs.getString("Phone"));
-                order.setAddress(rs.getString("Address"));
-
-                OrderDetail orderDetail = new OrderDAO().getOrderDetailById(order.getId());
-
-                if (orderDetail.getDetail().getProduct().getCategoryId() == id) {
-                    totalCost += new OrderDAO().getTotal(order.getId());
-                }
+                
+                totalCost += rs.getDouble("TotalCost");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -148,7 +138,7 @@ public class AdminDAO {
     public double getAverageFeedbackByCategoryId(int id) {
         double avg = 0.0;
 
-        String query = "SELECT SUM(f.Rating)/COUNT(*) AS Average FROM Feedback f, OrderDetail od, ProductDetail pd, Product p WHERE f.OrderDetailID = od.ID AND od.ProductDetailID = pd.ID AND pd.ProductID = p.ID AND (? = -1 OR p.CategoryID = ?)";
+        String query = "SELECT ROUND(CAST(SUM(Rating) AS FLOAT) / COUNT(*), 2) AS Average FROM Feedback f, OrderDetail od, ProductDetail pd, Product p WHERE f.OrderDetailID = od.ID AND od.ProductDetailID = pd.ID AND pd.ProductID = p.ID AND (? = -1 OR p.CategoryID = ?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setInt(1, id);
