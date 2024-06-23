@@ -74,33 +74,48 @@ public class AdminDAO {
     public double getTotalCostOfPreviousNYears(int n) {
         double totalCost = 0.0;
         LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime previousStartDate = currentDate.minusYears(n).withDayOfYear(1).with(LocalTime.MIN); // Start of year n years ago
-        LocalDateTime previousEndDate = currentDate.minusYears(n - 1).withDayOfYear(1).with(LocalTime.MIN).minusSeconds(1); // End of year n-1 years ago
+        LocalDateTime previousStartDate = null;
+        LocalDateTime previousEndDate = null;
 
-        String query = "SELECT * FROM [Order] WHERE CreatedAt >= ? AND CreatedAt <= ?";
-        try {
-            ps = conn.prepareStatement(query);
-            ps.setTimestamp(1, Timestamp.valueOf(previousStartDate));
-            ps.setTimestamp(2, Timestamp.valueOf(previousEndDate));
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                Order order = new Order();
-                order.setId(rs.getInt("ID"));
-                order.setUserId(rs.getInt("UserID"));
-                order.setCreatedAt(rs.getDate("CreatedAt"));
-                order.setStatus(rs.getString("Status"));
-                order.setFullname(rs.getString("Fullname"));
-                order.setPhone(rs.getString("Phone"));
-                order.setAddress(rs.getString("Address"));
-                
-                totalCost += new OrderDAO().getTotal(order.getId());
+        // If n is not -1, calculate the start and end dates for the previous n years
+        if (n != -1) {
+            previousStartDate = currentDate.minusYears(n).withDayOfYear(1).with(LocalTime.MIN); // Start of year n years ago
+            previousEndDate = currentDate.minusYears(n - 1).withDayOfYear(1).with(LocalTime.MIN).minusSeconds(1); // End of year n-1 years ago
+        }
+
+        String query;
+        if (n == -1) {
+            query = "SELECT * FROM [Order]"; // Query all orders
+        } else {
+            query = "SELECT * FROM [Order] WHERE CreatedAt >= ? AND CreatedAt <= ?"; // Query orders within the date range
+        }
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            if (n != -1) {
+                ps.setTimestamp(1, Timestamp.valueOf(previousStartDate));
+                ps.setTimestamp(2, Timestamp.valueOf(previousEndDate));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) { // Use while loop to iterate through all results
+                    Order order = new Order();
+                    order.setId(rs.getInt("ID"));
+                    order.setUserId(rs.getInt("UserID"));
+                    order.setCreatedAt(rs.getDate("CreatedAt"));
+                    order.setStatus(rs.getString("Status"));
+                    order.setFullname(rs.getString("Fullname"));
+                    order.setPhone(rs.getString("Phone"));
+                    order.setAddress(rs.getString("Address"));
+
+                    totalCost += new OrderDAO().getTotal(order.getId());
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return totalCost;
     }
-    
+
     public double getTotalCostByCategory(int id) {
         double totalCost = 0.0;
 
@@ -117,16 +132,37 @@ public class AdminDAO {
                 order.setFullname(rs.getString("Fullname"));
                 order.setPhone(rs.getString("Phone"));
                 order.setAddress(rs.getString("Address"));
-                
+
                 OrderDetail orderDetail = new OrderDAO().getOrderDetailById(order.getId());
-                
-                if (orderDetail.getDetail().getProduct().getCategoryId() == id)
+
+                if (orderDetail.getDetail().getProduct().getCategoryId() == id) {
                     totalCost += new OrderDAO().getTotal(order.getId());
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return totalCost;
+    }
+
+    public double getAverageFeedbackByCategoryId(int id) {
+        double avg = 0.0;
+
+        String query = "SELECT SUM(f.Rating)/COUNT(*) AS Average FROM Feedback f, OrderDetail od, ProductDetail pd, Product p WHERE f.OrderDetailID = od.ID AND od.ProductDetailID = pd.ID AND pd.ProductID = p.ID AND (? = -1 OR p.CategoryID = ?)";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.setInt(2, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+
+                avg = rs.getDouble("Average");
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return avg;
     }
 
     // Read (Get Orders by Status and Date Range)
@@ -148,7 +184,7 @@ public class AdminDAO {
                 order.setFullname(rs.getString("Fullname"));
                 order.setPhone(rs.getString("Phone"));
                 order.setAddress(rs.getString("Address"));
-                
+
                 orders.add(order);
             }
         } catch (SQLException e) {

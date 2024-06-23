@@ -72,6 +72,7 @@ public class AdminDashboardController extends HttpServlet {
         // Retrieve total cost of orders from previous years
         request.setAttribute("total_now", new AdminDAO().getTotalCostOfPreviousNYears(0));
         request.setAttribute("total_prev", new AdminDAO().getTotalCostOfPreviousNYears(1));
+        request.setAttribute("total_all", new AdminDAO().getTotalCostOfPreviousNYears(-1));
 
         // Retrieve the count of users
         request.setAttribute("user_count", new UserDAO().getAllUsers().size());
@@ -85,6 +86,9 @@ public class AdminDashboardController extends HttpServlet {
         
         request.setAttribute("cateString", cateString);
         request.setAttribute("cateCost", cateCost);
+        
+        request.setAttribute("categoryList", category);
+        request.setAttribute("avgFeedback", new AdminDAO().getAverageFeedbackByCategoryId(-1));
 
         // Forward the request to the JSP
         request.getRequestDispatcher("../admin-dashboard.jsp").forward(request, response);

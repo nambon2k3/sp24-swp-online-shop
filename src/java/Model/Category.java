@@ -5,6 +5,7 @@
  */
 package Model;
 
+import DAO.AdminDAO;
 import java.sql.Timestamp;
 
 /**
@@ -25,8 +26,6 @@ public class Category {
         this.ID = ID;
         this.categoryName = categoryName;
     }
-    
-    
 
     public int getID() {
         return ID;
@@ -68,5 +67,12 @@ public class Category {
         this.createdBy = createdBy;
     }
     
+    public double getTotalCost() {
+        return new AdminDAO().getTotalCostByCategory(ID);
+    }
+    
+    public double getAvgFeedback() {
+        return new AdminDAO().getAverageFeedbackByCategoryId(ID);
+    }
     
 }
