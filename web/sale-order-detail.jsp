@@ -77,8 +77,13 @@
 
 
             <div class="mt-4">
+                <c:if test="${order.status eq 'Submitted'}">
+                    <a class="btn btn-success" href="approve-order?orderId=${order.id}">
+                        Approved
+                    </a>
+                </c:if>
                 <form method="get" action="update-order-status" class="form-inline mb-3">
-                    <c:if test="${order.status ne 'Received' && order.status ne 'Canceled' && order.status ne 'Submitted'}">
+                    <c:if test="${order.status ne 'Received' && order.status ne 'Canceled'}">
                         <table class="table">
                             <c:if test="${sessionScope.staff.role eq 4}">
                                 <tr>
@@ -133,11 +138,7 @@
                         </table>
                     </c:if>
                 </form>
-                <c:if test="${order.status eq 'Submitted'}">
-                    <a class="btn btn-success" href="approve-order?orderId=${order.id}">
-                        Approved
-                    </a>
-                </c:if>
+                
             </div>
 
         </div>

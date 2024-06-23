@@ -16,7 +16,7 @@
     <body>
 
         <!-- Sidebar -->
-        <%@ include file="sale-sidebar.jsp" %>
+        <%@ include file="inventory-sidebar.jsp" %>
 
         <!-- Main content -->
         <div class="main-content container text-center" style="margin-top: 10%">
@@ -33,8 +33,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
-            <form method="get" action="sale-order" class="form-inline mb-3">
-                <div class="row g-3">
+            <form method="get" action="list-order" class="form-inline mb-3">
+                <div class="row col-12">
                     <div class="col-md-3">
                         <label for="startDate" class="form-label">Start Date</label>
                         <input type="date" id="startDate" name="startDate" class="form-control" value="${param.startDate}">
@@ -51,7 +51,7 @@
                             <option value="Shipped" ${param.orderStatus == 'Shipped' ? 'selected' : ''}>Shipping</option>
                         </select>
                     </div>
-                    <div class="col-12 mt-3">
+                    <div class="col-3 mt-3">
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </div>
                 </div>
