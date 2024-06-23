@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.ParseException;
+import java.util.Calendar;
 
 @WebServlet(name = "MarketingDashboardController", urlPatterns = {"/marketing/dashboard"})
 public class MarketingDashboardController extends HttpServlet {
@@ -35,13 +36,21 @@ public class MarketingDashboardController extends HttpServlet {
                 e.printStackTrace();
             }
         } else {
+            // Calculate today's date
             Date today = new Date();
-            startDate = sdf.format(today); // Default to current date if no startDate provided
-            endDate = sdf.format(today); // Default to current date if no endDate provided
+            endDate = sdf.format(today);
+
+            // Calculate the date 7 days ago
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(today);
+            calendar.add(Calendar.DAY_OF_YEAR, -7);
+            Date sevenDaysAgo = calendar.getTime();
+            startDate = sdf.format(sevenDaysAgo);
         }
 
         MarketingDAO dao = new MarketingDAO();
 
+        request.setAttribute("label", dao.getStatisticTrend(startDate, endDate));
         request.setAttribute("post", dao.getStatisticTrend("Post", startDate, endDate));
         request.setAttribute("product", dao.getStatisticTrend("Product", startDate, endDate));
         request.setAttribute("user", dao.getStatisticTrend("User", startDate, endDate));
