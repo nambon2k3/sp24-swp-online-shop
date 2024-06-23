@@ -61,13 +61,35 @@ public class AdminDashboardController extends HttpServlet {
         LocalDateTime endDate = endDateStr != null ? LocalDateTime.parse(endDateStr + "T00:00:00") : LocalDateTime.now();
 
         // Retrieve order counts based on status and date range
-        request.setAttribute("order_success", new AdminDAO().getOrdersByStatus("Shipped").size());
-        request.setAttribute("order_cancel", new AdminDAO().getOrdersByStatus("Canceled").size());
-        request.setAttribute("order_pending", new AdminDAO().getOrdersByStatus("Submitted").size());
+        int orderSuccess = 0;
+        int orderCancel = 0;
+        int orderPending = 0;
+        orderSuccess += dao.getOrdersByStatus("Submitted").size();
+        orderSuccess += dao.getOrdersByStatus("Received").size();
+        orderSuccess += dao.getOrdersByStatus("Shipped").size();
+        orderPending += dao.getOrdersByStatus("Approved").size();
+        orderPending += dao.getOrdersByStatus("Shipping").size();
+        orderPending += dao.getOrdersByStatus("Request cancel").size();
+        orderCancel += dao.getOrdersByStatus("Canceled").size();
+        
+        request.setAttribute("order_success", orderSuccess);
+        request.setAttribute("order_cancel", orderCancel);
+        request.setAttribute("order_pending", orderPending);
 
-        request.setAttribute("order_success_filter", new AdminDAO().getOrdersByStatusAndDateRange("Shipped", startDate, endDate).size());
-        request.setAttribute("order_cancel_filter", new AdminDAO().getOrdersByStatusAndDateRange("Canceled", startDate, endDate).size());
-        request.setAttribute("order_pending_filter", new AdminDAO().getOrdersByStatusAndDateRange("Submitted", startDate, endDate).size());
+        int orderSuccessFilter = 0;
+        int orderCancelFilter = 0;
+        int orderPendingFilter = 0;
+        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Submitted", startDate, endDate).size();
+        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Received", startDate, endDate).size();
+        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Shipped", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Approved", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Shipping", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Request cancel", startDate, endDate).size();
+        orderCancelFilter += dao.getOrdersByStatusAndDateRange("Canceled", startDate, endDate).size();
+        
+        request.setAttribute("order_success_filter", orderSuccessFilter);
+        request.setAttribute("order_cancel_filter", orderCancelFilter);
+        request.setAttribute("order_pending_filter", orderPendingFilter);
 
         // Retrieve total cost of orders from previous years
         request.setAttribute("total_now", new AdminDAO().getTotalCostOfPreviousNYears(0));

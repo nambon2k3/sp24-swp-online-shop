@@ -32,7 +32,7 @@ public class AdminDAO {
     // Read (Get Orders by Status)
     public List<Order> getOrdersByStatus(String status) {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM [Order] WHERE Status = ?";
+        String query = "SELECT * FROM [Order] WHERE LOWER(Status) = LOWER(?)";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, status);
@@ -158,7 +158,7 @@ public class AdminDAO {
     // Read (Get Orders by Status and Date Range)
     public List<Order> getOrdersByStatusAndDateRange(String status, LocalDateTime startDate, LocalDateTime endDate) {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM [Order] WHERE Status = ? AND [CreatedAt] >= ? AND [CreatedAt] <= ?";
+        String query = "SELECT * FROM [Order] WHERE LOWER(Status) = LOWER(?) AND [CreatedAt] >= ? AND [CreatedAt] <= ?";
         try {
             ps = conn.prepareStatement(query);
             ps.setString(1, status);
