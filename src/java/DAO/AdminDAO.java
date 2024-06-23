@@ -185,7 +185,7 @@ public class AdminDAO {
     }
     
     public User getLastOrderCustomer() {
-        String sql = "SELECT TOP 1 * FROM [swp-online-shop].[dbo].[Order] ORDER BY ID";
+        String sql = "SELECT TOP 1 * FROM [swp-online-shop].[dbo].[Order] ORDER BY ID DESC";
 
         try {
             ps = conn.prepareStatement(sql);
@@ -203,7 +203,7 @@ public class AdminDAO {
                 Timestamp createdAt = rs.getTimestamp("CreatedAt");
                 int createdBy = rs.getInt("CreatedBy");
 
-                return new UserDAO().getUserById(createdBy);
+                return new UserDAO().getUserById(userId);
             }
         } catch (SQLException ex) {
             System.out.println("getAllOrders: " + ex.getMessage());

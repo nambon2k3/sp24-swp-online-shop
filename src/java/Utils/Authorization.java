@@ -18,9 +18,11 @@
 //    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 //            throws IOException, ServletException {
 //
+//        // get request response
 //        HttpServletRequest httpRequest = (HttpServletRequest) request;
 //        HttpServletResponse httpResponse = (HttpServletResponse) response;
 //
+//        // lay thong tin staff
 //        Staff staff = SessionUserInfo.getStaffSession(httpRequest);
 //
 //        // Get the requested URL
