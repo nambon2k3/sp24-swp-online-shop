@@ -205,9 +205,14 @@ public class OrderDAO {
                     + "JOIN Staff s on s.ID = o.CreatedBy"
                     + " WHERE o.CreatedAt BETWEEN ? AND ?");
 
-            if (staff.getRole() != 4) {
+            if (staff.getRole() == 3) {
                 query.append(" AND o.CreatedBy = ");
                 query.append(String.valueOf(staff.getId()));
+            }
+            
+            if (staff.getRole() == 6) {
+                query.append(" AND o.Status IN  ");
+                query.append(String.valueOf("('Approved', 'Shipping')"));
             }
 
             if (salesperson != null && !salesperson.isEmpty()) {
@@ -369,6 +374,23 @@ public class OrderDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return isCanceled;
+    }
+    
+    public boolean shippingOrder(int orderId) {
+        boolean isCanceled = false;
+        try {
+            String sql = "UPDATE [Order] SET status = 'Shipping' WHERE ID = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, orderId);
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                isCanceled = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("shippingOrder: " + e.getMessage());
         }
         return isCanceled;
     }
