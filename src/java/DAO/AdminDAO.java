@@ -2,6 +2,7 @@ package DAO;
 
 import Model.Order;
 import Model.OrderDetail;
+import Model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -181,6 +182,34 @@ public class AdminDAO {
             e.printStackTrace();
         }
         return orders;
+    }
+    
+    public User getLastOrderCustomer() {
+        String sql = "SELECT TOP 1 * FROM [swp-online-shop].[dbo].[Order] ORDER BY ID";
+
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                // Extract data from ResultSet
+                int id = rs.getInt("ID");
+                int userId = rs.getInt("UserID");
+                String fullName = rs.getString("Fullname");
+                String address = rs.getString("Address");
+                String phone = rs.getString("Phone");
+                String status = rs.getString("Status");
+                boolean isDeleted = rs.getBoolean("IsDeleted");
+                Timestamp createdAt = rs.getTimestamp("CreatedAt");
+                int createdBy = rs.getInt("CreatedBy");
+
+                return new UserDAO().getUserById(createdBy);
+            }
+        } catch (SQLException ex) {
+            System.out.println("getAllOrders: " + ex.getMessage());
+        }
+        
+        return new User();
     }
 
 }

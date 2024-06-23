@@ -69,8 +69,15 @@
             <!-- Customers -->
             <div class="row mb-4 mt-4">
                 <div class="col-md-6 p-3">
-                    <h3>Customers</h3> <!-- Added title -->
-                    <canvas id="customersChart"></canvas>
+                    <h3>System</h3> <!-- Added title -->
+                    <div class="row d-flex" style="justify-content: center">
+                        <div class="col-8 mb-4">
+                            <div class="category-item">
+                                <p><strong>Last order customer: </strong> ${user_last.fullname}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas class="" id="customersChart"></canvas>
                 </div>
                 <!-- Feedbacks -->
                 <div class="col-md-6 p-3">

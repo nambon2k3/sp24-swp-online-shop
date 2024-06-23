@@ -98,6 +98,7 @@ public class AdminDashboardController extends HttpServlet {
 
         // Retrieve the count of users
         request.setAttribute("user_count", new UserDAO().getAllUsers().size());
+        request.setAttribute("user_last", dao.getLastOrderCustomer());
 
         // Retrieve the count of feedbacks
         request.setAttribute("feedback_count", new AdminDAO().countFeedback());
