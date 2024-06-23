@@ -84,8 +84,6 @@ public class InventoryOrderController extends HttpServlet {
         }
         
         Staff staff = (Staff) request.getSession().getAttribute("staff");
-        System.out.println("startDate: " + startDate);
-        System.out.println("endDate: " + endDate);
         
         List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, startDate, endDate, salesperson, orderStatus, staff);
         List<Category> categories = new PostDAO().getUniqueCategories();

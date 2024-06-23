@@ -48,7 +48,7 @@
                         <select id="orderStatus" name="orderStatus" class="form-control">
                             <option value="" ${param.orderStatus == null ? 'selected' : ''}>All</option>
                             <option value="Approved" ${param.orderStatus == 'Approved' ? 'selected' : ''}>Approved</option>
-                            <option value="Shipped" ${param.orderStatus == 'Shipped' ? 'selected' : ''}>Shipping</option>
+                            <option value="Shipping" ${param.orderStatus == 'Shipping' ? 'selected' : ''}>Shipping</option>
                         </select>
                     </div>
                     <div class="col-3 mt-3">
