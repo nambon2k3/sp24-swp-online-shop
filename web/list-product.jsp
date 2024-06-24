@@ -159,7 +159,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="addToCart(document.getElementById('selectedProductDetailId').value)">Submit</button>
+                                        <button type="button" class="btn btn-primary" onclick="addToCart(${p.productDetail.productDetailId})">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -211,11 +211,12 @@
                                                 document.getElementById('selectedColor').style.backgroundColor = color.toLowerCase();
                                             }
                                             function addToCart(id) {
-                                                let quantity = document.getElementById('quantity').value;
-                                                console.log(quantity);
-                                                fetch('add-cart?id=' + id + '&quantity=' + quantity);
-                                                window.alert('ADDED Successfully');
-                                            }
+                                            let quantity = document.getElementById('quantity').value;
+                                            console.log(quantity);
+                                            fetch('add-cart?id=' + id + '&quantity=' + quantity);
+                                            window.alert('ADDED Successfully');
+                                        }
+
 
         </script>
 

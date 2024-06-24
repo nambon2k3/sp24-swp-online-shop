@@ -224,7 +224,8 @@ public class ProductDAO extends DBContext {
                 + "c.Name AS CategoryName, "
                 + "p.CreatedAt AS ProductCreatedAt, "
                 + "p.description AS description, "
-                + "p.CreatedBy AS ProductCreatedBy "
+                + "p.CreatedBy AS ProductCreatedBy, "
+                + "p.CategoryID "
                 + "FROM Product p "
                 + "INNER JOIN Category c ON p.CategoryID = c.ID "
                 + "WHERE p.ID = ? AND p.IsDeleted = 0";
