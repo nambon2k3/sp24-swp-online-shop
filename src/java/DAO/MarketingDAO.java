@@ -110,7 +110,7 @@ public class MarketingDAO {
 
         return result.toString();
     }
-    
+
     public String getStatisticTrend(String table, String startDate, String endDate) {
         StringBuilder result = new StringBuilder();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -119,6 +119,14 @@ public class MarketingDAO {
         try {
             Date start = dateFormat.parse(startDate);
             Date end = dateFormat.parse(endDate);
+
+            // Ensure the range is no more than 14 days
+            calendar.setTime(start);
+            calendar.add(Calendar.DATE, 14);
+            Date maxEndDate = calendar.getTime();
+            if (end.after(maxEndDate)) {
+                end = maxEndDate;
+            }
 
             calendar.setTime(start);
             while (!calendar.getTime().after(end)) {
@@ -152,5 +160,42 @@ public class MarketingDAO {
         return result.toString();
     }
 
+    public String getStatisticTrend(String startDate, String endDate) {
+        StringBuilder result = new StringBuilder();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+
+        try {
+            Date start = dateFormat.parse(startDate);
+            Date end = dateFormat.parse(endDate);
+
+            // Ensure the range is no more than 14 days
+            calendar.setTime(start);
+            calendar.add(Calendar.DATE, 14);
+            Date maxEndDate = calendar.getTime();
+            if (end.after(maxEndDate)) {
+                end = maxEndDate;
+            }
+
+            calendar.setTime(start);
+            while (!calendar.getTime().after(end)) {
+                Date currentDate = calendar.getTime();
+                String formattedDate = dateFormat.format(currentDate);
+
+                if (result.length() > 0) {
+                    result.append(",");
+                }
+                result.append("'" + formattedDate + "'");
+
+                // Move calendar to next day
+                calendar.add(Calendar.DATE, 1);
+            }
+
+        } catch (ParseException e) {
+            Logger.getLogger(MarketingDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        return result.toString();
+    }
 
 }

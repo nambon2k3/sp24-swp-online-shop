@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,6 +12,17 @@
         <!-- Font Awesome CSS for icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
+        <style>
+            .category-item {
+                padding: 20px;
+                background: #f9f9f9;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                height: 100%;
+                border: 2px solid #ddd; /* Added border */
+            }
+        </style>
     </head>
     <body>
 
@@ -33,22 +46,53 @@
                 </div>
 
                 <!-- Total Cost of Each Category -->
-                <div class="col-md-12">
+                <div class="col-12 mb-4 mt-4">
                     <h2>Total Cost by Category</h2> <!-- Added title -->
-                    <canvas id="totalCostByCategoryChart"></canvas>
+                    <div class="row">
+                        <div class="col-6">
+                            <canvas id="totalCostByCategoryChart"></canvas>
+                        </div>
+                        <div class="col-6 row">
+                            <c:forEach var="c" items="${categoryList}">
+                                <div class="col-sm-6 col-md-4 mb-4">
+                                    <div class="category-item">
+                                        <p><strong>Category:</strong> ${c.categoryName}</p>
+                                        <p><strong>Totalcost</strong> ${c.totalCost}$</p>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Customers -->
-            <div class="row mb-4">
+            <div class="row mb-4 mt-4">
                 <div class="col-md-6 p-3">
-                    <h3>Customers</h3> <!-- Added title -->
-                    <canvas id="customersChart"></canvas>
+                    <h3>System</h3> <!-- Added title -->
+                    <div class="row d-flex" style="justify-content: center">
+                        <div class="col-8 mb-4">
+                            <div class="category-item">
+                                <p><strong>Last order customer: </strong> ${user_last.fullname}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas class="" id="customersChart"></canvas>
                 </div>
                 <!-- Feedbacks -->
                 <div class="col-md-6 p-3">
                     <h3>Feedbacks</h3> <!-- Added title -->
-                    <canvas id="feedbacksChart"></canvas>
+                    <p><strong>Average feedback:</strong> ${avgFeedback}</p>
+                    <div class="row">
+                        <c:forEach var="c" items="${categoryList}">
+                            <div class="col-sm-6 col-md-4 mb-4">
+                                <div class="category-item">
+                                    <p><strong>Category:</strong> ${c.categoryName}</p>
+                                    <p><strong>Average Feedback:</strong> ${c.avgFeedback}</p>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </div>
             </div>
 
@@ -78,6 +122,7 @@
                     <canvas id="orderTrendChart"></canvas>
                 </div>
             </div>
+
         </div>
 
 
@@ -124,10 +169,10 @@
             var revenuesChart = new Chart(revenuesCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Previous year', 'This year'],
+                    labels: ['Previous year', 'This year', 'Total'],
                     datasets: [{
                             label: 'Revenues $',
-                            data: [${total_prev}, ${total_now}], // Use dynamic data
+                            data: [${total_prev}, ${total_now}, ${total_all}], // Use dynamic data
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.7)',
                                 'rgba(54, 162, 235, 0.7)'
@@ -186,42 +231,42 @@
             });
 
             // Feedbacks Chart (Column Chart)
-            var feedbacksCtx = document.getElementById('feedbacksChart').getContext('2d');
-            var feedbacksChart = new Chart(feedbacksCtx, {
-                type: 'bar', // Change chart type to 'bar'
-                data: {
-                    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'], // Update labels
-                    datasets: [{
-                            label: 'Average Star',
-                            data: [2.7, 0.7, 1, 1.2, 4.8], // Example data for demonstration
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.7)',
-                                'rgba(255, 159, 64, 0.7)',
-                                'rgba(255, 205, 86, 0.7)',
-                                'rgba(75, 192, 192, 0.7)',
-                                'rgba(54, 162, 235, 0.7)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(255, 159, 64, 1)',
-                                'rgba(255, 205, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(54, 162, 235, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                    }
-                }
-            });
+            //        var feedbacksCtx = document.getElementById('feedbacksChart').getContext('2d');
+            //        var feedbacksChart = new Chart(feedbacksCtx, {
+            //            type: 'bar', // Change chart type to 'bar'
+            //            data: {
+            //                labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'], // Update labels
+            //                datasets: [{
+            //                        label: 'Average Star',
+            //                        data: [2.7, 0.7, 1, 1.2, 4.8], // Example data for demonstration
+            //                        backgroundColor: [
+            //                            'rgba(255, 99, 132, 0.7)',
+            //                            'rgba(255, 159, 64, 0.7)',
+            //                            'rgba(255, 205, 86, 0.7)',
+            //                            'rgba(75, 192, 192, 0.7)',
+            //                            'rgba(54, 162, 235, 0.7)'
+            //                        ],
+            //                        borderColor: [
+            //                            'rgba(255, 99, 132, 1)',
+            //                            'rgba(255, 159, 64, 1)',
+            //                            'rgba(255, 205, 86, 1)',
+            //                            'rgba(75, 192, 192, 1)',
+            //                            'rgba(54, 162, 235, 1)'
+            //                        ],
+            //                        borderWidth: 1
+            //                    }]
+            //            },
+            //            options: {
+            //                responsive: true,
+            //                scales: {
+            //                    yAxes: [{
+            //                            ticks: {
+            //                                beginAtZero: true
+            //                            }
+            //                        }]
+            //                }
+            //            }
+            //        });
 
             var orderTrendCtx = document.getElementById('orderTrendChart').getContext('2d');
             var norderTrendChart = new Chart(orderTrendCtx, {

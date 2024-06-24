@@ -67,7 +67,7 @@
 
     <script>
         // Labels for the last 7 days or the selected date range
-        const labels = [1,2,3,4,5,6,7]; // Adjust if needed for dynamic dates
+        const labels = [${label}]; // Adjust if needed for dynamic dates
 
         // Data for each chart
         const postsData = [${post}];
