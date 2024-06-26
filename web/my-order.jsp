@@ -129,7 +129,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary mb-2">Filter</button>
                 </form>
-                
+
                 <table class="table">
                     <thead>
                         <tr>
@@ -155,7 +155,9 @@
                                     <c:if test="${item.status eq 'Shipped'}">
                                         <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Received</a>
                                     </c:if>
-
+                                    <c:if test="${item.status eq 'Not yet' && !item.isExpired()}">
+                                        <a href="payment?orderId=${item.id}&method=repay" class="btn btn-primary">Continue payment</a>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>

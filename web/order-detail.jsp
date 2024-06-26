@@ -127,7 +127,7 @@
                                 <td>$${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) : product.price*product.buyQuantity}</td>
                                 <td>
                                     <a href="${pageContext.request.contextPath}/public/product-detail?id=${product.productId}&pdid=${product.productDetailId}" class="btn btn-primary">Re-buy</a>
-                                    <c:if test="${order.status eq 'Received'}">
+                                    <c:if test="${order.status eq 'Received' && !item.isFeedbacked()}">
                                         <a href="feedback?id=${product.orderDetailId}" class="btn btn-secondary">Feedback</a>
                                     </c:if>
                                 </td>

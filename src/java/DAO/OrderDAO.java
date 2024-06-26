@@ -156,6 +156,23 @@ public class OrderDAO {
         return orders;
     }
 
+    public boolean autoCanceled() {
+        try {
+            String UPDATE_ORDER_STATUS_SQL
+                    = "UPDATE [dbo].[Order] "
+                    + "SET [Status] = 'canceled' "
+                    + "WHERE [Status] == 'Not yet' "
+                    + "AND [CreatedAt] < DATEADD(DAY, -1, GETDATE())";
+            // Execute the update statement
+            PreparedStatement pstmt = connection.prepareStatement(UPDATE_ORDER_STATUS_SQL);
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            System.out.println("autoCanceled: " + e.getMessage());
+        } 
+        return false;
+    }
+
     // Method to get the total number of orders
     public int getTotalOrderCount(int userId, String orderDate, String orderTime, String orderStatus) {
         int count = 0;
@@ -209,10 +226,10 @@ public class OrderDAO {
                 query.append(" AND o.CreatedBy = ");
                 query.append(String.valueOf(staff.getId()));
             }
-            
+
             if (staff.getRole() == 6) {
                 query.append(" AND o.Status IN  ");
-                query.append(String.valueOf("('Approved', 'Shipping')"));
+                query.append(String.valueOf("('Approved', 'Shipping', 'Failed')"));
             }
 
             if (salesperson != null && !salesperson.isEmpty()) {
@@ -377,13 +394,14 @@ public class OrderDAO {
         }
         return isCanceled;
     }
-    
-    public boolean shippingOrder(int orderId) {
+
+    public boolean shippingOrder(int orderId, String status) {
         boolean isCanceled = false;
         try {
-            String sql = "UPDATE [Order] SET status = 'Shipping' WHERE ID = ?";
+            String sql = "UPDATE [Order] SET status = ? WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, orderId);
+            statement.setString(1, status);
+            statement.setInt(2, orderId);
 
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
@@ -609,6 +627,31 @@ public class OrderDAO {
         }
 
         return orderDetails;
+    }
+    
+    public boolean isFeedbacked(int orderId, int productDetailId) {
+        String GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL
+                = "SELECT *\n" +
+"                 FROM [swp-online-shop].[dbo].[OrderDetail] od \n" +
+"                 LEFT JOIN [swp-online-shop].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID \n" +
+"                 WHERE fb.OrderDetailID IS NULL \n" +
+"                 AND od.OrderID = ? and od.ProductDetailID = ?\n" +
+"                 AND od.IsDeleted = 0";
+        try (
+                PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL)) {
+
+            preparedStatement.setInt(1, orderId);
+            preparedStatement.setInt(2, productDetailId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("getOrderDetailsNotFeedbackedByUserId: " + e.getMessage());
+        }
+
+        return false;
     }
 
     public OrderDetail getOrderDetailById(int id) {

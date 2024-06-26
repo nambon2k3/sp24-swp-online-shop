@@ -58,7 +58,7 @@ public class ApproveOrderController extends HttpServlet {
     throws ServletException, IOException {
         int orderId = Integer.parseInt(request.getParameter("orderId")); 
         OrderDAO orderDAO = new OrderDAO();
-        boolean isSuccess = orderDAO.updateOrderStatus("Approved", orderId);
+        boolean isSuccess = orderDAO.updateOrderStatus(request.getParameter("status"), orderId);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         response.sendRedirect("order-detail?isSuccess=" + isSuccess + "&orderId="+orderId);
     } 

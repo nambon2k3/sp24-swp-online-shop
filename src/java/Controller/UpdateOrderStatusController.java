@@ -59,11 +59,16 @@ public class UpdateOrderStatusController extends HttpServlet {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         String notes = request.getParameter("notes");
         String saleId = request.getParameter("saleId");
+        String status = request.getParameter("orderStatus");
         
         OrderDAO orderDAO = new OrderDAO();
         
         
-        boolean isSuccess = orderDAO.updateOrderStatus(request.getParameter("orderStatus"), orderId, notes, saleId);
+        boolean isSuccess = orderDAO.updateOrderStatus(status, orderId, notes, saleId);
+        
+        if(status.equalsIgnoreCase("failed")) {
+            isSuccess = orderDAO.cancelOrder(orderId);
+        }
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         response.sendRedirect("order-detail?isSuccess=" + isSuccess + "&orderId="+orderId);
     } 

@@ -66,7 +66,9 @@
                     </div>
                 </div>
             </form>
-
+            <div>
+                Total: ${totalOrders}
+            </div>
             <table class="table">
                 <thead>
                     <tr>

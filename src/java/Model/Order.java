@@ -3,9 +3,11 @@ package Model;
 import DAO.OrderDAO;
 import DAO.StaffDAO;
 import DAO.UserDAO;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Order {
+
     private int id;
     private int userId;
     private String fullname;
@@ -17,13 +19,11 @@ public class Order {
     private int createdBy;
     private double totalCost;
     private String notes;
-    
-    
+
     private User user;
-    
+
     public Order() {
     }
-    
 
     public Order(int id, int userId, String fullname, String address, String phone, String status, boolean isDeleted, Date createdAt, int createdBy) {
         this.id = id;
@@ -50,18 +50,28 @@ public class Order {
         return notes;
     }
 
+    public boolean isExpired() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(createdAt);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+        // Get the new date
+        Date expiredDate = calendar.getTime();
+        return new Date().before(expiredDate);
+    }
+
     public void setNotes(String notes) {
         this.notes = notes;
     }
-    
+
     public String getGender(String email) {
         return new UserDAO().getUserByEmail(email).getGender();
     }
-    
+
     public User getUser() {
         return new UserDAO().getUserById(userId);
     }
-    
+
     public Staff getSale() {
         return new StaffDAO().getStaffById(createdBy);
     }
@@ -137,7 +147,7 @@ public class Order {
     public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
-    
+
     public Staff getStaff() {
         return new StaffDAO().getStaffById(createdBy);
     }
@@ -146,8 +156,5 @@ public class Order {
     public String toString() {
         return "Order{" + "id=" + id + ", userId=" + userId + ", fullname=" + fullname + ", address=" + address + ", phone=" + phone + ", status=" + status + ", isDeleted=" + isDeleted + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", totalCost=" + totalCost + ", notes=" + notes + ", user=" + user + '}';
     }
-
-    
-    
 
 }

@@ -33,6 +33,10 @@ public class OrderDetail {
         return quantity;
     }
     
+    public boolean isFeedbacked() {
+        return new OrderDAO().isFeedbacked(orderId, productDetailId);
+    }
+    
     
 
     public int getId() {

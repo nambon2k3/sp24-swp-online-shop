@@ -125,15 +125,23 @@ public class PaymentController extends HttpServlet {
         order.setAddress(address);
         order.setPhone(phone);
         order.setNotes(notes);
-        if (method.equalsIgnoreCase("vnpay")) {
+        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay")) {
             order.setFullname(user.getFullname());
             order.setAddress(user.getAddress());
             order.setPhone(user.getPhone());
             order.setNotes(notes);
         }
-        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Paied" : "COD");
+        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Not yet" : "COD");
         order.setUserId(user.getId());
-        int orderId = new OrderDAO().createOrder(order);
+        int orderId = 0;
+        if(request.getParameter("orderId") != null && !request.getParameter("orderId").isEmpty()) {
+           orderId = Integer.parseInt(request.getParameter("orderId"));
+        }
+         
+        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay")) {
+            orderId = new OrderDAO().createOrder(order);
+        }
+        
         Config.orderID = orderId;
         // Retrieve cart items from session or request (assuming a method getCartItems exists)
         List<Cart> cartItems = new CartDAO().getAllCarts(user.getId());

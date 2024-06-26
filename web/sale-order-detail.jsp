@@ -78,8 +78,11 @@
 
             <div class="mt-4">
                 <c:if test="${order.status eq 'Submitted'}">
-                    <a class="btn btn-success" href="approve-order?orderId=${order.id}">
+                    <a class="btn btn-success" href="approve-order?orderId=${order.id}&status=Approved">
                         Approved
+                    </a>
+                    <a class="btn btn-danger" href="approve-order?orderId=${order.id}&status=Rejected"">
+                        Rejected
                     </a>
                 </c:if>
                 <form method="get" action="update-order-status" class="form-inline mb-3">
@@ -112,11 +115,11 @@
                                         </c:if>
                                         <c:if test="${order.status  eq 'Shipping'}">
                                             <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                            <option value="Fail" ${order.status == 'Failed' ? 'selected' : ''}>Failed</option>
                                         </c:if>
                                         <c:if test="${order.status  eq 'Request cancel'}">
                                             <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
                                         </c:if>
-                                        
                                     </select>
                                 </td>
                             </tr>
@@ -138,7 +141,7 @@
                         </table>
                     </c:if>
                 </form>
-                
+
             </div>
 
         </div>

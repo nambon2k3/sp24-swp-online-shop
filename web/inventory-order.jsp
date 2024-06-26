@@ -84,7 +84,10 @@
                             <td>${item.status}</td>
                             <td>
                                 <c:if test="${item.status eq 'Approved'}">
-                                    <a href="shipping-order?orderId=${item.id}" class="btn btn-primary">Shipping</a>
+                                    <a href="shipping-order?orderId=${item.id}&status=Boxed" class="btn btn-primary">Boxed</a>
+                                </c:if>
+                                    <c:if test="${item.status eq 'Boxed'}">
+                                    <a href="shipping-order?orderId=${item.id}&status=Shipping" class="btn btn-primary">Shipping</a>
                                 </c:if>
                             </td>
                         </tr>

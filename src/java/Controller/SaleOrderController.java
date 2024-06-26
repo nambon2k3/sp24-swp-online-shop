@@ -66,6 +66,7 @@ public class SaleOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         OrderDAO orderDAO = new OrderDAO();
+        orderDAO.autoCanceled();
 
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");

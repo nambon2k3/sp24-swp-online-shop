@@ -57,10 +57,11 @@ public class ShippingOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
-
+        String status = request.getParameter("status");
+        
         OrderDAO orderDAO = new OrderDAO();
         
-        boolean isSuccess = orderDAO.shippingOrder(orderId);
+        boolean isSuccess = orderDAO.shippingOrder(orderId, status);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         response.sendRedirect("list-order?isSuccess=" + isSuccess);
     } 
