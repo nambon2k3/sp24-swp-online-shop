@@ -6,6 +6,7 @@
 package Controller;
 
 import DAO.OrderDAO;
+import DAO.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -67,7 +68,8 @@ public class UpdateOrderStatusController extends HttpServlet {
         boolean isSuccess = orderDAO.updateOrderStatus(status, orderId, notes, saleId);
         
         if(status.equalsIgnoreCase("failed")) {
-            isSuccess = orderDAO.cancelOrder(orderId);
+            isSuccess = orderDAO.failOrder(orderId);
+            new ProductDAO().updateQuantity(orderId, -1);
         }
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         response.sendRedirect("order-detail?isSuccess=" + isSuccess + "&orderId="+orderId);

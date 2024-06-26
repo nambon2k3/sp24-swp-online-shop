@@ -54,10 +54,9 @@ public class Order {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(createdAt);
         calendar.add(Calendar.DAY_OF_MONTH, 1);
-
         // Get the new date
         Date expiredDate = calendar.getTime();
-        return new Date().before(expiredDate);
+        return new Date().after(expiredDate);
     }
 
     public void setNotes(String notes) {

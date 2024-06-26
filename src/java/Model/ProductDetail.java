@@ -5,6 +5,7 @@
 package Model;
 
 import DAO.CategoryDAO;
+import DAO.OrderDAO;
 import DAO.ProductDAO;
 import java.sql.*;
 
@@ -33,7 +34,10 @@ public class ProductDetail {
         return orderDetailId;
     }
     
-    
+        
+    public boolean isFeedbacked() {
+        return new OrderDAO().isFeedbacked(orderDetailId);
+    }
     
     private int buyQuantity;
     

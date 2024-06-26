@@ -67,7 +67,7 @@ public class MyOrderController extends HttpServlet {
             throws ServletException, IOException {
         OrderDAO orderDAO = new OrderDAO();
         ProductDAO productDAO = new ProductDAO();
-
+        orderDAO.autoCanceled();
         int currentPage = 1;
         int ordersPerPage = 10; // Set the number of orders per page
 

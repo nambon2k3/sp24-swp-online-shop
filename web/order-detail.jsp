@@ -127,8 +127,8 @@
                                 <td>$${product.discount != null &&  product.discount != 0 ? (product.price * (100-product.discount)/100)*(product.buyQuantity) : product.price*product.buyQuantity}</td>
                                 <td>
                                     <a href="${pageContext.request.contextPath}/public/product-detail?id=${product.productId}&pdid=${product.productDetailId}" class="btn btn-primary">Re-buy</a>
-                                    <c:if test="${order.status eq 'Received' && !item.isFeedbacked()}">
-                                        <a href="feedback?id=${product.orderDetailId}" class="btn btn-secondary">Feedback</a>
+                                    <c:if test="${order.status eq 'Close' && !product.isFeedbacked()}">
+                                        <a href="feedback?id=${product.orderDetailId}" class="btn btn-secondary">Feedback ${product.isFeedbacked(1)}</a>
                                     </c:if>
                                 </td>
                             </tr>
@@ -139,7 +139,7 @@
                     <strong>Total Order Price:</strong> $${order.totalCost}
                 </div>
                 <!-- Order Actions -->
-                <c:if test="${order.status ne 'Received' && order.status ne 'Canceled'}">
+                <c:if test="${order.status ne 'Close' && order.status ne 'Canceled'}">
                     <div class="mt-4">
                         <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Cancel Order</a>
                     </div>

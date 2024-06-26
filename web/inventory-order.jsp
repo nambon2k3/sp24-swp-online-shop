@@ -48,7 +48,7 @@
                         <select id="orderStatus" name="orderStatus" class="form-control">
                             <option value="" ${param.orderStatus == null ? 'selected' : ''}>All</option>
                             <option value="Approved" ${param.orderStatus == 'Approved' ? 'selected' : ''}>Approved</option>
-                            <option value="Shipping" ${param.orderStatus == 'Shipping' ? 'selected' : ''}>Shipping</option>
+                            <option value="Delivering" ${param.orderStatus == 'Delivering' ? 'selected' : ''}>Delivering</option>
                         </select>
                     </div>
                     <div class="col-3 mt-3">
@@ -84,10 +84,10 @@
                             <td>${item.status}</td>
                             <td>
                                 <c:if test="${item.status eq 'Approved'}">
-                                    <a href="shipping-order?orderId=${item.id}&status=Boxed" class="btn btn-primary">Boxed</a>
+                                    <a href="shipping-order?orderId=${item.id}&status=Packaging" class="btn btn-primary">Packaging</a>
                                 </c:if>
-                                    <c:if test="${item.status eq 'Boxed'}">
-                                    <a href="shipping-order?orderId=${item.id}&status=Shipping" class="btn btn-primary">Shipping</a>
+                                    <c:if test="${item.status eq 'Packaging'}">
+                                    <a href="shipping-order?orderId=${item.id}&status=Delivering" class="btn btn-primary">Delivering</a>
                                 </c:if>
                             </td>
                         </tr>

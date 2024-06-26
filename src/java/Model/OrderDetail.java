@@ -32,12 +32,6 @@ public class OrderDetail {
     public int getQuantity() {
         return quantity;
     }
-    
-    public boolean isFeedbacked() {
-        return new OrderDAO().isFeedbacked(orderId, productDetailId);
-    }
-    
-    
 
     public int getId() {
         return id;

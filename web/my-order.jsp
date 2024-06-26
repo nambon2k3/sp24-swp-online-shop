@@ -120,9 +120,9 @@
                         <label for="orderStatus" class="sr-only">Order Status:</label>
                         <select id="orderStatus" name="orderStatus" class="form-control">
                             <option value="">All</option>
-                            <option value="Received" ${orderStatus eq"Received" ? "selected" : ""}>Received</option>
+                            <option value="Close" ${orderStatus eq"Close" ? "selected" : ""}>Close</option>
                             <option value="Submitted" ${orderStatus eq"Submitted" ? "selected" : ""}>Submitted</option>
-                            <option value="Shipped" ${orderStatus eq"Shipped" ? "selected" : ""}>Shipped</option>
+                            <option value="Success" ${orderStatus eq"Success" ? "selected" : ""}>Success</option>
                             <option value="Request Cancel" ${orderStatus eq "Request Cancel" ? "selected" : ""}>Request Cancel</option>
                             <option value="Canceled" ${orderStatus eq "Canceled" ? "selected" : ""}>Canceled</option>
                         </select>
@@ -152,9 +152,10 @@
                                 <td>$${item.totalCost}</td>
                                 <td>${item.status}</td>
                                 <td>
-                                    <c:if test="${item.status eq 'Shipped'}">
-                                        <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Received</a>
+                                    <c:if test="${item.status eq 'Success'}">
+                                        <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Close</a>
                                     </c:if>
+                                        
                                     <c:if test="${item.status eq 'Not yet' && !item.isExpired()}">
                                         <a href="payment?orderId=${item.id}&method=repay" class="btn btn-primary">Continue payment</a>
                                     </c:if>

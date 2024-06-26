@@ -1,5 +1,6 @@
 package Model;
 
+import DAO.OrderDAO;
 import java.util.Date;
 
 public class Staff {
@@ -111,6 +112,11 @@ public class Staff {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+    
+    public int saleNumberOrder() {
+        return new OrderDAO().getSaleTotalOrder(id);
+    }
+    
     
     public void setRoleInt(String role) {
         if (role == "Admin") this.role = 1;

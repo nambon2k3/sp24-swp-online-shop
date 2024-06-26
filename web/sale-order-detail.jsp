@@ -86,9 +86,9 @@
                     </a>
                 </c:if>
                 <form method="get" action="update-order-status" class="form-inline mb-3">
-                    <c:if test="${order.status ne 'Received' && order.status ne 'Canceled'}">
+                    <c:if test="${order.status ne 'Close' && order.status ne 'Canceled'}">
                         <table class="table">
-                            <c:if test="${sessionScope.staff.role eq 4}">
+                            <c:if test="${sessionScope.staff.role eq 4 && order.status  eq 'Submitted'}">
                                 <tr>
                                     <td>
                                         <label for="orderStatus" class="form-label mr-5"><strong>Assign to:</strong> </label>
@@ -96,7 +96,7 @@
                                     <td>
                                         <select id="orderStatus" name="saleId" class="form-control mr-5">
                                             <c:forEach items="${sales}" var="item">
-                                                <option value="${item.id}" ${item.id == order.createdBy ? 'selected' : ''}>${item.fullname}</option>
+                                                <option value="${item.id}" ${item.id == order.createdBy ? 'selected' : ''}>${item.fullname} - ${item.saleNumberOrder()}</option>
                                             </c:forEach>
                                         </select>
                                     </td>
@@ -110,11 +110,11 @@
 
                                 <td>
                                     <select id="orderStatus" name="orderStatus" class="form-control mr-5">
-                                        <c:if test="${order.status  ne 'Shipped'}">
+                                        <c:if test="${order.status  ne 'Success'}">
                                             <option value="${order.status}" selected="">${order.status}</option>
                                         </c:if>
-                                        <c:if test="${order.status  eq 'Shipping'}">
-                                            <option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                        <c:if test="${order.status  eq 'Delivering'}">
+                                            <option value="Success" ${order.status == 'Success' ? 'selected' : ''}>Success</option>
                                             <option value="Fail" ${order.status == 'Failed' ? 'selected' : ''}>Failed</option>
                                         </c:if>
                                         <c:if test="${order.status  eq 'Request cancel'}">
