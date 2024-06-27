@@ -67,7 +67,7 @@ public class UpdateOrderStatusController extends HttpServlet {
         
         boolean isSuccess = orderDAO.updateOrderStatus(status, orderId, notes, saleId);
         
-        if(status.equalsIgnoreCase("failed")) {
+        if(status.equalsIgnoreCase("failed") || status.equalsIgnoreCase("Canceled")) {
             isSuccess = orderDAO.failOrder(orderId);
             new ProductDAO().updateQuantity(orderId, -1);
         }

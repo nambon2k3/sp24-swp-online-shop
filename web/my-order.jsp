@@ -157,7 +157,7 @@
                                     </c:if>
                                         
                                     <c:if test="${item.status eq 'Not yet' && !item.isExpired()}">
-                                        <a href="payment?orderId=${item.id}&method=repay" class="btn btn-primary">Continue payment</a>
+                                        <a href="../public/payment?orderId=${item.id}&method=repay&amount=${item.totalCost}" class="btn btn-primary">Continue payment</a>
                                     </c:if>
                                 </td>
                             </tr>

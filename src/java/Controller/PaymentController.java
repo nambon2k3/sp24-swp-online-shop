@@ -39,10 +39,16 @@ import com.google.gson.Gson;
 public class PaymentController extends HttpServlet {
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
+    }
+    
+    
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse respone) throws ServletException, IOException {
 
         String amount_raw = request.getParameter("amount");
-        System.out.println(amount_raw);
         int amount = Integer.parseInt(request.getParameter("amount").substring(0, amount_raw.lastIndexOf("."))) * 100 * 25000;
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
@@ -126,7 +132,7 @@ public class PaymentController extends HttpServlet {
         order.setAddress(address);
         order.setPhone(phone);
         order.setNotes(notes);
-        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay")) {
+        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay") || method.equalsIgnoreCase("COD")) {
             order.setFullname(user.getFullname());
             order.setAddress(user.getAddress());
             order.setPhone(user.getPhone());
@@ -139,14 +145,13 @@ public class PaymentController extends HttpServlet {
            orderId = Integer.parseInt(request.getParameter("orderId"));
         }
          
-        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay")  || method.equalsIgnoreCase("COD")) {
+        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("COD")) {
             orderId = new OrderDAO().createOrder(order);
         }
         
         Config.orderID = orderId;
         // Retrieve cart items from session or request (assuming a method getCartItems exists)
         List<Cart> cartItems = new CartDAO().getAllCarts(user.getId());
-        System.out.println("orderId: " + orderId);
         // Insert Order Details
         if (request.getParameter("mode") != null) {
             int productDetailId = Integer.parseInt(request.getParameter("productdetailId"));
@@ -168,7 +173,7 @@ public class PaymentController extends HttpServlet {
             new CartDAO().clearCart(user.getId());
         }
 
-        if (method.equalsIgnoreCase("vnpay")) {
+        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay")) {
             respone.sendRedirect(paymentUrl);
         } else {
             respone.sendRedirect("../customer/my-order");

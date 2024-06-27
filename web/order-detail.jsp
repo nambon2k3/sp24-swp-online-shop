@@ -117,7 +117,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="product" items="${orderedProducts}">
+                         <c:forEach var="product" items="${orderedProducts}">
                             <tr>
                                 <td><img src="${product.imageURL}" alt="..." width="100" height="100"></td>
                                 <td>${product.getProductName()}</td>
@@ -128,7 +128,7 @@
                                 <td>
                                     <a href="${pageContext.request.contextPath}/public/product-detail?id=${product.productId}&pdid=${product.productDetailId}" class="btn btn-primary">Re-buy</a>
                                     <c:if test="${order.status eq 'Close' && !product.isFeedbacked()}">
-                                        <a href="feedback?id=${product.orderDetailId}" class="btn btn-secondary">Feedback ${product.isFeedbacked(1)}</a>
+                                        <a href="feedback?id=${product.orderDetailId}" class="btn btn-secondary">Feedback</a>
                                     </c:if>
                                 </td>
                             </tr>
@@ -139,7 +139,7 @@
                     <strong>Total Order Price:</strong> $${order.totalCost}
                 </div>
                 <!-- Order Actions -->
-                <c:if test="${order.status ne 'Close' && order.status ne 'Canceled'}">
+                <c:if test="${order.status ne 'Close' && order.status ne 'Canceled' && order.status ne 'Failed'}">
                     <div class="mt-4">
                         <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Cancel Order</a>
                     </div>

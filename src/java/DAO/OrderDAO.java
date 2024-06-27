@@ -387,7 +387,6 @@ public class OrderDAO {
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
                 isCanceled = true;
-                new ProductDAO().updateQuantity(orderId, -1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -508,7 +507,7 @@ public class OrderDAO {
             ps.setInt(1, saleId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1);
+                return rs.getInt(4);
             }
         } catch (SQLException e) {
             System.out.println("getSaleTotalOrder: " + e.getMessage());

@@ -6,6 +6,7 @@
 package Controller;
 
 import DAO.OrderDAO;
+import DAO.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -57,8 +58,13 @@ public class ApproveOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         int orderId = Integer.parseInt(request.getParameter("orderId")); 
+        String status = request.getParameter("status");
         OrderDAO orderDAO = new OrderDAO();
-        boolean isSuccess = orderDAO.updateOrderStatus(request.getParameter("status"), orderId);
+        boolean isSuccess = orderDAO.updateOrderStatus(status, orderId);
+        if(status.equalsIgnoreCase("Rejected")) {
+            isSuccess = orderDAO.failOrder(orderId);
+            new ProductDAO().updateQuantity(orderId, -1);
+        }
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         response.sendRedirect("order-detail?isSuccess=" + isSuccess + "&orderId="+orderId);
     } 
