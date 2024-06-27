@@ -102,6 +102,12 @@
                                     </td>
                                 </tr>
                             </c:if>
+                                
+                                <select style="display: none" id="orderStatus" name="saleId" class="form-control mr-5">
+                                            <c:forEach items="${sales}" var="item">
+                                                <option value="${item.id}" ${item.id == order.createdBy ? 'selected' : ''}>${item.fullname} - ${item.saleNumberOrder()}</option>
+                                            </c:forEach>
+                                        </select>
 
                             <tr>
                                 <td>
@@ -115,7 +121,7 @@
                                         </c:if>
                                         <c:if test="${order.status  eq 'Delivering'}">
                                             <option value="Success" ${order.status == 'Success' ? 'selected' : ''}>Success</option>
-                                            <option value="Fail" ${order.status == 'Failed' ? 'selected' : ''}>Failed</option>
+                                            <option value="Failed" ${order.status == 'Failed' ? 'selected' : ''}>Failed</option>
                                         </c:if>
                                         <c:if test="${order.status  eq 'Request cancel'}">
                                             <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
