@@ -77,7 +77,7 @@
 
 
             <div class="mt-4">
-                <c:if test="${order.status eq 'Submitted'}">
+                <c:if test="${order.status eq 'Submitted' || order.status eq 'COD'}">
                     <a class="btn btn-success" href="approve-order?orderId=${order.id}&status=Approved">
                         Approved
                     </a>

@@ -62,7 +62,6 @@ public class ApproveOrderController extends HttpServlet {
         OrderDAO orderDAO = new OrderDAO();
         boolean isSuccess = orderDAO.updateOrderStatus(status, orderId);
         if(status.equalsIgnoreCase("Rejected")) {
-            isSuccess = orderDAO.failOrder(orderId);
             new ProductDAO().updateQuantity(orderId, -1);
         }
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
