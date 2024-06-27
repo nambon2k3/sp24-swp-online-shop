@@ -138,7 +138,7 @@ public class PaymentController extends HttpServlet {
            orderId = Integer.parseInt(request.getParameter("orderId"));
         }
          
-        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay")) {
+        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay")  || method.equalsIgnoreCase("COD")) {
             orderId = new OrderDAO().createOrder(order);
         }
         
