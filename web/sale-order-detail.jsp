@@ -88,7 +88,7 @@
                 <form method="get" action="update-order-status" class="form-inline mb-3">
                     <c:if test="${order.status ne 'Close' && order.status ne 'Canceled' && order.status ne 'Rejected'}">
                         <table class="table">
-                            <c:if test="${sessionScope.staff.role eq 4 && order.status  eq 'Submitted' && order.status  eq 'COD'}">
+                            <c:if test="${sessionScope.staff.role eq 4 && (order.status  eq 'Submitted' || order.status  eq 'COD')}">
                                 <tr>
                                     <td>
                                         <label for="orderStatus" class="form-label mr-5"><strong>Assign to:</strong> </label>
@@ -102,12 +102,14 @@
                                     </td>
                                 </tr>
                             </c:if>
-                                
+                            <c:if test="${order.status  ne 'Submitted' && order.status  ne 'COD'}">
                                 <select style="display: none" id="orderStatus" name="saleId" class="form-control mr-5">
-                                            <c:forEach items="${sales}" var="item">
-                                                <option value="${item.id}" ${item.id == order.createdBy ? 'selected' : ''}>${item.fullname} - ${item.saleNumberOrder()}</option>
-                                            </c:forEach>
-                                        </select>
+                                    <c:forEach items="${sales}" var="item">
+                                        <option value="${item.id}" ${item.id == order.createdBy ? 'selected' : ''}>${item.fullname} - ${item.saleNumberOrder()}</option>
+                                    </c:forEach>
+                                </select>
+                            </c:if>
+
 
                             <tr>
                                 <td>
