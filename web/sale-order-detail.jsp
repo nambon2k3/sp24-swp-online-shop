@@ -86,9 +86,9 @@
                     </a>
                 </c:if>
                 <form method="get" action="update-order-status" class="form-inline mb-3">
-                    <c:if test="${order.status ne 'Close' && order.status ne 'Canceled'}">
+                    <c:if test="${order.status ne 'Close' && order.status ne 'Canceled' && order.status ne 'Rejected'}">
                         <table class="table">
-                            <c:if test="${sessionScope.staff.role eq 4 && order.status  eq 'Submitted'}">
+                            <c:if test="${sessionScope.staff.role eq 4 && order.status  eq 'Submitted' && order.status  eq 'COD'}">
                                 <tr>
                                     <td>
                                         <label for="orderStatus" class="form-label mr-5"><strong>Assign to:</strong> </label>
