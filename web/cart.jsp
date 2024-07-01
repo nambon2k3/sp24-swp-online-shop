@@ -96,13 +96,13 @@
             <div class="col-md-10">
                 <c:if test="${isSuccess ne null && isSuccess}">
                     <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                        <strong>Save success!</strong> You should check in on some of those fields below.   
+                        <strong>Order successfully received!</strong> You should check in on some of those fields below.   
                         <button type="button" class="btn-close"  onclick="document.getElementById('mess').style.display = 'none'"></button>
                     </div>
                 </c:if>
                 <c:if test="${isSuccess ne null && !isSuccess}">
                     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                        <strong>Save failed!</strong> You should check your network.
+                        <strong>Order failed to receive!</strong> You should check your network.
                         <button type="button" class="btn-close"  onclick="document.getElementById('mess').style.display = 'none'"></button>
                     </div>
                 </c:if>

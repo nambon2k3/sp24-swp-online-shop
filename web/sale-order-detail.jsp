@@ -22,12 +22,12 @@
         <div class="main-content container" style="margin-top: 10%; margin-bottom: 10%">
             <c:if test="${isSuccess ne null && isSuccess}">
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save success!</strong> 
+                    <strong>Update Order success!</strong> 
                 </div>
             </c:if>
             <c:if test="${isSuccess ne null && !isSuccess}">
                 <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save failed!</strong> You should check your network.
+                    <strong>Update Order failed!</strong> You should check your network.
                 </div>
             </c:if>
             <!-- Order Details -->
