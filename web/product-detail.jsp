@@ -93,18 +93,8 @@
                                     <input  type="hidden"  name="amount" id="amount" value=""> 
                                     <span style="font-weight: normal; font-style: italic"> (Available: ${product.productDetail.stock}) </span>
                                 </h5>
-
-                                <h5>
-                                    <strong>Payment method:</strong>
-                                    <input type="radio" name="method" value="VNPAY" checked> <strong>VNPAY</strong> 
-                                    <input type="radio"  name="method" value="COD" ${product.productDetail.price * (1 - product.productDetail.discount/100) > 45 ? "disabled" : ""}> <strong>COD</strong> ${product.productDetail.price * (1 - product.productDetail.discount/100) > 45 ? "(Order > 45$ not allow COD)" : ""}
-
-                                </h5>
-
-
                                 <div class="action">
                                     <button class="add-to-cart btn btn-default" type="button" onclick="addToCart(${product.productDetail.productDetailId})">add to cart</button>
-                                    <button type="submit" class="add-to-cart btn btn-default">buy & feedback</button>
                                 </div>
                             </div>
                         </form>

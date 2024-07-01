@@ -139,14 +139,15 @@ public class PaymentController extends HttpServlet {
             order.setPhone(user.getPhone());
             order.setNotes(notes);
         }
-        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Not yet" : "COD");
+        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Not yet" : "Submitted");
+        order.setPaymentMethod(method);
         order.setUserId(user.getId());
         int orderId = 0;
         if(request.getParameter("orderId") != null && !request.getParameter("orderId").isEmpty()) {
            orderId = Integer.parseInt(request.getParameter("orderId"));
         }
          
-        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("COD")) {
+        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("COD") || method.equalsIgnoreCase("tranfer")) {
             orderId = new OrderDAO().createOrder(order);
         }
         

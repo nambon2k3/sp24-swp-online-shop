@@ -19,6 +19,7 @@ public class Order {
     private int createdBy;
     private double totalCost;
     private String notes;
+    private String paymentMethod;
 
     private User user;
 
@@ -38,6 +39,15 @@ public class Order {
         this.totalCost = new OrderDAO().getTotal(id);
     }
 
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    
     public double getTotalCost() {
         return totalCost;
     }

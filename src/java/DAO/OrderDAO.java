@@ -62,9 +62,11 @@ public class OrderDAO {
                 boolean isDeleted = rs.getBoolean("IsDeleted");
                 Timestamp createdAt = rs.getTimestamp("CreatedAt");
                 int createdBy = rs.getInt("CreatedBy");
+                String paymentMethod = rs.getString("paymentMethod");
 
                 // Create an Order object with extracted data
                 Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, createdAt, createdBy);
+                order.setPaymentMethod(paymentMethod);
                 order.setNotes(rs.getString("notes"));
                 orders.add(order);
             }
@@ -145,8 +147,11 @@ public class OrderDAO {
                 Timestamp createdAt = rs.getTimestamp("CreatedAt");
                 int createdBy = rs.getInt("CreatedBy");
 
+                String paymentMethod = rs.getString("paymentMethod");
+
                 // Create an Order object with extracted data
                 Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, createdAt, createdBy);
+                order.setPaymentMethod(paymentMethod);
                 order.setNotes(rs.getString("notes"));
                 orders.add(order);
             }
@@ -269,8 +274,11 @@ public class OrderDAO {
                 Timestamp createdAt = rs.getTimestamp("CreatedAt");
                 int createdBy = rs.getInt("CreatedBy");
 
+                String paymentMethod = rs.getString("paymentMethod");
+
                 // Create an Order object with extracted data
                 Order order = new Order(id, userId, fullName, address, phone, status, isDeleted, createdAt, createdBy);
+                order.setPaymentMethod(paymentMethod);
                 order.setNotes(rs.getString("notes"));
                 orders.add(order);
             }
@@ -346,6 +354,8 @@ public class OrderDAO {
                 order.setCreatedBy(rs.getInt("createdBy"));
                 order.setNotes(rs.getString("notes"));
                 order.setTotalCost(getTotal(orderId));
+                String paymentMethod = rs.getString("paymentMethod");
+                order.setPaymentMethod(paymentMethod);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -393,7 +403,7 @@ public class OrderDAO {
         }
         return isCanceled;
     }
-    
+
     public boolean failOrder(int orderId) {
         boolean isCanceled = false;
         try {
@@ -411,8 +421,6 @@ public class OrderDAO {
         }
         return isCanceled;
     }
-    
-    
 
     public boolean shippingOrder(int orderId, String status) {
         boolean isCanceled = false;
@@ -519,7 +527,7 @@ public class OrderDAO {
 
     public int createOrder(Order order) {
         int orderId = 0;
-        String INSERT_ORDER_SQL = "INSERT INTO [Order] (userId, fullname, address, phone, status, isDeleted, createdBy, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String INSERT_ORDER_SQL = "INSERT INTO [Order] (userId, fullname, address, phone, status, isDeleted, createdBy, notes, [paymentMethod]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, order.getUserId());
             preparedStatement.setString(2, order.getFullname());
@@ -529,6 +537,7 @@ public class OrderDAO {
             preparedStatement.setBoolean(6, false);
             preparedStatement.setInt(7, getSaleIdWithLeastOrder());
             preparedStatement.setString(8, order.getNotes());
+            preparedStatement.setString(9, order.getPaymentMethod());
             preparedStatement.executeUpdate();
 
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
