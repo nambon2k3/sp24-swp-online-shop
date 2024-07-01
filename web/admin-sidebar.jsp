@@ -39,6 +39,15 @@
     .main-content {
         padding-left: 11%;
     }
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .sidebar ul.logout {
+        margin-top: auto;
+    }
 </style>
 
 <!-- Sidebar -->
@@ -47,5 +56,8 @@
         <li><a href="dashboard"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a></li>
         <li><a href="user"><i class="fas fa-users mr-2"></i>Customers</a></li>
         <li><a href="setting"><i class="fas fa-cog mr-2"></i>Settings</a></li>
+    </ul>
+    <ul class="logout">
+        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
     </ul>
 </nav>

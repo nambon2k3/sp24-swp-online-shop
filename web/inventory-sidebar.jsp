@@ -39,11 +39,23 @@
     .main-content {
         padding-left: 11%;
     }
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .sidebar ul.logout {
+        margin-top: auto;
+    }
 </style>
 
 <!-- Sidebar -->
 <nav class="sidebar">
     <ul>
         <li><a href="list-order"><i class="fas fa-shopping-cart mr-2"></i>Orders</a></li>
+    </ul>
+    <ul class="logout">
+        <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
     </ul>
 </nav>
