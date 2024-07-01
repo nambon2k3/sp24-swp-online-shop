@@ -8,9 +8,11 @@ package Controller;
 import DAO.CartDAO;
 import DAO.PostDAO;
 import DAO.ProductDAO;
+import DAO.SettingDAO;
 import Model.Cart;
 import Model.Category;
 import Model.Product;
+import Model.Setting;
 import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -84,8 +86,11 @@ public class CartContactController extends HttpServlet {
 
         int totalCartItems = cartDAO.getCartCount(userId, searchQuery, category);
         int totalPages = (int) Math.ceil((double) totalCartItems / PAGE_SIZE);
+        
+        Setting setting = new SettingDAO().getSettingByID(3);
 
         request.setAttribute("cartItemsFull", cartItemsFull);
+        request.setAttribute("setting", setting);
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("products", products);
         request.setAttribute("categories", categories);
