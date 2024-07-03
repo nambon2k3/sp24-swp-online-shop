@@ -19,7 +19,7 @@
         <%@ include file="sale-sidebar.jsp" %>
 
         <!-- Main content -->
-        <div class="main-content container text-center" style="margin-top: 10%">
+        <div class="main-content text-center" style="margin-top: 10%">
             <h2>My Orders</h2>
             <c:if test="${isSuccess ne null && isSuccess}">
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">

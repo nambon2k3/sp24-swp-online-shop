@@ -18,7 +18,7 @@
         <!-- Sidebar -->
         <%@ include file="admin-sidebar.jsp" %>
 
-        <div class="container mt-5 main-content">
+        <div class="mt-5 main-content">
             <h2>Setting List</h2>
 
             <c:if test="${param.success ne null}">

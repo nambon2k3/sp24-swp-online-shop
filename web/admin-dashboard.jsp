@@ -30,7 +30,7 @@
         <%@ include file="admin-sidebar.jsp" %>
 
         <!-- Main content -->
-        <div class="main-content container text-center">
+        <div class="main-content text-center">
             <h1 class="mb-4">Admin Dashboard</h1>
 
             <!-- Statistics of new orders -->

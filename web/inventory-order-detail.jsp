@@ -19,7 +19,7 @@
         <%@ include file="sale-sidebar.jsp" %>
 
         <!-- Main content -->
-        <div class="main-content container" style="margin-top: 10%; margin-bottom: 10%">
+        <div class="main-content" style="margin-top: 10%; margin-bottom: 10%">
             <c:if test="${isSuccess ne null && isSuccess}">
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
                     <strong>Save success!</strong> 

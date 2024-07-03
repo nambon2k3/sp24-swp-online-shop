@@ -17,7 +17,7 @@
     <%@ include file="marketing-sidebar.jsp" %>
 
     <!-- Main content -->
-    <div class="main-content container text-center">
+    <div class="main-content text-center">
         <h1 class="mb-4">Marketing Dashboard</h1>
 
         <!-- Date Picker Form -->
