@@ -139,6 +139,7 @@
                             <th>Phone</th>
                             <th>Total</th>
                             <th>Status</th>
+                            <th>Payment Method</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -151,6 +152,7 @@
                                 <td>${item.phone}</td>
                                 <td>$${item.totalCost}</td>
                                 <td>${item.status}</td>
+                                <td>${item.paymentMethod}</td>
                                 <td>
                                     <c:if test="${item.status eq 'Success'}">
                                         <a href="confirm-order?orderId=${item.id}" class="btn btn-primary">Close</a>

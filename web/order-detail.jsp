@@ -94,6 +94,7 @@
                 <p>Order Date: ${order.createdAt}</p>
                 <p>Total Cost: $${order.totalCost}</p>
                 <p>Status: ${order.status}</p>
+                <p>Payment Method: ${order.paymentMethod}</p>
 
                 <!-- Receiver Information -->
                 <h3>Receiver Information</h3>

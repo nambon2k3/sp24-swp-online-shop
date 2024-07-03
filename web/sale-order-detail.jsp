@@ -22,12 +22,12 @@
         <div class="main-content" style="margin-top: 10%; margin-bottom: 10%">
             <c:if test="${isSuccess ne null && isSuccess}">
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save success!</strong> 
+                    <strong>Update Order success!</strong> 
                 </div>
             </c:if>
             <c:if test="${isSuccess ne null && !isSuccess}">
                 <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save failed!</strong> You should check your network.
+                    <strong>Update Order failed!</strong> You should check your network.
                 </div>
             </c:if>
             <!-- Order Details -->
@@ -36,6 +36,7 @@
             <p>Order Date: ${order.createdAt}</p>
             <p>Total Cost: $${order.totalCost}</p>
             <p>Status: ${order.status}</p>
+            <p>Payment Method: ${order.paymentMethod}</p>
 
             <!-- Receiver Information -->
             <h3>Receiver Information</h3>

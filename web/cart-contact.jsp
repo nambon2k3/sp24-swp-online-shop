@@ -202,7 +202,19 @@
                         </tr>
                         <tr>
                             <td>Payment method:</td>
-                            <td><input type="radio" name="method" value="VNPAY" checked> VNPAY <br><input type="radio"  name="method" value="COD" ${totalPrice > 45 ? "disabled" : ""}> COD ${totalPrice > 45 ? "(Order > 45$ not allow COD)" : ""}</td> 
+                            <td>
+                                <input type="radio" name="method" value="VNPAY" checked> VNPAY <br>
+                                <input type="radio" name="method" value="Tranfer"> Tranfer 
+                                <div> 
+                                    <ul>
+                                        <li><strong>STK: </strong> 01239817231123</li>
+                                        <li> <strong>BANK: </strong>MB Bank - HA NOI</li>
+                                        <li><strong>OWNER: </strong>${sessionScope.user.fullname}</li>
+                                    </ul>
+                                </div> 
+                                        <input type="radio"  name="method" value="COD" ${totalPrice > setting.value ? "disabled" : ""}> COD 
+                                        <c:if test="${totalPrice > setting.value}">(Order > ${setting.value}$ is not allow for COD)</c:if>
+                            </td> 
                         </tr>
                         <tr>
                             <td colspan="2">

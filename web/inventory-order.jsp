@@ -23,13 +23,13 @@
             <h2>My Orders</h2>
             <c:if test="${isSuccess ne null && isSuccess}">
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save success!</strong> You should check in on some of those fields below.
+                    <strong>Update order success!</strong> You should check in on some of those fields below.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('mess').style.display = 'none'"></button>
                 </div>
             </c:if>
             <c:if test="${isSuccess ne null && !isSuccess}">
                 <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" id="mess">
-                    <strong>Save failed!</strong> You should check your network.
+                    <strong>Update order failed!</strong> You should check your network.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>

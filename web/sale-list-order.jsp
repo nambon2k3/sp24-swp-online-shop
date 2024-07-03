@@ -80,6 +80,7 @@
                         <th>Address</th>
                         <th>Phone</th>
                         <th>Total</th>
+                        <th>Payment Method</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -93,6 +94,7 @@
                             <td>${item.address}</td>
                             <td>${item.phone}</td>
                             <td>$${item.totalCost}</td>
+                            <td>$${item.paymentMethod}</td>
                             <td>${item.status}</td>
                         </tr>
                     </c:forEach>
