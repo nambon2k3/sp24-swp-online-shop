@@ -38,6 +38,8 @@
     /* Main content style */
     .main-content {
         padding-left: 11%;
+        margin-left: 5%;
+        margin-right: 5%;
     }
     .sidebar {
         display: flex;
@@ -58,6 +60,7 @@
         <li><a href="setting"><i class="fas fa-cog mr-2"></i>Settings</a></li>
     </ul>
     <ul class="logout">
+        <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>
         <li><a href="../logout"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
     </ul>
 </nav>

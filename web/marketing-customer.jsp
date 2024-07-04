@@ -29,7 +29,7 @@
         <!-- Sidebar -->
         <%@ include file="marketing-sidebar.jsp" %>
 
-        <div class="container mt-5 main-content">
+        <div class="mt-5 main-content">
             <h2>User List</h2>
 
 

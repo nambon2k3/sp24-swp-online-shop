@@ -28,7 +28,7 @@
         <!-- Sidebar -->
         <%@ include file="marketing-sidebar.jsp" %>
 
-        <div class="container mt-5 main-content">
+        <div class="mt-5 main-content">
             <h2>Product List</h2>
 
             <c:if test="${param.success ne null}">
