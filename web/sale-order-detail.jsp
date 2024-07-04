@@ -78,7 +78,7 @@
 
 
             <div class="mt-4">
-                <c:if test="${order.status eq 'Submitted' || order.status eq 'COD'}">
+                <c:if test="${(order.status eq 'Submitted' || order.status eq 'COD') && sessionScope.staff.role ne 4}">
                     <a class="btn btn-success" href="approve-order?orderId=${order.id}&status=Approved">
                         Approved
                     </a>
@@ -87,7 +87,7 @@
                     </a>
                 </c:if>
                 <form method="get" action="update-order-status" class="form-inline mb-3">
-                    <c:if test="${order.status ne 'Close' && order.status ne 'Canceled' && order.status ne 'Rejected'}">
+                    <c:if test="${order.status ne 'Close' && order.status ne 'Canceled' && order.status ne 'Success' && order.status ne 'Failed' && order.status ne 'Rejected'}">
                         <table class="table">
                             <c:if test="${sessionScope.staff.role eq 4 && (order.status  eq 'Submitted' || order.status  eq 'COD')}">
                                 <tr>
@@ -111,39 +111,45 @@
                                 </select>
                             </c:if>
 
+                            <c:if test="${sessionScope.staff.role ne 4}">
+                                <tr>
+                                    <td>
+                                        <label for="orderStatus" class="form-label mr-5"><strong>Update Order Status:</strong> </label>
+                                    </td>
+
+                                    <td>
+                                        <select id="orderStatus" name="orderStatus" class="form-control mr-5">
+                                            <c:if test="${order.status  ne 'Success'}">
+                                                <option value="${order.status}" selected="">${order.status}</option>
+                                            </c:if>
+                                            <c:if test="${order.status  eq 'Delivering'}">
+                                                <option value="Success" ${order.status == 'Success' ? 'selected' : ''}>Success</option>
+                                                <option value="Failed" ${order.status == 'Failed' ? 'selected' : ''}>Failed</option>
+                                            </c:if>
+                                            <c:if test="${order.status  eq 'Request cancel'}">
+                                                <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
+                                            </c:if>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <label for="orderStatus" class="form-label mr-5"><strong>Notes: </strong> </label>
+                                    </td>
+                                    <td>
+                                        <textarea name="notes" class="form-control">
+                                            ${order.notes}
+                                        </textarea>
+                                    </td>
+                                </tr>
+                            </c:if>
 
                             <tr>
-                                <td>
-                                    <label for="orderStatus" class="form-label mr-5"><strong>Update Order Status:</strong> </label>
-                                </td>
-
-                                <td>
-                                    <select id="orderStatus" name="orderStatus" class="form-control mr-5">
-                                        <c:if test="${order.status  ne 'Success'}">
-                                            <option value="${order.status}" selected="">${order.status}</option>
-                                        </c:if>
-                                        <c:if test="${order.status  eq 'Delivering'}">
-                                            <option value="Success" ${order.status == 'Success' ? 'selected' : ''}>Success</option>
-                                            <option value="Failed" ${order.status == 'Failed' ? 'selected' : ''}>Failed</option>
-                                        </c:if>
-                                        <c:if test="${order.status  eq 'Request cancel'}">
-                                            <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
-                                        </c:if>
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>
-                                    <label for="orderStatus" class="form-label mr-5"><strong>Notes: </strong> </label>
-                                </td>
-                                <td>
-                                    <textarea name="notes" class="form-control">
-                                        ${order.notes}
-                                    </textarea>
-                                </td>
-                            </tr>
-                            <tr>
+                                <c:if test="${sessionScope.staff.role eq 4}">
+                                    <input type="hidden" name="orderStatus" value="${order.status}">
+                                    <input type="hidden" name="notes" value="${order.notes}">
+                                </c:if>
                                 <td><input type="hidden" name="orderId" value="${order.id}"></td>
                                 <td><button type="submit" class="btn btn-success">Update</button></td>
                             </tr>

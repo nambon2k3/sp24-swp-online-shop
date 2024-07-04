@@ -6,6 +6,7 @@ package Controller;
 
 import DAO.CartDAO;
 import DAO.OrderDAO;
+import DAO.ProductDAO;
 import Model.Cart;
 import Model.Order;
 import Model.OrderDetail;
@@ -139,7 +140,7 @@ public class PaymentController extends HttpServlet {
             order.setPhone(user.getPhone());
             order.setNotes(notes);
         }
-        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Not yet" : "Submitted");
+        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Wait for pay" : "Submitted");
         order.setPaymentMethod(method);
         order.setUserId(user.getId());
         int orderId = 0;
@@ -171,6 +172,9 @@ public class PaymentController extends HttpServlet {
                 orderDetail.setProductDetailId(cartItem.getProductDetailId());
                 orderDetail.setQuantity(cartItem.getQuantity());
                 new OrderDAO().createOrderDetail(orderDetail);
+                if(method.equalsIgnoreCase("COD") || method.equalsIgnoreCase("tranfer")) {
+                    new ProductDAO().updateProductDetailQuantity(cartItem.getProductDetailId(), cartItem.getQuantity());
+                }
             }
             new CartDAO().clearCart(user.getId());
         }

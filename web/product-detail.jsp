@@ -21,6 +21,7 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">    
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="../css/pdetail.css">
 
         <style>
@@ -102,7 +103,35 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <h3>Product Feedback</h3>
+                <c:forEach var="feedback" items="${feedbackList}">
+                    <div class="feedback">
+
+                        <div class="d-flex">
+                            <div class="mr-5">
+                                Rating:
+                                <c:forEach begin="1" end="${feedback.rating}">
+                                    <i class='bx bxs-star'></i>
+                                </c:forEach>
+                            </div>
+                        </div>
+                        <p>Comment: ${feedback.comment}</p>
+                        <p>Created At: ${feedback.createdAt}</p>
+                    </div>
+                </c:forEach>
+                <div class="pagination">
+                    <c:if test="${currentPage > 1}">
+                        <a href="productFeedback?productDetailID=&page=${currentPage - 1}">Previous</a>
+                    </c:if>
+                    <c:if test="${feedbackList.size() == 10}">
+                        <a href="productFeedback?productDetailID=&page=${currentPage + 1}">Next</a>
+                    </c:if>
+                </div>
+            </div>
+
         </div>
+
         <jsp:include page="footer.html"></jsp:include>
             <!-- Bootstrap core JS-->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

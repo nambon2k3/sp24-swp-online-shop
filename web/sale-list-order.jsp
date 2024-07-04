@@ -35,22 +35,29 @@
             </c:if>
             <form method="get" action="sale-order" class="form-inline mb-3">
                 <div class="row g-3">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="startDate" class="form-label">Start Date</label>
                         <input type="date" id="startDate" name="startDate" class="form-control" value="${param.startDate}">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="endDate" class="form-label">End Date</label>
                         <input type="date" id="endDate" name="endDate" class="form-control" value="${param.endDate}">
                     </div>
                     <c:if test="${sessionScope.staff.role eq 4}">
-                        <div class="col-md-3">
+                        <div class="col-md-2 mr-2">
                             <label for="salesperson" class="form-label">Salesperson</label>
-                            <input type="text" id="salesperson" name="salesperson" class="form-control" value="${param.salesperson}">
+                            <input  type="text" id="salesperson" name="salesperson" class="form-control" value="${param.salesperson}">
                         </div>
                     </c:if>
-
-                    <div class="col-md-3">
+                    <div class="col-md-2">
+                        <label for="salesperson" class="form-label">ID: </label>
+                        <input type="text" style="width: 50px" id="salesperson" name="id" class="form-control" value="${param.id}">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="salesperson" class="form-label">Customer name: </label>
+                        <input type="text" id="salesperson" name="customerName" class="form-control" value="${param.customerName}">
+                    </div>
+                    <div class="col-md-2">
                         <label for="orderStatus" class="form-label">Order Status</label>
                         <select id="orderStatus" name="orderStatus" class="form-control">
                             <option value="" ${param.orderStatus == null ? 'selected' : ''}>All</option>
@@ -62,14 +69,11 @@
                             <option value="Canceled" ${param.orderStatus == 'Canceled' ? 'selected' : ''}>Canceled</option>
                         </select>
                     </div>
-                    <div class="col-12 mt-3">
+                    <div class="col-12 mt-2">
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </div>
                 </div>
             </form>
-            <div>
-                Total: ${totalOrders}
-            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -89,12 +93,12 @@
                         <tr>
                             <td><a href="order-detail?orderId=${item.id}">${item.id}</a></td>
                             <td>${item.createdAt}</td>
-                            <td>${item.user.fullname}</td>
+                            <td>${item.fullname}</td>
                             <td>${item.staff.fullname}</td>
                             <td>${item.address}</td>
                             <td>${item.phone}</td>
                             <td>$${item.totalCost}</td>
-                            <td>$${item.paymentMethod}</td>
+                            <td>${item.paymentMethod}</td>
                             <td>${item.status}</td>
                         </tr>
                     </c:forEach>

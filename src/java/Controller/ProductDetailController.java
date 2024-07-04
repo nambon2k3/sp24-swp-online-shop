@@ -5,7 +5,9 @@
 
 package Controller;
 
+import DAO.FeedbackDAO;
 import DAO.ProductDAO;
+import Model.Feedback;
 import Model.Product;
 import Model.ProductDetail;
 import java.io.IOException;
@@ -56,15 +58,30 @@ public class ProductDetailController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private static final int PAGE_SIZE = 10;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        int page = 1;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        int offset = (page - 1) * PAGE_SIZE;
         int id = Integer.parseInt(request.getParameter("id"));
         Product product = new ProductDAO().getProductById(id);
         if(request.getParameter("pdid") != null) {
             int pdid = Integer.parseInt(request.getParameter("pdid"));
             product.setProductDetail(new ProductDAO().getProductDetailById(pdid));
         }
+        
+        
+        List<Feedback> feedbackList = new FeedbackDAO().getFeedbackByProductDetailID(product.getProductDetail().getProductDetailId(), offset, PAGE_SIZE);
+        
+       
+        
+        
+        request.setAttribute("feedbackList", feedbackList);
+        request.setAttribute("currentPage", page);
         List<ProductDetail> listDetails = new ProductDAO().getProductDetailsByProductId(id);
         request.setAttribute("product", product);
         request.setAttribute("listDetails", listDetails);

@@ -69,6 +69,8 @@ public class SaleOrderController extends HttpServlet {
         orderDAO.autoCanceled();
 
         String startDate = request.getParameter("startDate");
+        String id = request.getParameter("id");
+        String customerName = request.getParameter("customerName");
         String endDate = request.getParameter("endDate");
         String salesperson = request.getParameter("salesperson");
         String orderStatus = request.getParameter("orderStatus");
@@ -90,9 +92,9 @@ public class SaleOrderController extends HttpServlet {
         
         Staff staff = (Staff) request.getSession().getAttribute("staff");
         
-        List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, startDate, endDate, salesperson, orderStatus, staff);
+        List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, startDate, endDate, salesperson, orderStatus, staff, id, customerName);
         List<Category> categories = new PostDAO().getUniqueCategories();
-        int totalOrders = orderDAO.getTotalOrderCount(startDate, endDate, salesperson, orderStatus, staff);
+        int totalOrders = orderDAO.getTotalOrderCount(startDate, endDate, salesperson, orderStatus, staff, id, customerName);
         int totalPages = (int) Math.ceil((double) totalOrders / ordersPerPage);
         
         request.setAttribute("orders", orders);

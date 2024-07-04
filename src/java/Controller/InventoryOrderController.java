@@ -85,11 +85,11 @@ public class InventoryOrderController extends HttpServlet {
         
         Staff staff = (Staff) request.getSession().getAttribute("staff");
         
-        List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, startDate, endDate, salesperson, orderStatus, staff);
+        List<Order> orders = orderDAO.getOrdersByPage(currentPage, ordersPerPage, startDate, endDate, salesperson, orderStatus, staff, null, null);
         List<Category> categories = new PostDAO().getUniqueCategories();
-        int totalOrders = orderDAO.getTotalOrderCount(startDate, endDate, salesperson, orderStatus, staff);
+        int totalOrders = orderDAO.getTotalOrderCount(startDate, endDate, salesperson, orderStatus, staff, null, null);
         int totalPages = (int) Math.ceil((double) totalOrders / ordersPerPage);
-        
+        System.out.println("totalOrders: " + totalOrders);
         request.setAttribute("orders", orders);
         request.setAttribute("categories", categories);
         request.setAttribute("totalOrders", totalOrders);

@@ -241,4 +241,43 @@ public class FeedbackDAO {
         }
         return false;
     }
+    
+    
+    
+    public List<Feedback> getFeedbackByProductDetailID(int productDetailID, int offset, int pageSize) {
+        List<Feedback> feedbackList = new ArrayList<>();
+        String query = "SELECT [ID], [OrderDetailID], [Rating], [Comment], [IsDeleted], [CreatedAt], [CreatedBy], [ImgURL] " +
+                       "FROM [swp-online-shop].[dbo].[Feedback] " +
+                       "WHERE [OrderDetailID] IN (" +
+                       "    SELECT [ID] " +
+                       "    FROM [swp-online-shop].[dbo].[OrderDetail] " +
+                       "    WHERE [ProductDetailID] = ?) " +
+                       "ORDER BY [CreatedAt] DESC " +
+                       "OFFSET ? ROWS " +
+                       "FETCH NEXT ? ROWS ONLY";
+
+        try (
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, productDetailID);
+            stmt.setInt(2, offset);
+            stmt.setInt(3, pageSize);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Feedback feedback = new Feedback();
+                feedback.setId(rs.getInt("ID"));
+                feedback.setOrderDetailId(rs.getInt("OrderDetailID"));
+                feedback.setRating(rs.getInt("Rating"));
+                feedback.setComment(rs.getString("Comment"));
+                feedback.setIsDeleted(rs.getBoolean("IsDeleted"));
+                feedback.setCreatedAt(rs.getTimestamp("CreatedAt"));
+                feedback.setCreatedBy(rs.getInt("CreatedBy"));
+                feedback.setImgeURL(rs.getBytes("ImgURL"));
+                feedbackList.add(feedback);
+            }
+        } catch (SQLException e) {
+            System.out.println("getFeedbackByProductDetailID: " + e.getMessage());
+        }
+        return feedbackList;
+    }
 }

@@ -91,4 +91,11 @@ public class Feedback {
         return "data:image/png;base64," + imageBase64;
     }
 
+    @Override
+    public String toString() {
+        return "Feedback{" + "id=" + id + ", orderDetailId=" + orderDetailId + ", rating=" + rating + ", comment=" + comment + ", isDeleted=" + isDeleted + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", imgeURL=" + imgeURL + '}';
+    }
+    
+    
+
 }

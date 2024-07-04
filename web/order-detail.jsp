@@ -118,7 +118,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                         <c:forEach var="product" items="${orderedProducts}">
+                        <c:forEach var="product" items="${orderedProducts}">
                             <tr>
                                 <td><img src="${product.imageURL}" alt="..." width="100" height="100"></td>
                                 <td>${product.getProductName()}</td>
@@ -139,11 +139,13 @@
                 <div>
                     <strong>Total Order Price:</strong> $${order.totalCost}
                 </div>
+                
+                
                 <!-- Order Actions -->
-                <c:if test="${order.status ne 'Close' && order.status ne 'Canceled' && order.status ne 'Failed' && order.status ne 'Success' && order.status ne 'Rejected'}">
+                <c:if test="${order.status ne 'Close' && order.status ne 'Canceled' && order.status ne 'Failed' && order.status ne 'Success' && order.status ne 'Rejected' && order.status ne 'Delivering'}">
                     <div class="mt-4">
-                        <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Cancel Order</a>
-                    </div>
+                    <a href="cancel-order?orderId=${order.id}" class="btn btn-danger">Cancel Order</a>
+                </div>
                 </c:if>
 
             </div>

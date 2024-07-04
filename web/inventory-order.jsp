@@ -49,6 +49,13 @@
                             <option value="" ${param.orderStatus == null ? 'selected' : ''}>All</option>
                             <option value="Approved" ${param.orderStatus == 'Approved' ? 'selected' : ''}>Approved</option>
                             <option value="Delivering" ${param.orderStatus == 'Delivering' ? 'selected' : ''}>Delivering</option>
+                            <option value="Packaging" ${param.orderStatus == 'Packaging' ? 'selected' : ''}>Packaging</option>
+                            <option value="Close" ${param.orderStatus == 'Close' ? 'selected' : ''}>Close</option>
+                            <option value="Failed" ${param.orderStatus == 'Failed' ? 'selected' : ''}>Failed</option>
+                            <option value="Submitted" ${param.orderStatus == 'Submitted' ? 'selected' : ''}>Submitted</option>
+                            <option value="Success" ${param.orderStatus == 'Success' ? 'selected' : ''}>Success</option>
+                            <option value="Request Cancel" ${param.orderStatus == 'Request Cancel' ? 'selected' : ''}>Request Cancel</option>
+                            <option value="Canceled" ${param.orderStatus == 'Canceled' ? 'selected' : ''}>Canceled</option>
                         </select>
                     </div>
                     <div class="col-3 mt-3">
@@ -68,6 +75,7 @@
                         <th>Phone</th>
                         <th>Total</th>
                         <th>Status</th>
+                        <th>Payment Method</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -82,6 +90,7 @@
                             <td>${item.phone}</td>
                             <td>$${item.totalCost}</td>
                             <td>${item.status}</td>
+                            <td>${item.paymentMethod}</td>
                             <td>
                                 <c:if test="${item.status eq 'Approved'}">
                                     <a href="shipping-order?orderId=${item.id}&status=Packaging" class="btn btn-primary">Packaging</a>
