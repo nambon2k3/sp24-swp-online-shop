@@ -183,7 +183,7 @@
                                     <ul style="list-style-type: none">
                                         <li><strong>STK: </strong> 01239817231123</li>
                                         <li> <strong>BANK: </strong>MB Bank - HA NOI</li>
-                                        <li><strong>OWNER: </strong>${sessionScope.user.fullname}</li>
+                                        <li><strong>OWNER: </strong>Sloth shop</li>
                                     </ul>
                                 </div> 
                             </td> 
