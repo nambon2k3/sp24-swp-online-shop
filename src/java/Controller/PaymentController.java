@@ -121,6 +121,10 @@ public class PaymentController extends HttpServlet {
         //Section : Add new payment
         //Get user payment
         String method = request.getParameter("method");
+        if(method.equalsIgnoreCase("tranfer1")) {
+            respone.sendRedirect("tranfer-commit");
+            return;
+        }
 
         User user = (User) request.getSession().getAttribute("user");
         //Create bill
