@@ -85,10 +85,10 @@
 
             <div class="mt-4">
                 <c:if test="${order.status eq 'Approved'}">
-                    <a href="shipping-order?orderId=${item.id}&status=Packaging" class="btn btn-primary">Packaging</a>
+                    <a href="shipping-order?orderId=${order.id}&status=Packaging" class="btn btn-primary">Packaging</a>
                 </c:if>
                 <c:if test="${order.status eq 'Packaging'}">
-                    <a href="shipping-order?orderId=${item.id}&status=Delivering" class="btn btn-primary">Delivering</a>
+                    <a href="shipping-order?orderId=${order.id}&status=Delivering" class="btn btn-primary">Delivering</a>
                 </c:if>
             </div>
 

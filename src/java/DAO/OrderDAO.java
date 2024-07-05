@@ -352,11 +352,11 @@ public class OrderDAO {
     public Order getOrderById(int orderId) {
         Order order = null;
         try {
-            String sql = "SELECT * FROM [Order] WHERE ID = ?";
+            String sql = "SELECT * FROM [swp-online-shop].[dbo].[Order] WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
-            rs = statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 order = new Order();
                 order.setId(rs.getInt("ID"));
