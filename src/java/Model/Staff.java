@@ -4,6 +4,7 @@ import DAO.OrderDAO;
 import java.util.Date;
 
 public class Staff {
+
     private int id;
     private String email;
     private String password;
@@ -112,25 +113,54 @@ public class Staff {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-    
+
+    private int saleNumberOrder = -1;
     public int saleNumberOrder() {
-        return new OrderDAO().getSaleTotalOrder(id);
+        if (saleNumberOrder == -1) {
+            saleNumberOrder = 0;
+            OrderDAO dao = new OrderDAO();
+
+            saleNumberOrder += dao.getOrdersByStatus("Approved").size();
+            saleNumberOrder += dao.getOrdersByStatus("Request cancel").size();
+            saleNumberOrder += dao.getOrdersByStatus("Packaging").size();
+            saleNumberOrder += dao.getOrdersByStatus("Delivering").size();
+            saleNumberOrder += dao.getOrdersByStatus("Wait for pay").size();
+        }
+        
+        return saleNumberOrder;
     }
-    
-    
+
     public void setRoleInt(String role) {
-        if (role == "Admin") this.role = 1;
-        if (role == "Marketing") this.role = 2;
-        if (role == "Sale") this.role = 3;
-        if (role == "Sale leader") this.role = 4;
-        if (role == "User") this.role = 5;
+        if (role == "Admin") {
+            this.role = 1;
+        }
+        if (role == "Marketing") {
+            this.role = 2;
+        }
+        if (role == "Sale") {
+            this.role = 3;
+        }
+        if (role == "Sale leader") {
+            this.role = 4;
+        }
+        if (role == "User") {
+            this.role = 5;
+        }
     }
-    
+
     public String getRoleString() {
-        if (this.role == 1) return "Admin";
-        if (this.role == 2) return "Marketing";
-        if (this.role == 3) return "Sale";
-        if (this.role == 4) return "Sale leader";
+        if (this.role == 1) {
+            return "Admin";
+        }
+        if (this.role == 2) {
+            return "Marketing";
+        }
+        if (this.role == 3) {
+            return "Sale";
+        }
+        if (this.role == 4) {
+            return "Sale leader";
+        }
         return "User";
     }
 
