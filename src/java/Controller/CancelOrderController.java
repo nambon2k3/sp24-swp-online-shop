@@ -62,7 +62,7 @@ public class CancelOrderController extends HttpServlet {
         
         boolean isSuccess = orderDAO.cancelOrder(orderId);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
-        response.sendRedirect("my-order?isSuccess=" + isSuccess);
+        response.sendRedirect("my-order?isSuccess=" + isSuccess + "&type=Request canceled");
     } 
 
     /** 

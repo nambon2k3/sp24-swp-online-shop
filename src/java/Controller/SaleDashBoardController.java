@@ -22,7 +22,7 @@ import java.util.Map;
  * @author Legion
  */
 @WebServlet(name = "SaleDashBoardController", urlPatterns = {"/sale/dashboard"})
-public class SaleDashboardController extends HttpServlet {
+public class SaleDashBoardController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

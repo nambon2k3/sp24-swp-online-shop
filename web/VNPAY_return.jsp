@@ -125,11 +125,11 @@
                                         + request.getParameter("vnp_OrderInfo") + ", Amount:" + String.format("%,.0f",Double.parseDouble(request.getParameter("vnp_Amount"))/100) + ", Transaction Code: " + request.getParameter("vnp_TransactionNo"));
                                     } else {
                                         out.print("Failed");
-                                        new OrderDAO().updateOrder("Not yet", Config.orderID);
+                                        new OrderDAO().updateOrder("Wait for pay", Config.orderID);
                                     }
 
                                 } else {
-                                    new OrderDAO().updateOrder("Not yet", Config.orderID);
+                                    new OrderDAO().updateOrder("Wait for pay", Config.orderID);
                                     out.print("invalid signature");
                                 }
                                 response.sendRedirect("public/cart?isSuccess=" + isSuccess);

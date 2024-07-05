@@ -7,6 +7,8 @@ package Controller;
 
 import DAO.OrderDAO;
 import DAO.ProductDAO;
+import Model.Order;
+import Utils.EmailService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,9 +62,16 @@ public class ApproveOrderController extends HttpServlet {
         int orderId = Integer.parseInt(request.getParameter("orderId")); 
         String status = request.getParameter("status");
         OrderDAO orderDAO = new OrderDAO();
+        Order order = orderDAO.getOrderById(orderId);
         boolean isSuccess = orderDAO.updateOrderStatus(status, orderId);
         if(status.equalsIgnoreCase("Rejected")) {
             new ProductDAO().updateQuantity(orderId, -1);
+            EmailService.sendEmail(order.getUser().getEmail(), "Confirm Card", "Your order " + order.getId() + "was rejected!");
+        }
+        if(status.equalsIgnoreCase("approved")) {
+            if(order.getPaymentMethod().equalsIgnoreCase("COD") || order.getPaymentMethod().equalsIgnoreCase("tranfer")) {
+                EmailService.sendEmail(order.getUser().getEmail(), "Thanks Card", "Thanks for trying our product, we have received your order by " + order.getPaymentMethod());
+            }
         }
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         response.sendRedirect("order-detail?isSuccess=" + isSuccess + "&orderId="+orderId);

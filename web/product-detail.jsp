@@ -105,21 +105,26 @@
             </div>
             <div class="card">
                 <h3>Product Feedback</h3>
-                <c:forEach var="feedback" items="${feedbackList}">
-                    <div class="feedback">
+                <div class="card-body">
+                    <c:forEach var="feedback" items="${feedbackList}">
+                        <div class="feedback mb-2" style="border: 1px solid lightgray; padding: 15px; background-color: white">
 
-                        <div class="d-flex">
-                            <div class="mr-5">
-                                Rating:
-                                <c:forEach begin="1" end="${feedback.rating}">
-                                    <i class='bx bxs-star'></i>
-                                </c:forEach>
+                            <div class="d-flex">
+                                <div class="mr-5">
+                                    <strong>Rating:</strong>
+                                    <c:forEach begin="1" end="${feedback.rating}">
+                                        <i style="color: orange" class='bx bxs-star'></i>
+                                    </c:forEach>
+                                </div>
                             </div>
+                            <p><strong>Comment:</strong> ${feedback.comment}</p>
+                            <p><strong>Created By:</strong> ${feedback.userName}</p>
+                            <p style="text-align: right">
+                                <small style="font-style: italic">Created At: ${feedback.createdAt}</small>
+                            </p>
                         </div>
-                        <p>Comment: ${feedback.comment}</p>
-                        <p>Created At: ${feedback.createdAt}</p>
-                    </div>
-                </c:forEach>
+                    </c:forEach>
+                </div>
                 <div class="pagination">
                     <c:if test="${currentPage > 1}">
                         <a href="productFeedback?productDetailID=&page=${currentPage - 1}">Previous</a>

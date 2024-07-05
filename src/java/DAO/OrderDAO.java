@@ -436,6 +436,25 @@ public class OrderDAO {
         }
         return isCanceled;
     }
+    
+    
+    public boolean saleCanceledOrder(int orderId) {
+        boolean isCanceled = false;
+        try {
+            String sql = "UPDATE [Order] SET status = 'Canceled' WHERE ID = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, orderId);
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                isCanceled = true;
+                new ProductDAO().updateQuantity(orderId, -1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isCanceled;
+    }
 
     public boolean shippingOrder(int orderId, String status) {
         boolean isCanceled = false;

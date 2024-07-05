@@ -66,20 +66,38 @@ public class ListProductController extends HttpServlet {
         String pageParam = request.getParameter("page");
         String searchQuery = request.getParameter("searchQuery");
         String categoryId = request.getParameter("categoryId");
+        String minPriceParam = request.getParameter("minPrice");
+        String maxPriceParam = request.getParameter("maxPrice");
+        String color = request.getParameter("color");
+        String size = request.getParameter("size");
+
         int pageNumber = pageParam == null ? 1 : Integer.parseInt(pageParam);
         int pageSize = 12;
 
-        List<Product> products = new ProductDAO().getProductsByPage(pageNumber, pageSize, searchQuery, categoryId);
-        int total = new ProductDAO().countTotalProducts(searchQuery, categoryId);
-        System.out.println(total);
+        Double minPrice = minPriceParam == null || minPriceParam.isEmpty() ? null : Double.parseDouble(minPriceParam);
+        Double maxPrice = maxPriceParam == null || maxPriceParam.isEmpty() ? null : Double.parseDouble(maxPriceParam);
+
+        List<Product> products = new ProductDAO().getProductsByPage(pageNumber, pageSize, searchQuery, categoryId, minPrice, maxPrice, color, size);
+        int total = new ProductDAO().countTotalProducts(searchQuery, categoryId, minPrice, maxPrice, color, size);
+
         int endPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
         List<Category> categories = new CategoryDAO().getCategories();
+        List<String> colors = new ProductDAO().getAvailableColors();
+        List<String> sizes = new ProductDAO().getAvailableSizes();
+
         request.setAttribute("products", products);
         request.setAttribute("endPage", endPage);
         request.setAttribute("page", pageNumber);
         request.setAttribute("categories", categories);
+        request.setAttribute("colors", colors);
+        request.setAttribute("sizes", sizes);
         request.setAttribute("searchQuery", searchQuery);
         request.setAttribute("categoryId", categoryId);
+        request.setAttribute("minPrice", minPrice);
+        request.setAttribute("maxPrice", maxPrice);
+        request.setAttribute("selectedColor", color);
+        request.setAttribute("selectedSize", size);
+
         request.getRequestDispatcher("/list-product.jsp").forward(request, response);
     }
 

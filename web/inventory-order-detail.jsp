@@ -16,7 +16,7 @@
     <body>
 
         <!-- Sidebar -->
-        <%@ include file="sale-sidebar.jsp" %>
+        <%@ include file="inventory-sidebar.jsp" %>
 
         <!-- Main content -->
         <div class="main-content" style="margin-top: 10%; margin-bottom: 10%">

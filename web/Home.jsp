@@ -93,12 +93,8 @@
                         </div>
                     </c:forEach> 
                 </div>
-                <div class="row mb-5 ">
-                    <form action="home" class="d-flex text-center justify-content-center align-items-lg-center">
-                        <button style="margin-right: 10px; width: fit-content"class="btn btn-primary">Go to Page:</button> 
-                        <input class="form-control" oninput="valid(this)" style="width: 30px; font-size: 15px; padding: 5px; height: 25px; margin-right: 5px"  type="input" name="page" value="${page}" pattern="\d{1,}" title="Enter number"> /  ${endPage}
-                    </form>
-
+                <div class="row d-flex justify-content-center">
+                    <a class="btn btn-primary col-lg-2" href="public/list-product">See more</a>
                 </div>
             </div>   
         </section>

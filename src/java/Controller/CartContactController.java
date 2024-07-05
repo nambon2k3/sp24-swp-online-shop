@@ -88,7 +88,9 @@ public class CartContactController extends HttpServlet {
         int totalPages = (int) Math.ceil((double) totalCartItems / PAGE_SIZE);
         
         Setting setting = new SettingDAO().getSettingByID(3);
-
+        if(setting.getIsDeleted()) {
+            request.setAttribute("setting", setting);
+        }
         request.setAttribute("cartItemsFull", cartItemsFull);
         request.setAttribute("setting", setting);
         request.setAttribute("cartItems", cartItems);

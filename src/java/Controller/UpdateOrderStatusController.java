@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller;
 
 import DAO.OrderDAO;
 import DAO.ProductDAO;
+import Model.Order;
+import Utils.EmailService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,36 +20,39 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Legion
  */
-@WebServlet(name="UpdateOrderStatusController", urlPatterns={"/sale/update-order-status"})
+@WebServlet(name = "UpdateOrderStatusController", urlPatterns = {"/sale/update-order-status"})
 public class UpdateOrderStatusController extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpdateOrderStatusController</title>");  
+            out.println("<title>Servlet UpdateOrderStatusController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UpdateOrderStatusController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet UpdateOrderStatusController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -56,26 +60,32 @@ public class UpdateOrderStatusController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         String notes = request.getParameter("notes");
         String saleId = request.getParameter("saleId");
         String status = request.getParameter("orderStatus");
-        
+
         OrderDAO orderDAO = new OrderDAO();
         
+        Order order = orderDAO.getOrderById(orderId);
         
         boolean isSuccess = orderDAO.updateOrderStatus(status, orderId, notes, saleId);
-        
-        if(status.equalsIgnoreCase("failed") || status.equalsIgnoreCase("Canceled")) {
+        if (status.equalsIgnoreCase("failed")) {
             isSuccess = orderDAO.failOrder(orderId);
+            EmailService.sendEmail(order.getUser().getEmail(), "Confirm Card", "Your order " + order.getId() + "was failed!");
+        }
+        if (status.equalsIgnoreCase("Canceled")) {
+            isSuccess = orderDAO.saleCanceledOrder(orderId);
+            EmailService.sendEmail(order.getUser().getEmail(), "Confirm Card", "Your order " + order.getId() + "was cancled!");
         }
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
-        response.sendRedirect("order-detail?isSuccess=" + isSuccess + "&orderId="+orderId);
-    } 
+        response.sendRedirect("order-detail?isSuccess=" + isSuccess + "&orderId=" + orderId);
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -83,12 +93,13 @@ public class UpdateOrderStatusController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

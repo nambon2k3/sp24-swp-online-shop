@@ -1,5 +1,6 @@
 package Model;
 
+import DAO.FeedbackDAO;
 import DAO.OrderDAO;
 import java.util.Date;
 import javax.xml.bind.DatatypeConverter;
@@ -13,6 +14,17 @@ public class Feedback {
     private Date createdAt;
     private int createdBy;
     private byte[] imgeURL;
+    private String userName;
+
+    public String getUserName() {
+        return new FeedbackDAO().getUserNameFeedback(id);
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    
+    
 
     public byte[] getImgeURL() {
         return imgeURL;

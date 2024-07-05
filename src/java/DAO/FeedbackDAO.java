@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class FeedbackDAO {
 
     private Connection conn;
@@ -145,7 +144,7 @@ public class FeedbackDAO {
         }
         return feedbackList;
     }
-    
+
     public List<Feedback> getFilteredFeedbacks(String comment, Boolean isDeleted, String rating) {
         List<Feedback> feedbackList = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID) AS RowNum, * FROM [Feedback] WHERE 1=1");
@@ -223,7 +222,7 @@ public class FeedbackDAO {
         }
         return false;
     }
-    
+
     public boolean addFeedbackVer2(Feedback feedback) {
         String query = "INSERT INTO [Feedback] (OrderDetailId, Rating, Comment, IsDeleted, CreatedBy, imgURL) VALUES (?, ?, ?, ?, ?, ?)";
         try {
@@ -241,23 +240,21 @@ public class FeedbackDAO {
         }
         return false;
     }
-    
-    
-    
+
     public List<Feedback> getFeedbackByProductDetailID(int productDetailID, int offset, int pageSize) {
         List<Feedback> feedbackList = new ArrayList<>();
-        String query = "SELECT [ID], [OrderDetailID], [Rating], [Comment], [IsDeleted], [CreatedAt], [CreatedBy], [ImgURL] " +
-                       "FROM [swp-online-shop].[dbo].[Feedback] " +
-                       "WHERE [OrderDetailID] IN (" +
-                       "    SELECT [ID] " +
-                       "    FROM [swp-online-shop].[dbo].[OrderDetail] " +
-                       "    WHERE [ProductDetailID] = ?) " +
-                       "ORDER BY [CreatedAt] DESC " +
-                       "OFFSET ? ROWS " +
-                       "FETCH NEXT ? ROWS ONLY";
+        String query = "SELECT [ID], [OrderDetailID], [Rating], [Comment], [IsDeleted], [CreatedAt], [CreatedBy], [ImgURL] "
+                + "FROM [swp-online-shop].[dbo].[Feedback] "
+                + "WHERE [OrderDetailID] IN ("
+                + "    SELECT [ID] "
+                + "    FROM [swp-online-shop].[dbo].[OrderDetail] "
+                + "    WHERE [ProductDetailID] = ?) "
+                + "ORDER BY [CreatedAt] DESC "
+                + "OFFSET ? ROWS "
+                + "FETCH NEXT ? ROWS ONLY";
 
         try (
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, productDetailID);
             stmt.setInt(2, offset);
             stmt.setInt(3, pageSize);
@@ -279,5 +276,24 @@ public class FeedbackDAO {
             System.out.println("getFeedbackByProductDetailID: " + e.getMessage());
         }
         return feedbackList;
+    }
+
+    public String getUserNameFeedback(int feedbackID) {
+        String query = "select o.Fullname \n"
+                + "  from Feedback f\n"
+                + "  join OrderDetail od on od.ID = f.OrderDetailID\n"
+                + "  join [Order] o on o.ID = od.OrderID\n"
+                + "  where f.ID = ?";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, feedbackID);
+            rs = ps.executeQuery();
+            if(rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(FeedbackDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return "";
     }
 }

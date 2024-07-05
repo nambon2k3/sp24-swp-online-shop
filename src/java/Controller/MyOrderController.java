@@ -97,6 +97,7 @@ public class MyOrderController extends HttpServlet {
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
+        request.setAttribute("type", request.getParameter("type"));
         request.getRequestDispatcher("/my-order.jsp").forward(request, response);
     }
 
