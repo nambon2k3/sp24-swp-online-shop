@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import DAO.AdminDAO;
 import DAO.SaleDAO;
 import DAO.OrderDAO;
 import DAO.UserDAO;
@@ -54,6 +55,8 @@ public class SaleDashBoardController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        AdminDAO dao = new AdminDAO();
+        
         // Get the start date and end date from request parameters
         String startDateStr = request.getParameter("start_date");
         String endDateStr = request.getParameter("end_date");
@@ -64,13 +67,45 @@ public class SaleDashBoardController extends HttpServlet {
         LocalDateTime endDate = endDateStr != null ? LocalDateTime.parse(endDateStr + "T00:00:00") : LocalDateTime.now();
 
         // Retrieve order counts based on status and date range
-        request.setAttribute("order_success", new SaleDAO().getOrdersByStatus("Shipped").size());
-        request.setAttribute("order_cancel", new SaleDAO().getOrdersByStatus("Canceled").size());
-        request.setAttribute("order_pending", new SaleDAO().getOrdersByStatus("Submitted").size());
+        int orderSuccess = 0;
+        int orderCancel = 0;
+        int orderPending = 0;
+        orderSuccess += dao.getOrdersByStatus("Close").size();
+        orderSuccess += dao.getOrdersByStatus("Success").size();
+        
+        orderPending += dao.getOrdersByStatus("Approved").size();
+        orderPending += dao.getOrdersByStatus("Request cancel").size();
+        orderPending += dao.getOrdersByStatus("Packaging").size();
+        orderPending += dao.getOrdersByStatus("Delivering").size();
+        orderPending += dao.getOrdersByStatus("Wait for pay").size();
+        
+        orderCancel += dao.getOrdersByStatus("Rejected").size();
+        orderCancel += dao.getOrdersByStatus("Canceled").size();
+        orderCancel += dao.getOrdersByStatus("Failed").size();
+        
+        request.setAttribute("order_success", orderSuccess);
+        request.setAttribute("order_cancel", orderCancel);
+        request.setAttribute("order_pending", orderPending);
 
-        request.setAttribute("order_success_filter", new SaleDAO().getOrdersByStatusAndDateRange("Shipped", startDate, endDate, sale).size());
-        request.setAttribute("order_cancel_filter", new SaleDAO().getOrdersByStatusAndDateRange("Canceled", startDate, endDate, sale).size());
-        request.setAttribute("order_pending_filter", new SaleDAO().getOrdersByStatusAndDateRange("Submitted", startDate, endDate, sale).size());
+        int orderSuccessFilter = 0;
+        int orderCancelFilter = 0;
+        int orderPendingFilter = 0;
+        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Close", startDate, endDate).size();
+        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Success", startDate, endDate).size();
+        
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Approved", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Request cancel", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Packaging", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Delivering", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Wait for pay", startDate, endDate).size();
+        
+        orderCancelFilter += dao.getOrdersByStatusAndDateRange("Rejected", startDate, endDate).size();
+        orderCancelFilter += dao.getOrdersByStatusAndDateRange("Canceled", startDate, endDate).size();
+        orderCancelFilter += dao.getOrdersByStatusAndDateRange("Failed", startDate, endDate).size();
+        
+        request.setAttribute("order_success_filter", orderSuccessFilter);
+        request.setAttribute("order_cancel_filter", orderCancelFilter);
+        request.setAttribute("order_pending_filter", orderPendingFilter);
 
         // Retrieve total cost of orders from previous years
         request.setAttribute("total_now", new SaleDAO().getTotalCostOfPreviousNYears(0));

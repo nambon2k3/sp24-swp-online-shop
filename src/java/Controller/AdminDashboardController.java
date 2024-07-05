@@ -47,13 +47,18 @@ public class AdminDashboardController extends HttpServlet {
         int orderSuccess = 0;
         int orderCancel = 0;
         int orderPending = 0;
-        orderSuccess += dao.getOrdersByStatus("Submitted").size();
-        orderSuccess += dao.getOrdersByStatus("Received").size();
-        orderSuccess += dao.getOrdersByStatus("Shipped").size();
+        orderSuccess += dao.getOrdersByStatus("Close").size();
+        orderSuccess += dao.getOrdersByStatus("Success").size();
+        
         orderPending += dao.getOrdersByStatus("Approved").size();
-        orderPending += dao.getOrdersByStatus("Shipping").size();
         orderPending += dao.getOrdersByStatus("Request cancel").size();
+        orderPending += dao.getOrdersByStatus("Packaging").size();
+        orderPending += dao.getOrdersByStatus("Delivering").size();
+        orderPending += dao.getOrdersByStatus("Wait for pay").size();
+        
+        orderCancel += dao.getOrdersByStatus("Rejected").size();
         orderCancel += dao.getOrdersByStatus("Canceled").size();
+        orderCancel += dao.getOrdersByStatus("Failed").size();
         
         request.setAttribute("order_success", orderSuccess);
         request.setAttribute("order_cancel", orderCancel);
@@ -62,13 +67,18 @@ public class AdminDashboardController extends HttpServlet {
         int orderSuccessFilter = 0;
         int orderCancelFilter = 0;
         int orderPendingFilter = 0;
-        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Submitted", startDate, endDate).size();
-        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Received", startDate, endDate).size();
-        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Shipped", startDate, endDate).size();
+        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Close", startDate, endDate).size();
+        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Success", startDate, endDate).size();
+        
         orderPendingFilter += dao.getOrdersByStatusAndDateRange("Approved", startDate, endDate).size();
-        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Shipping", startDate, endDate).size();
         orderPendingFilter += dao.getOrdersByStatusAndDateRange("Request cancel", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Packaging", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Delivering", startDate, endDate).size();
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Wait for pay", startDate, endDate).size();
+        
+        orderCancelFilter += dao.getOrdersByStatusAndDateRange("Rejected", startDate, endDate).size();
         orderCancelFilter += dao.getOrdersByStatusAndDateRange("Canceled", startDate, endDate).size();
+        orderCancelFilter += dao.getOrdersByStatusAndDateRange("Failed", startDate, endDate).size();
         
         request.setAttribute("order_success_filter", orderSuccessFilter);
         request.setAttribute("order_cancel_filter", orderCancelFilter);

@@ -44,6 +44,12 @@
                 </select>
             </div>
 
+            <!-- Name Search -->
+            <div class="mb-3 mt-2">
+                <label for="nameSearch">Search by Type:</label>
+                <input type="text" id="nameSearch" class="form-control" style="width: auto; display: inline-block;" placeholder="Enter name">
+            </div>
+
             <table id="settingTable" class="table table-striped">
                 <thead>
                     <tr>
@@ -51,7 +57,6 @@
                         <th>Type</th>
                         <th>Value</th>
                         <th>Order</th>
-                        <th>Description</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -63,7 +68,6 @@
                             <td>${setting.getType()}</td>
                             <td>${setting.getValue()}</td>
                             <td>${setting.getOrder()}</td>
-                            <td>${setting.getDescription()}</td>
                             <td>${setting.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editSettingModal_${setting.getID()}">Edit</button>
@@ -190,13 +194,17 @@
 
         <script>
             $(document).ready(function () {
-                var table = $('#settingTable').DataTable({
+                let table = $('#settingTable').DataTable({
                     "paging": false,
                     "lengthChange": false,
                     "searching": true,
                     "ordering": true,
                     "info": false,
                     "autoWidth": false
+                });
+
+                $('#nameSearch').on('keyup', function () {
+                    table.columns(1).search(this.value).draw();
                 });
 
                 $('#statusFilter').on('change', function () {
@@ -207,6 +215,8 @@
                         table.columns(5).search('').draw();
                     }
                 });
+                
+                 $('#settingTable_wrapper .dataTables_filter').addClass('d-none');
             });
         </script>
 
