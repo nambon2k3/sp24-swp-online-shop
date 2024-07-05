@@ -95,8 +95,8 @@
             </div>
             <div class="col-md-10">
 
-                <h2>Shopping Cart</h2>
-                <table class="table">
+                <h2 style="display: none">Shopping Cart</h2>
+                <table class="table" style="display: none">
                     <thead>
                         <tr>
                             <th>Image</th>
@@ -141,7 +141,7 @@
                         </c:forEach>
                     </tbody>
                 </table>
-                <div>
+                <div style="display: none">
                     <c:if test="${totalPages > 1}">
                         <nav aria-label="Page navigation">
                             <ul class="pagination">
@@ -154,7 +154,7 @@
                         </nav>
                     </c:if>
                 </div>
-                <div>
+                <div style="display: none">
                     Total Order Price: $<span id="total-price">
                         <c:set var="totalPrice" value="0" />
                         <c:forEach var="item" items="${cartItemsFull}">
@@ -170,12 +170,28 @@
                     </span>
                 </div>
                 <br>
-                <h2>Cart Contact</h2>
+                <h2 style="display: none">Cart Contact</h2>
                 <form action="../public/payment" method="post">
                     <table class="table table-borderless">
                         <input class="form-control" id="amount" name="amount" type="hidden" readonly value="${totalPrice}" />
                         <input type="hidden" Checked="True" id="bankCode" name="bankcode" value="NCB">
                         <input type="hidden" id="language" Checked="True" name="language" value="vn">
+                        <tr>
+                            <td>
+                                <input style="display: none" type="radio" name="method" value="Tranfer" checked="">
+                                <div> 
+                                    <ul style="list-style-type: none">
+                                        <li><strong>STK: </strong> 01239817231123</li>
+                                        <li> <strong>BANK: </strong>MB Bank - HA NOI</li>
+                                        <li><strong>OWNER: </strong>${sessionScope.user.fullname}</li>
+                                    </ul>
+                                </div> 
+                            </td> 
+                            <td>
+                                <img src="https://eko.in/assets/img/bill-payment/QR.png" alt="alt"/>
+                            </td>
+                            
+                        </tr>
                         <tr>
                             <td>Full Name:</td>
                             <td><input type="text" class="form-control" name="fullname" value="${sessionScope.user.fullname}"></td> 
@@ -200,34 +216,19 @@
                             <td>Notes:</td>
                             <td><input type="text" class="form-control" name="notes" value=""></td> 
                         </tr>
-                        <tr>
-                            <td>Payment method:</td>
-                            <td>
-                                <input type="radio" name="method" value="VNPAY" checked> VNPAY <br>
-                                <input type="radio" name="method" value="Tranfer1"> Tranfer 
-                                <div> 
-                                    <ul>
-                                        <li><strong>STK: </strong> 01239817231123</li>
-                                        <li> <strong>BANK: </strong>MB Bank - HA NOI</li>
-                                        <li><strong>OWNER: </strong>Sloth shop</li>
-                                    </ul>
-                                </div> 
-                                        <input type="radio"  name="method" value="COD" ${totalPrice > setting.value ? "disabled" : ""}> COD 
-                                        <c:if test="${totalPrice > setting.value}">(Order > ${setting.value}$ is not allow for COD)</c:if>
-                            </td> 
-                        </tr>
+
                         <tr>
                             <td colspan="2">
-                                <a href="cart"  class="btn btn-secondary">Change</a>
+                                <a href="cart" class="btn btn-secondary">Change</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </td>
                         </tr>
-                        
+
                     </table>
 
 
                 </form>
-                
+
             </div>
 
         </div>
