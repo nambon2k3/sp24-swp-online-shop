@@ -19,7 +19,7 @@
         <%@ include file="admin-sidebar.jsp" %>
 
         <div class="mt-5 main-content">
-            <h2>User List</h2>
+            <h2>Staff List</h2>
 
 
             <c:if test="${param.success ne null}">
@@ -61,6 +61,13 @@
                         <option value="">Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group mr-2">
+                    <select class="form-control" name="status">
+                        <option value="">Select Status</option>
+                        <option value="false">Active</option>
+                        <option value="true">Inactive</option>
                     </select>
                 </div>
                 
@@ -143,11 +150,11 @@
                                 <input type="hidden" name="userId" value="${user.id}">
                                 <div class="form-group">
                                     <label for="fullName">Full Name</label>
-                                    <input type="text" class="form-control" id="fullName" name="fullName" value="${user.fullname}">
+                                    <input type="text" class="form-control" id="fullName" name="fullName" value="${user.fullname}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" value="${user.getEmail()}">
+                                    <input type="email" class="form-control" id="email" name="email" value="${user.getEmail()}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="role">Role</label>
@@ -159,18 +166,18 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="gender">Gender</label>
-                                    <select class="form-control" id="gender" name="gender">
+                                    <select class="form-control" id="gender" name="gender" readonly>
                                         <option value="true" ${user.gender eq 'Male' ? "selected" : ""}>Male</option>
                                         <option value="false" ${user.gender eq 'Female' ? "selected" : ""}>Female</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="address">Address</label>
-                                    <input type="text" class="form-control" id="address" name="address" value="${user.getAddress()}">
+                                    <input type="text" class="form-control" id="address" name="address" value="${user.getAddress()}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="phone">Phone</label>
-                                    <input type="text" class="form-control" id="phone" name="phone" value="${user.getPhone()}">
+                                    <input type="text" class="form-control" id="phone" name="phone" value="${user.getPhone()}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="status">Status</label>

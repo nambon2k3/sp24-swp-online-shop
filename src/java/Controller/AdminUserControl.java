@@ -42,12 +42,14 @@ public class AdminUserControl extends HttpServlet {
         String roleString = request.getParameter("role");
         int role = (roleString==null || roleString.isEmpty()) ? -1 : Integer.parseInt(roleString);
         String gender = request.getParameter("gender");
+        String statusString = request.getParameter("status");
+        Boolean status = (statusString==null || statusString.isEmpty()) ? null : Boolean.parseBoolean(statusString);
 
         // Perform filtering based on the provided parameters
-        List<Staff> filteredStaffList = staffDAO.getFilteredStaff(fullName, email, phone, role, gender, pageNumber, pageSize);
+        List<Staff> filteredStaffList = staffDAO.getFilteredStaff(fullName, email, phone, role, gender, status, pageNumber, pageSize);
 
         // Get total number of staffs matching the filter criteria
-        int totalStaffs = staffDAO.getFilteredStaff(fullName, email, role, gender).size();
+        int totalStaffs = staffDAO.getFilteredStaff(fullName, email, role, gender, status).size();
 
         // Calculate total number of pages
         int totalPages = (int) Math.ceil((double) totalStaffs / pageSize);

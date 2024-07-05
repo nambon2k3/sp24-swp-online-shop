@@ -177,7 +177,7 @@ public class StaffDAO {
         return staffList;
     }
 
-    public List<Staff> getFilteredStaff(String fullName, String email, String phone, int role, String gender, int pageNumber, int pageSize) {
+    public List<Staff> getFilteredStaff(String fullName, String email, String phone, int role, String gender, Boolean isDeleted, int pageNumber, int pageSize) {
         List<Staff> filteredUserList = new ArrayList<>();
         String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [Staff] WHERE 1=1";
         // Add filter conditions
@@ -195,6 +195,9 @@ public class StaffDAO {
         }
         if (gender != null && !gender.isEmpty()) {
             query += " AND Gender = '" + gender + "'";
+        }
+        if (isDeleted != null) {
+            query += "AND IsDeleted = " + (isDeleted ? "1" : "0");
         }
         // Add pagination
         query += ") AS SubQuery WHERE RowNum BETWEEN ? AND ?";
@@ -227,7 +230,7 @@ public class StaffDAO {
         return filteredUserList;
     }
     
-    public List<Staff> getFilteredStaff(String fullName, String email, int role, String gender) {
+    public List<Staff> getFilteredStaff(String fullName, String email, int role, String gender, Boolean isDeleted) {
         List<Staff> filteredUserList = new ArrayList<>();
         String query = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY ID) AS RowNum FROM [Staff] WHERE 1=1";
         // Add filter conditions
@@ -242,6 +245,9 @@ public class StaffDAO {
         }
         if (gender != null && !gender.isEmpty()) {
             query += " AND Gender LIKE '%" + gender + "%'";
+        }
+        if (isDeleted != null) {
+            query += "AND IsDeleted = " + (isDeleted ? "1" : "0");
         }
         // Add pagination
         query += ") AS SubQuery";

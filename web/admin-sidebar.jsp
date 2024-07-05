@@ -56,7 +56,7 @@
 <nav class="sidebar">
     <ul>
         <li><a href="dashboard"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a></li>
-        <li><a href="user"><i class="fas fa-users mr-2"></i>Customers</a></li>
+        <li><a href="user"><i class="fas fa-users mr-2"></i>Staffs</a></li>
         <li><a href="setting"><i class="fas fa-cog mr-2"></i>Settings</a></li>
     </ul>
     <ul class="logout">
