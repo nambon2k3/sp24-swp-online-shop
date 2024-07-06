@@ -279,7 +279,6 @@
             $(document).ready(function () {
                 $('#sliderTable').DataTable({
                     "paging": false,
-                    "pageLength": 5,
                     "lengthChange": false,
                     "searching": false,
                     "ordering": true,
