@@ -213,7 +213,7 @@
                                     </ul>
                                 </div> 
                                         <input type="radio"  name="method" value="COD" ${totalPrice > setting.value ? "disabled" : ""}> COD 
-                                        <c:if test="${totalPrice > setting.value}">(Order > ${setting.value}$ is not allow for COD)</c:if>
+                                        <c:if test="${totalPrice > setting.value && !setting.isDeleted}">(Order > ${setting.value}$ is not allow for COD)</c:if>
                             </td> 
                         </tr>
                         <tr>
