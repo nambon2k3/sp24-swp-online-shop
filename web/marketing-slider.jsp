@@ -25,12 +25,12 @@
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
-                    Update success!
+                    Success!
                 </div>
             </c:if>
             <c:if test="${param.fail ne null}">
                 <div class="alert alert-danger" role="alert">
-                    Update failed!
+                    Failed!
                 </div>
             </c:if>
 
@@ -279,6 +279,7 @@
             $(document).ready(function () {
                 $('#sliderTable').DataTable({
                     "paging": false,
+                    "pageLength": 5,
                     "lengthChange": false,
                     "searching": false,
                     "ordering": true,
