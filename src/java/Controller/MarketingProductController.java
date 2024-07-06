@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "MarketingProductController", urlPatterns = {"/marketing/product"})
-public class MarketingProductController extends HttpServlet  {
-    
+public class MarketingProductController extends HttpServlet {
+
     private ProductDAO productDAO;
 
     @Override
@@ -92,14 +92,27 @@ public class MarketingProductController extends HttpServlet  {
 
         // Add the product to the database
         int productId = productDAO.addProduct(newProduct);
-        
+
         ProductDetail productDetail = new ProductDetail();
         productDetail.setProductId(productId);
         productDetail.setImageURL(imageUrl);
         productDetail.setPrice(price);
         productDetail.setStock(quantity);
         
-        new ProductDAO().addProductDetail(productDetail);
+        String[] sizes = request.getParameterValues("size");
+        String[] colors = request.getParameterValues("color");
+        if (sizes != null && colors != null) {
+            for (String size : sizes) {
+                for (String color : colors) {
+
+                    productDetail.setColor(color);
+                    productDetail.setSize(size);
+                    
+                    new ProductDAO().addProductDetail(productDetail);
+                    
+                }
+            }
+        }
 
         if (productId != -1) {
             // Redirect to product list page after successful addition
@@ -129,7 +142,6 @@ public class MarketingProductController extends HttpServlet  {
         product.setDescription(description);
         product.setIsDeleted(isDeleted);
 
-        
         ProductDetail productDetail = new ProductDAO().getProductDetailByProductId(productId);
         productDetail.setImageURL(imageUrl);
         productDetail.setPrice(price);
@@ -147,5 +159,5 @@ public class MarketingProductController extends HttpServlet  {
             response.sendRedirect("product?fail");
         }
     }
-    
+
 }

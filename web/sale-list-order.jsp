@@ -39,7 +39,7 @@
                         <label for="startDate" class="form-label">Start Date</label>
                         <input type="date" id="startDate" name="startDate" class="form-control" value="${param.startDate}">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 mr-2">
                         <label for="endDate" class="form-label">End Date</label>
                         <input type="date" id="endDate" name="endDate" class="form-control" value="${param.endDate}">
                     </div>

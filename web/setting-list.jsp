@@ -79,7 +79,7 @@
                 </tbody>
             </table>
 
-            <nav aria-label="Page navigation">
+<!--            <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item">
                         <a class="page-link" href="?page=1" aria-label="Previous">
@@ -97,7 +97,7 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
+            </nav>-->
         </div>
 
         <!--edit modal-->
@@ -195,7 +195,7 @@
         <script>
             $(document).ready(function () {
                 let table = $('#settingTable').DataTable({
-                    "paging": false,
+                    "paging": true,
                     "lengthChange": false,
                     "searching": true,
                     "ordering": true,
