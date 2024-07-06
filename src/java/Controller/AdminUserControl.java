@@ -90,6 +90,7 @@ public class AdminUserControl extends HttpServlet {
         boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
+        String avatar = request.getParameter("imageUrl");
 
         boolean success = false;
 
@@ -105,6 +106,7 @@ public class AdminUserControl extends HttpServlet {
             newStaff.setAddress(address);
             newStaff.setPhone(phone);
             newStaff.setRole(role);
+            newStaff.setAvatar(avatar);
 
             success = staffDAO.registerStaff(newStaff);
 
@@ -129,6 +131,7 @@ public class AdminUserControl extends HttpServlet {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
+        String avatar = request.getParameter("imageUrl");
 
         // Create a Staff object with the updated data
         Staff staff = new StaffDAO().getStaffById(staffId);
@@ -140,6 +143,7 @@ public class AdminUserControl extends HttpServlet {
         staff.setAddress(address);
         staff.setPhone(phone);
         staff.setIsDeleted(status);
+        staff.setAvatar(avatar);
 
         // Update the staff
         boolean success = staffDAO.updateStaff(staff);
