@@ -61,6 +61,7 @@
         <li><a href="user"><i class="fas fa-user-friends mr-2"></i>Customers</a></li>
         <li><a href="feedback"><i class="fas fa-comments mr-2"></i>Feedbacks</a></li>
         <li><a href="slider"><i class="fas fa-images mr-2"></i>Sliders</a></li>
+        <li><a href="list-post"><i class="fas fa-images mr-2"></i>List Post</a></li>
     </ul>
     <ul class="logout">
         <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>
