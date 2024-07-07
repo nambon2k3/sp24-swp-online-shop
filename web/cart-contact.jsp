@@ -209,11 +209,11 @@
                                     <ul>
                                         <li><strong>STK: </strong> 01239817231123</li>
                                         <li> <strong>BANK: </strong>MB Bank - HA NOI</li>
-                                        <li><strong>OWNER: </strong>${sessionScope.user.fullname}</li>
+                                        <li><strong>OWNER: </strong>Sloth shop</li>
                                     </ul>
                                 </div> 
                                         <input type="radio"  name="method" value="COD" ${totalPrice > setting.value ? "disabled" : ""}> COD 
-                                        <c:if test="${totalPrice > setting.value}">(Order > ${setting.value}$ is not allow for COD)</c:if>
+                                        <c:if test="${totalPrice > setting.value && !setting.isDeleted}">(Order > ${setting.value}$ is not allow for COD)</c:if>
                             </td> 
                         </tr>
                         <tr>

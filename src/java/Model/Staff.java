@@ -120,11 +120,12 @@ public class Staff {
             saleNumberOrder = 0;
             OrderDAO dao = new OrderDAO();
 
-            saleNumberOrder += dao.getOrdersByStatus("Approved").size();
-            saleNumberOrder += dao.getOrdersByStatus("Request cancel").size();
-            saleNumberOrder += dao.getOrdersByStatus("Packaging").size();
-            saleNumberOrder += dao.getOrdersByStatus("Delivering").size();
-            saleNumberOrder += dao.getOrdersByStatus("Wait for pay").size();
+            saleNumberOrder += dao.getOrdersByStatus("Submitted", id).size();
+            saleNumberOrder += dao.getOrdersByStatus("Approved", id).size();
+            saleNumberOrder += dao.getOrdersByStatus("Request cancel", id).size();
+            saleNumberOrder += dao.getOrdersByStatus("Packaging", id).size();
+            saleNumberOrder += dao.getOrdersByStatus("Delivering", id).size();
+            saleNumberOrder += dao.getOrdersByStatus("Success", id).size();
         }
         
         return saleNumberOrder;

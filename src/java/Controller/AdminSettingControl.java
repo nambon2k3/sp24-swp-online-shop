@@ -29,7 +29,7 @@ public class AdminSettingControl extends HttpServlet {
         int pageSize = 5;
 
         // List settings with pagination
-        List<Setting> settingList = settingDAO.getAllSettings(pageNumber, pageSize);
+        List<Setting> settingList = settingDAO.getAllSettings();
 
         // Get total number of settings
         int totalSettings = settingDAO.getAllSettings().size();

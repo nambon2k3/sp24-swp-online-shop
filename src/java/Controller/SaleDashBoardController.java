@@ -72,8 +72,8 @@ public class SaleDashBoardController extends HttpServlet {
         int orderPending = 0;
         orderSuccess += dao.getOrdersByStatus("Close").size();
         orderSuccess += dao.getOrdersByStatus("Success").size();
-        orderSuccess += dao.getOrdersByStatus("Submitted").size();
         
+        orderPending += dao.getOrdersByStatus("Submitted").size();
         orderPending += dao.getOrdersByStatus("Approved").size();
         orderPending += dao.getOrdersByStatus("Request cancel").size();
         orderPending += dao.getOrdersByStatus("Packaging").size();
@@ -93,8 +93,8 @@ public class SaleDashBoardController extends HttpServlet {
         int orderPendingFilter = 0;
         orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Close", startDate, endDate).size();
         orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Success", startDate, endDate).size();
-        orderSuccessFilter += dao.getOrdersByStatusAndDateRange("Submitted", startDate, endDate).size();
         
+        orderPendingFilter += dao.getOrdersByStatusAndDateRange("Submitted", startDate, endDate).size();
         orderPendingFilter += dao.getOrdersByStatusAndDateRange("Approved", startDate, endDate).size();
         orderPendingFilter += dao.getOrdersByStatusAndDateRange("Request cancel", startDate, endDate).size();
         orderPendingFilter += dao.getOrdersByStatusAndDateRange("Packaging", startDate, endDate).size();

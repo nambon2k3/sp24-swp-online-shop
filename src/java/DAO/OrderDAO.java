@@ -842,12 +842,13 @@ public class OrderDAO {
         return staffs;
     }
     
-    public List<Order> getOrdersByStatus(String status) {
+    public List<Order> getOrdersByStatus(String status, int saleId) {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM [Order] WHERE LOWER(Status) = LOWER(?)";
+        String query = "SELECT * FROM [Order] WHERE LOWER(Status) = LOWER(?) AND CreatedBy = ?";
         try {
             stmt = connection.prepareStatement(query);
             stmt.setString(1, status);
+            stmt.setInt(2, saleId);
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Order order = new Order();

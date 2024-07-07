@@ -23,12 +23,12 @@
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
-                    Update success!
+                    Success!
                 </div>
             </c:if>
             <c:if test="${param.fail ne null}">
                 <div class="alert alert-danger" role="alert">
-                    Update failed!
+                    Failed!
                 </div>
             </c:if>
 
@@ -79,7 +79,7 @@
                 </tbody>
             </table>
 
-            <nav aria-label="Page navigation">
+<!--            <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item">
                         <a class="page-link" href="?page=1" aria-label="Previous">
@@ -97,7 +97,7 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
+            </nav>-->
         </div>
 
         <!--edit modal-->
@@ -195,7 +195,8 @@
         <script>
             $(document).ready(function () {
                 let table = $('#settingTable').DataTable({
-                    "paging": false,
+                    "paging": true,
+                    "pageLength": 5,
                     "lengthChange": false,
                     "searching": true,
                     "ordering": true,
@@ -210,9 +211,9 @@
                 $('#statusFilter').on('change', function () {
                     var selectedStatus = $(this).val();
                     if (selectedStatus) {
-                        table.columns(5).search('^' + selectedStatus + '$', true, false).draw();
+                        table.columns(4).search('^' + selectedStatus + '$', true, false).draw();
                     } else {
-                        table.columns(5).search('').draw();
+                        table.columns(4).search('').draw();
                     }
                 });
                 

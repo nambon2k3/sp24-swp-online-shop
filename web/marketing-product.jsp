@@ -13,6 +13,9 @@
         <!-- Font Awesome CSS for icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
         <style>
             .modal-lg {
                 max-width: 80%;
@@ -33,12 +36,12 @@
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
-                    Update success!
+                    Success!
                 </div>
             </c:if>
             <c:if test="${param.fail ne null}">
                 <div class="alert alert-danger" role="alert">
-                    Update failed!
+                    Failed!
                 </div>
             </c:if>
 
@@ -290,6 +293,37 @@
                                 <input type="text" class="form-control" id="quantity" name="quantity" required>
                             </div>
                             <div class="form-group">
+                                <label>Size</label>
+                                <select class="sizeSelect form-control" name="size" multiple required>
+                                    <option value="M">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Color</label>
+                                <select class="colorSelect form-control" name="color" multiple required>
+                                    <option value="Red">Red</option>
+                                    <option value="Green">Green</option>
+                                    <option value="Blue">Blue</option>
+                                    <option value="Yellow">Yellow</option>
+                                    <option value="Black">Black</option>
+                                    <option value="White">White</option>
+                                    <option value="Purple">Purple</option>
+                                    <option value="Orange">Orange</option>
+                                    <option value="Pink">Pink</option>
+                                    <option value="Brown">Brown</option>
+                                    <option value="Gray">Gray</option>
+                                    <option value="Teal">Teal</option>
+                                    <option value="Maroon">Maroon</option>
+                                    <option value="Navy">Navy</option>
+                                    <option value="Olive">Olive</option>
+                                    <option value="Lime">Lime</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                             </div>
@@ -310,6 +344,7 @@
         <!-- DataTables -->
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
 
         <script>
                                     $(document).ready(function () {
@@ -364,5 +399,32 @@
                 }
             }
         </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                let elements = document.getElementsByClassName('sizeSelect');
+                Array.from(elements).forEach(element => {
+                    const choices = new Choices(element, {
+                        removeItemButton: true,
+                        searchResultLimit: 5,
+                        renderChoiceLimit: 5,
+                        placeholderValue: 'Select option',
+                        searchPlaceholderValue: 'Search option',
+                    });
+                });
+
+                elements = document.getElementsByClassName('colorSelect');
+                Array.from(elements).forEach(element => {
+                    const choices = new Choices(element, {
+                        removeItemButton: true,
+                        searchResultLimit: 5,
+                        renderChoiceLimit: 5,
+                        placeholderValue: 'Select option',
+                        searchPlaceholderValue: 'Search option',
+                    });
+                });
+            });
+        </script>
+
     </body>
 </html>

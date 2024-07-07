@@ -25,12 +25,12 @@
 
             <c:if test="${param.success ne null}">
                 <div class="alert alert-success" role="alert">
-                    Update success!
+                    Success!
                 </div>
             </c:if>
             <c:if test="${param.fail ne null}">
                 <div class="alert alert-danger" role="alert">
-                    Update failed!
+                    Failed!
                 </div>
             </c:if>
 
@@ -197,10 +197,10 @@
                             <input type="hidden" name="action" value="add">
                             <!-- Form Inputs -->
                             <div class="form-group">
-                                <label for="imageUrl">Image URL</label>
+                                <label for="imageUrl">Image</label>
                                 <img id="image0" class="w-100" src="">
                                 <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)" required>
-                                <input type="hidden" class="form-control" id="imageUrl0" name="imageUrl" value="${slider.imageUrl}">
+                                <input type="hidden" class="form-control" id="imageUrl0" name="imageUrl" value="">
                             </div>
                             <div class="form-group">
                                 <label for="imageUrl">Title</label>
