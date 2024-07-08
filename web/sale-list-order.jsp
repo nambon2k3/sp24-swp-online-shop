@@ -33,8 +33,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
-            <form method="get" action="sale-order" class="form-inline mb-3">
-                <div class="row g-3">
+            <form method="get" action="sale-order" class="form-inline mb-3 " >
+                <div class="row g-3 d-flex ${sessionScope.staff.role eq 4 ? 'justify-content-center' : 'justify-content-between' }" >
                     <div class="col-md-2">
                         <label for="startDate" class="form-label">Start Date</label>
                         <input type="date" id="startDate" name="startDate" class="form-control" value="${param.startDate}">
@@ -49,13 +49,13 @@
                             <input  type="text" id="salesperson" name="salesperson" class="form-control" value="${param.salesperson}">
                         </div>
                     </c:if>
-                    <div class="col-md-2">
+                    <div class="${sessionScope.staff.role eq 4 ? 'col-md-1' : 'col-md-2' }">
                         <label for="salesperson" class="form-label">ID: </label>
-                        <input type="text" style="width: 50px" id="salesperson" name="id" class="form-control" value="${param.id}">
+                        <input type="text" id="salesperson" name="id" style="${sessionScope.staff.role eq 4 ? 'width: 50px' : ''}"  class="form-control" value="${param.id}">
                     </div>
                     <div class="col-md-2">
                         <label for="salesperson" class="form-label">Customer name: </label>
-                        <input type="text" id="salesperson" name="customerName" class="form-control" value="${param.customerName}">
+                        <input type="text" id="salesperson" name="customerName" class="form-control" width="100%" value="${param.customerName}">
                     </div>
                     <div class="col-md-2">
                         <label for="orderStatus" class="form-label">Order Status</label>
