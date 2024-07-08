@@ -82,6 +82,11 @@ public class Setting {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Setting{" + "id=" + id + ", type=" + type + ", value=" + value + ", order=" + order + ", isDeleted=" + isDeleted + ", description=" + description + '}';
+    }
     
     
 
