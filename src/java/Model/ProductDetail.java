@@ -25,11 +25,76 @@ public class ProductDetail {
     private Timestamp createdAt;
     private int createdBy;
     private int orderDetailId;
+    private int hold;
+    private float importPrice;
+    private String categoryName;
+    private String productName;
+    private boolean isDeleted;
+    private String description;
+
+    public boolean getIsDeleted() {
+        return new ProductDAO().getProductById(productId).getIsDeleted();
+    }
+
+    public String getDescription() {
+        return new ProductDAO().getProductById(productId).getDescription();
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+    
+   
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    
+    
+    public String getProductName() {
+        return new ProductDAO().getProductById(productId).getProductName();
+    }
+    
+    
+
+    public String getCategoryName() {
+        return new ProductDAO().getProductById(productId).getCategoryName();
+    }
+
+    
+    
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+    
+    
 
     public void setOrderDetailId(int orderDetailId) {
         this.orderDetailId = orderDetailId;
     }
 
+    public int getHold() {
+        return hold;
+    }
+
+    public void setHold(int hold) {
+        this.hold = hold;
+    }
+
+    public float getImportPrice() {
+        return importPrice;
+    }
+
+    public void setImportPrice(float importPrice) {
+        this.importPrice = importPrice;
+    }
+    
     public int getOrderDetailId() {
         return orderDetailId;
     }
@@ -130,9 +195,6 @@ public class ProductDetail {
         this.discount = discount;
     }
     
-    public String getProductName() {
-        return new ProductDAO().getProductById(productId).getProductName();
-    }
     
     public String getCateogryName() {
         return new ProductDAO().getProductById(productId).getCategoryName();

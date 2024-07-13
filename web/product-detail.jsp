@@ -92,7 +92,7 @@
                                     <input  type="hidden"  name="mode" value="buy&feedback"> 
                                     <input  type="hidden"  name="bankcode" value="NCB">
                                     <input  type="hidden"  name="amount" id="amount" value=""> 
-                                    <span style="font-weight: normal; font-style: italic"> (Available: ${product.productDetail.stock}) </span>
+                                    <span style="font-weight: normal; font-style: italic"> (Available: ${product.productDetail.stock - product.productDetail.hold}) </span>
                                 </h5>
                                 <div class="action">
                                     <button class="add-to-cart btn btn-default" type="button" onclick="addToCart(${product.productDetail.productDetailId})">add to cart</button>

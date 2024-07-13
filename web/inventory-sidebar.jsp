@@ -56,6 +56,7 @@
 <nav class="sidebar">
     <ul>
         <li><a href="list-order"><i class="fas fa-shopping-cart mr-2"></i>Orders</a></li>
+        <li><a href="list-product"><i class="fas fa-shopping-cart mr-2"></i>Product Inventory</a></li>
     </ul>
     <ul class="logout">
         <li class="text-light"><i class="fas fa-users mr-2"></i>${sessionScope.staff.fullname}</li>
