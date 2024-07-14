@@ -509,7 +509,7 @@ public class OrderDAO {
                 + "    ON \n"
                 + "        s.ID = o.CreatedBy\n"
                 + "    WHERE \n"
-                + "        s.Role = 3\n"
+                + "        s.Role = 3 and o.Status in ('Submitted', 'Approved', 'Request Cancel', 'Packaging', 'Delivering', 'Success')\n"
                 + "    GROUP BY \n"
                 + "        s.ID, s.Fullname, s.Email\n"
                 + ")\n"
