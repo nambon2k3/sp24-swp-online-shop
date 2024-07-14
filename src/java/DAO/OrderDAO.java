@@ -448,7 +448,6 @@ public class OrderDAO {
             int rowsUpdated = statement.executeUpdate();
             if (rowsUpdated > 0) {
                 isCanceled = true;
-                new ProductDAO().updateQuantity(orderId, -1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
