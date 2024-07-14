@@ -375,7 +375,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="quantity">Quantity</label>
-                                <input type="text" class="form-control" id="quantity" name="quantity" required>
+                                <input type="text" class="form-control" id="quantity" name="quantity" value="0" readonly>
                             </div>
                             <div class="form-group">
                                 <label>Size</label>
