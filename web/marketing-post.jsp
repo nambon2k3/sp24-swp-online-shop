@@ -18,6 +18,8 @@
               integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="../css/list-post.css">
+        <!-- Font Awesome CSS for icons -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     </head>
 
     <body>
@@ -117,7 +119,7 @@
                         <td>#</td>
                         <td>Thumbnail</td>
                         <td>Title</td>
-                        <td>Brief</td>
+                        <!--<td>Brief</td>-->
                         <td>Category</td>
                         <td>Created Date</td>
                         <td>Created By</td>
@@ -130,14 +132,15 @@
                             <td>${post.id}</td>
                             <td><img src="${post.imgURL}" alt="alt" width="100px" height="100px"/></td>
                             <td>${post.title}</td>
-                            <td>${fn:substring(post.content, 0, 50)}...</td>
+                            <!--<td>${fn:substring(post.content, 0, 50)}...</td>-->
                             <td>
                                 ${post.getCategoryName()}
                             </td>
                             <td>${post.createdAt}</td>
                             <td>${post.authorName}</td>
                             <td>
-                                <button type="btn" class="btn btn-info" onclick="view(`${post.id}`)" data-bs-toggle="modal" data-bs-target="#viewPostModal">View</button>
+                                <a class="btn btn-info" href="./post-edit?id=${post.id}">Edit</a>
+                                <!--<button type="btn" class="btn btn-info" onclick="view(`${post.id}`)" data-bs-toggle="modal" data-bs-target="#viewPostModal">View</button>-->
                                 <c:if test="${!post.isDeleted}">
                                     <a href="update-post?postId=${post.id}&isDeleted=1" class="btn btn-danger">Hide</a>
                                 </c:if>
