@@ -66,6 +66,7 @@ public class ApproveOrderController extends HttpServlet {
         boolean isSuccess = orderDAO.updateOrderStatus(status, orderId);
         if(status.equalsIgnoreCase("Rejected")) {
             new ProductDAO().updateQuantity(orderId, -1);
+            new ProductDAO().updateHoldQuantity(orderId, 1);
             EmailService.sendEmail(order.getUser().getEmail(), "Confirm Card", "Your order " + order.getId() + "was rejected!");
         }
         if(status.equalsIgnoreCase("approved")) {
