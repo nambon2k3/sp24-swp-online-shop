@@ -79,7 +79,7 @@ public class PostDetailController extends HttpServlet {
         String jsonPost = "[{\"id\":" + post.getId()+ ","
                 + "\"categoryId\":\"" + post.getCategoryId()+ "\","
                 + "\"title\":\"" + post.getTitle()+ "\","
-                + "\"content\":\"" + post.getContent() + "\","
+                + "\"content\":\"" + post.getContent().replace("\"", "\\\"") + "\","
                 + "\"isDeleted\":\"" + post.isIsDeleted() + "\","
                 + "\"createdAt\":\"" + post.getCreatedAt() + "\","
                 + "\"imgURL\":\"" + post.getImgURL()+ "\","
