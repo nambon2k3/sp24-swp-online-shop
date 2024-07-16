@@ -140,11 +140,11 @@
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                     <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="product-detail?id=${p.productId}">View details</a></div>
-                                    <div class="text-center mt-3">
+<!--                                    <div class="text-center mt-3">
                                         <button  type="button" class="btn btn-outline-dark mt-auto text-center" data-bs-toggle="modal" data-bs-target="#exampleModal-${p.productId}">
                                             Add To Cart
                                         </button>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
