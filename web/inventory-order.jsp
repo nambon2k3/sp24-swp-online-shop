@@ -98,9 +98,9 @@
                                 <c:if test="${item.status eq 'Packaging'}">
                                     <a href="shipping-order?orderId=${item.id}&status=Delivering" class="btn btn-primary">Delivering</a>
                                 </c:if>
-                                <c:if test="${order.status eq 'Delivering'}">
-                                    <a href="shipping-order?orderId=${order.id}&status=Success" class="btn btn-success">Success</a>
-                                    <a href="shipping-order?orderId=${order.id}&status=Failed" class="btn btn-danger">Failed</a>
+                                <c:if test="${item.status eq 'Delivering'}">
+                                    <a href="shipping-order?orderId=${item.id}&status=Success" class="btn btn-success">Success</a>
+                                    <a href="shipping-order?orderId=${item.id}&status=Failed" class="btn btn-danger">Failed</a>
                                 </c:if>
                             </td>
                         </tr>
