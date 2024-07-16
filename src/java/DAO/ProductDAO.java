@@ -62,7 +62,7 @@ public class ProductDAO extends DBContext {
 
     public List<Product> getProductsByPage(int pageNumber, int pageSize, String searchQuery, String categoryId, Double minPrice, Double maxPrice, String color, String size) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.*, c.Name as CategoryName, pd.Price, pd.Color, pd.Size, pd.ID as PDID FROM Product p "
+        String sql = "SELECT Distinct  p.*, c.Name as CategoryName FROM Product p "
                 + "                 JOIN ProductDetail pd ON p.ID = pd.ProductID "
                 + "				 Join Category c on p.CategoryID = c.ID"
                 + "                 WHERE p.IsDeleted = 0 AND pd.IsDeleted = 0 ";
@@ -116,7 +116,7 @@ public class ProductDAO extends DBContext {
                     product.setDescription(rs.getString("Description"));
                     product.setIsDeleted(rs.getBoolean("IsDeleted"));
 
-                    ProductDetail productDetail = getProductDetailById(rs.getInt("PDID"));
+                    ProductDetail productDetail = getProductDetailByProductId(product.getProductId());
                     product.setProductDetail(productDetail);
                     products.add(product);
                 }

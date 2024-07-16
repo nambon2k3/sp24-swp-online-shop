@@ -25,7 +25,7 @@ public class Product {
     }
 
     public List<ProductDetail> getListProductDetail() {
-        return listProductDetail;
+        return  new ProductDAO().getProductDetailsByProductId(productId);
     }
 
     public void setListProductDetail(List<ProductDetail> listProductDetail) {

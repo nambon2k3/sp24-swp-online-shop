@@ -39,6 +39,10 @@
                 cursor: pointer;
                 background-color: #555252
             }
+            
+            .color:hover {
+                cursor: pointer;
+            }
         </style>
 
     </head>
@@ -77,14 +81,23 @@
                                 <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
                                 <h5 class="sizes">sizes:
                                     <span style="margin-right: 20px"></span>
+                                    <c:set var="check" value=""/>
                                     <c:forEach items="${listDetails}" var="pd">
-                                        <span class="color size ${pd.size == product.productDetail.size ? 'active' : ''}" data-toggle="tooltip" style="border: 1px solid black; text-align: center; align-content: center;" onclick="window.location.href = 'product-detail?pdid=${pd.productDetailId}&id=${product.productId}'" title="small">
+                                        <c:if test="${!check.contains(String.valueOf(pd.size))}">
+                                            <span class="color size ${pd.size == product.productDetail.size ? 'active' : ''}" data-toggle="tooltip" style="border: 1px solid black; text-align: center; align-content: center;" onclick="window.location.href = 'product-detail?pdid=${pd.productDetailId}&id=${product.productId}'" title="small">
                                             ${pd.size}
                                         </span>
+                                        </c:if>
+                                        
+                                        <c:set var="check" value="${check} ${pd.size}"/>
                                     </c:forEach>
                                 </h5>
                                 <h5 class="sizes">colors:
-                                    <span class="color" style="background-color:  ${product.productDetail.color.toLowerCase()}"></span>
+                                    <c:forEach items="${listDetails}" var="pd">
+                                        <c:if test="${product.productDetail.size == pd.size}">
+                                            <span class="color" style="background-color:  ${pd.color.toLowerCase()}; ${product.productDetail.color eq pd.color ? 'box-shadow: 1px 2px 4px 1px black' : ''}" onclick="window.location.href = 'product-detail?pdid=${pd.productDetailId}&id=${product.productId}'"></span>
+                                        </c:if>
+                                    </c:forEach>
                                 </h5>
                                 <h5 class="colors">Quantity: 
                                     <input oninput="valid(this)" id="quantity" type="text" style="padding: 5px" value="1" name="quantity"> 
