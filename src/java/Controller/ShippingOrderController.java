@@ -6,6 +6,8 @@
 package Controller;
 
 import DAO.OrderDAO;
+import Model.Order;
+import Utils.EmailService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -61,7 +63,17 @@ public class ShippingOrderController extends HttpServlet {
         
         OrderDAO orderDAO = new OrderDAO();
         
-        boolean isSuccess = orderDAO.shippingOrder(orderId, status);
+        boolean isSuccess;
+        Order order = orderDAO.getOrderById(orderId);
+        if (status.equalsIgnoreCase("failed")) {
+            isSuccess = orderDAO.failOrder(orderId);
+            EmailService.sendEmail(order.getUser().getEmail(), "Confirm Card", "Your order " + order.getId() + "was failed!");
+        }
+        else {
+            isSuccess = orderDAO.shippingOrder(orderId, status);
+        }
+        
+        
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         response.sendRedirect("list-order?isSuccess=" + isSuccess);
     } 

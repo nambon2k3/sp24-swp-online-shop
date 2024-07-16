@@ -71,10 +71,6 @@ public class UpdateOrderStatusController extends HttpServlet {
         Order order = orderDAO.getOrderById(orderId);
         
         boolean isSuccess = orderDAO.updateOrderStatus(status, orderId, notes, saleId);
-        if (status.equalsIgnoreCase("failed")) {
-            isSuccess = orderDAO.failOrder(orderId);
-            EmailService.sendEmail(order.getUser().getEmail(), "Confirm Card", "Your order " + order.getId() + "was failed!");
-        }
         if (status.equalsIgnoreCase("Canceled")) {
             isSuccess = orderDAO.saleCanceledOrder(orderId);
             EmailService.sendEmail(order.getUser().getEmail(), "Confirm Card", "Your order " + order.getId() + "was cancled!");

@@ -118,7 +118,7 @@
                             <td>${product.productDetail.color}</td>
                             <td>${product.isDeleted ? 'Inactive' : 'Active'}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#productInfoModal_${product.productDetail.productDetailId}">Edit</button>
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#productInfoModal_${product.productDetail.productDetailId}">Import</button>
                             </td>
                         </tr>
                     </c:forEach>

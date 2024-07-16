@@ -122,10 +122,6 @@
                                             <c:if test="${order.status  ne 'Success'}">
                                                 <option value="${order.status}" selected="">${order.status}</option>
                                             </c:if>
-                                            <c:if test="${order.status  eq 'Delivering'}">
-                                                <option value="Success" ${order.status == 'Success' ? 'selected' : ''}>Success</option>
-                                                <option value="Failed" ${order.status == 'Failed' ? 'selected' : ''}>Failed</option>
-                                            </c:if>
                                             <c:if test="${order.status  eq 'Request cancel'}">
                                                 <option value="Canceled" ${order.status == 'Canceled' ? 'selected' : ''}>Canceled</option>
                                             </c:if>
