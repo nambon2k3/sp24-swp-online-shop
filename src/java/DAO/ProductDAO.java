@@ -185,7 +185,7 @@ public class ProductDAO extends DBContext {
                     product.setDescription(rs.getString("Description"));
                     product.setIsDeleted(rs.getBoolean("IsDeleted"));
 
-                    ProductDetail productDetail = getProductDetailByProductId(product.getProductId());
+                    ProductDetail productDetail = getProductDetailById(rs.getInt("PDID"));
                     product.setProductDetail(productDetail);
                     products.add(product);
                 }
