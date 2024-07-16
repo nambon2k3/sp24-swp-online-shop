@@ -35,7 +35,7 @@
                         <!-- Profile Image -->
                         <div class="form-group text-center">
                             <label for="profileImage">Profile Image:</label><br>
-                            <img id="image0" class="w-100" src="${user.avatar}">
+                            <img id="image0" class="w-25" src="${user.avatar}">
                             <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)">
                             <input type="hidden" class="form-control" id="imageUrl0" name="avatar" value="${user.avatar}">
                         </div>
