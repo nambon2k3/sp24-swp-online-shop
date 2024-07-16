@@ -212,7 +212,7 @@
                                         <tr>
                                             <th>Hold</th>
                                             <td>
-                                                <input class="form-control" type="number" name="hold" value="${product.productDetail.hold}">
+                                                <input class="form-control" type="number" name="hold" value="${product.productDetail.hold}" readonly>
                                             </td>
                                         </tr>
                                         <tr>
