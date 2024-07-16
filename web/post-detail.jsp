@@ -18,6 +18,8 @@
               integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="../css/list-post.css">
+        <!-- Font Awesome CSS for icons -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
         <!-- Include Quill.js CSS -->
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -73,8 +75,10 @@
                         <input type="text" class="form-control" id="createdBy" name="createdBy" readonly style="background-color: #e6e6e6">
                     </div>
                     <div class="form-group">
-                        <label for="postImgURLUpdate">Thumbnail Link:</label>
-                        <input type="text" class="form-control" id="postImgURLUpdate" name="imgURL" required>
+                        <label for="postImgURLUpdate">Thumbnail:</label><br>
+                        <img id="image1" class="w-50" src="">
+                        <input type="file" class="form-control w-50" id="imageFile1" accept="image/*" onchange="updateImage(1)">
+                        <input type="hidden" class="form-control" id="imageUrl1" name="imgURL" value="">
                     </div>
                     <div class="form-group">
                         <label for="postCategoryEdit">Category</label>
@@ -104,60 +108,94 @@
         <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
         <script>
-            async function view(id) {
-                try {
-                    const response = await fetch('post-detail?id=' + id);
-                    const data = await response.json();
+                                    async function view(id) {
+                                        try {
+                                            const response = await fetch('post-detail?id=' + id);
+                                            const data = await response.json();
 
-                    data.forEach(post => {
-                        document.getElementById('postId').value = post.id;
-                        document.getElementById('postTitleEdit').value = post.title;
-                        document.getElementById('postContentEdit').innerHTML = post.content;
-                        document.getElementById('createdAt').value = post.createdAt;
-                        document.getElementById('createdBy').value = post.createdBy;
-                        document.getElementById('postImgURLUpdate').value = post.imgURL;
+                                            data.forEach(post => {
+                                                document.getElementById('postId').value = post.id;
+                                                document.getElementById('postTitleEdit').value = post.title;
+                                                document.getElementById('postContentEdit').innerHTML = post.content;
+                                                document.getElementById('createdAt').value = post.createdAt;
+                                                document.getElementById('createdBy').value = post.createdBy;
+                                                document.getElementById('image1').src = post.imgURL;
+                                                document.getElementById('imageUrl1').value = post.imgURL;
 
-                        let listCategory = document.getElementsByClassName('cateOption');
-                        for (let i = 0; i < listCategory.length; i++) {
-                            if (listCategory[i].value === post.categoryId) {
-                                listCategory[i].selected = true;
-                            }
-                        }
-                    });
+                                                let listCategory = document.getElementsByClassName('cateOption');
+                                                for (let i = 0; i < listCategory.length; i++) {
+                                                    if (listCategory[i].value === post.categoryId) {
+                                                        listCategory[i].selected = true;
+                                                    }
+                                                }
+                                            });
 
-                    // Initialize Quill after setting the post content
-                    var quill = new Quill('#postContentEdit', {
-                        theme: 'snow',
-                        modules: {
-                            toolbar: [
-                                [{'header': [1, 2, 3, false]}],
-                                ['bold', 'italic', 'underline', 'strike'],
-                                [{'align': []}],
-                                [{'list': 'ordered'}, {'list': 'bullet'}],
-                                ['link', 'image'],
-                                ['clean']
-                            ]
-                        }
-                    });
+                                            // Initialize Quill after setting the post content
+                                            var quill = new Quill('#postContentEdit', {
+                                                theme: 'snow',
+                                                modules: {
+                                                    toolbar: [
+                                                        [{'header': [1, 2, 3, false]}],
+                                                        ['bold', 'italic', 'underline', 'strike'],
+                                                        [{'align': []}],
+                                                        [{'list': 'ordered'}, {'list': 'bullet'}],
+                                                        ['link', 'image'],
+                                                        ['clean']
+                                                    ]
+                                                }
+                                            });
 
-                    // Save Quill content to hidden input on form submit
-                    document.querySelector('form').onsubmit = function () {
-                        var html = quill.root.innerHTML;
-                        document.querySelector('#editContent').value = html;
-                    };
+                                            // Save Quill content to hidden input on form submit
+                                            document.querySelector('form').onsubmit = function () {
+                                                var html = quill.root.innerHTML;
+                                                document.querySelector('#editContent').value = html;
+                                            };
 
-                } catch (error) {
-                    console.error('Error fetching post data:', error);
-                }
-            }
+                                        } catch (error) {
+                                            console.error('Error fetching post data:', error);
+                                        }
+                                    }
 
-            // Ensure to call the view function when the page is loaded or when necessary
-            document.addEventListener('DOMContentLoaded', function () {
-                const postId = ${id}; // Ensure this variable is correctly passed from your server-side logic
-                view(postId);
-            });
+                                    // Ensure to call the view function when the page is loaded or when necessary
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const postId = ${id}; // Ensure this variable is correctly passed from your server-side logic
+                                        view(postId);
+                                    });
         </script>
 
+        <script>
+            function updateImage(sliderId) {
+                let fileInput = document.getElementById(`imageFile` + sliderId);
+                let image = document.getElementById(`image` + sliderId);
+                let hiddenInput = document.getElementById(`imageUrl` + sliderId);
+                console.log(fileInput, image, hiddenInput)
+
+                // check file uploaded
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+                    if (file.size > maxSize) {
+                        alert("The selected file is too large. Please select a file smaller than 2 MB.");
+                        fileInput.value = ''; // Clear the file input
+                        return;
+                    }
+
+                    // dịch image thành url
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        // Update the image src
+                        image.src = e.target.result;
+
+                        // Optionally, update the hidden input with the base64 data URL
+                        hiddenInput.value = e.target.result;
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            }
+        </script>
 
     </body>
 
