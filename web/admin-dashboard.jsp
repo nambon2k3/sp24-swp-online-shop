@@ -22,6 +22,11 @@
                 height: 100%;
                 border: 2px solid #ddd; /* Added border */
             }
+
+            .chart-container {
+                padding-left: 15%;
+                padding-right: 15%;
+            }
         </style>
     </head>
     <body>
@@ -36,21 +41,27 @@
             <!-- Statistics of new orders -->
             <div class="row">
                 <div class="col-md-6 mb-4 p-3">
-                    <h3>New Orders</h3> <!-- Added title -->
-                    <canvas id="newOrdersChart"></canvas>
+                    <h3>New Orders</h3>
+                    <div class="chart-container">
+                        <canvas id="newOrdersChart"></canvas>
+                    </div>
                 </div>
                 <!-- Revenues -->
                 <div class="col-md-6 mb-4 p-3">
-                    <h3>Revenues</h3> <!-- Added title -->
-                    <canvas id="revenuesChart"></canvas>
+                    <h3>Revenues</h3>
+                    <div class="chart-container">
+                        <canvas id="revenuesChart"></canvas>
+                    </div>
                 </div>
 
                 <!-- Total Cost of Each Category -->
                 <div class="col-12 mb-4 mt-4">
-                    <h2>Total Cost by Category</h2> <!-- Added title -->
+                    <h2>Total Cost by Category</h2>
                     <div class="row">
                         <div class="col-6">
-                            <canvas id="totalCostByCategoryChart"></canvas>
+                            <div class="chart-container">
+                                <canvas id="totalCostByCategoryChart"></canvas>
+                            </div>
                         </div>
                         <div class="col-6 row">
                             <c:forEach var="c" items="${categoryList}">
@@ -69,7 +80,7 @@
             <!-- Customers -->
             <div class="row mb-4 mt-4">
                 <div class="col-md-6 p-3">
-                    <h3>System</h3> <!-- Added title -->
+                    <h3>System</h3>
                     <div class="row d-flex" style="justify-content: center">
                         <div class="col-8 mb-4">
                             <div class="category-item">
@@ -77,11 +88,13 @@
                             </div>
                         </div>
                     </div>
-                    <canvas class="" id="customersChart"></canvas>
+                    <div class="chart-container">
+                        <canvas id="customersChart"></canvas>
+                    </div>
                 </div>
                 <!-- Feedbacks -->
                 <div class="col-md-6 p-3">
-                    <h3>Feedbacks</h3> <!-- Added title -->
+                    <h3>Feedbacks</h3>
                     <p><strong>Average feedback:</strong> ${avgFeedback}</p>
                     <div class="row">
                         <c:forEach var="c" items="${categoryList}">
@@ -112,14 +125,15 @@
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </form>
                 </div>
-
             </div>
 
             <!-- Trend of order counts -->
             <div class="row">
                 <div class="col-md-12">
-                    <h2>Order Trend</h2> <!-- Added title -->
-                    <canvas id="orderTrendChart"></canvas>
+                    <h2>Order Trend</h2>
+                    <div class="chart-container">
+                        <canvas id="orderTrendChart"></canvas>
+                    </div>
                 </div>
             </div>
 

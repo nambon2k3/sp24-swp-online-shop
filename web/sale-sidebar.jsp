@@ -50,6 +50,11 @@
     .sidebar ul.logout {
         margin-top: auto;
     }
+
+    .chart-container {
+        padding-left: 15%;
+        padding-right: 15%;
+    }
 </style>
 
 <!-- Sidebar -->

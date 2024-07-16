@@ -20,6 +20,17 @@
         <link rel="stylesheet" href="../css/list-post.css">
         <!-- Font Awesome CSS for icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+        <!-- Include Quill.js CSS -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+        <style>
+            @media (min-width: 768px) {
+                .modal-dialog {
+                    max-width: 80%;
+                }
+            }
+        </style>
     </head>
 
     <body>
@@ -196,7 +207,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="postContent">Content</label>
-                                <textarea class="form-control" id="postContent" name="content" rows="5" required></textarea>
+                                <!--<textarea class="form-control" id="postContent" name="content" rows="5" required></textarea>-->
+                                <label for="editContent" class="form-label">Content:</label>
+                                <div id="postContentEdit" style="height: 900px;"></div>
+                                <input type="hidden" id="editContent" name="content">
                             </div>
                             <div class="form-group">
                                 <label for="postCategory">Category</label>
@@ -216,7 +230,7 @@
             </div>
         </div>
 
-        <!-- Modal for Adding New Post -->
+        <!--update-->
         <div class="modal fade" id="viewPostModal" tabindex="-1" aria-labelledby="viewPostModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -338,6 +352,29 @@
                     reader.readAsDataURL(file);
                 }
             }
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+        <!-- Quill.js library -->
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+        <script>
+            var quill = new Quill('#postContentEdit', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{'header': [1, 2, 3, false]}],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{'align': []}],
+                        [{'list': 'ordered'}, {'list': 'bullet'}],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
         </script>
 
     </body>
