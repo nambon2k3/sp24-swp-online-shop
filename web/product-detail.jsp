@@ -130,6 +130,7 @@
                                     </c:forEach>
                                 </div>
                             </div>
+                            <p><strong>Image:</strong><img class="w-25 mb-3" src="${feedback.image}"></p>
                             <p><strong>Comment:</strong> ${feedback.comment}</p>
                             <p><strong>Created By:</strong> ${feedback.userName}</p>
                             <p style="text-align: right">

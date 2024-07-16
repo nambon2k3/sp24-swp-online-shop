@@ -20,6 +20,17 @@
         <link rel="stylesheet" href="../css/list-post.css">
         <!-- Font Awesome CSS for icons -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+        <!-- Include Quill.js CSS -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+        <style>
+            @media (min-width: 768px) {
+                .modal-dialog {
+                    max-width: 80%;
+                }
+            }
+        </style>
     </head>
 
     <body>
@@ -184,8 +195,11 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="postImgURL">Thumbnail Link:</label>
-                                <input type="text" class="form-control" id="postImgURL" name="imgURL" required>
+                                <label for="postImgURL">Thumbnail:</label>
+                                <!--<input type="text" class="form-control" id="postImgURL" name="imgURL" required>-->
+                                <img id="image0" class="w-100" src="">
+                                <input type="file" class="form-control" id="imageFile0" accept="image/*" onchange="updateImage(0)">
+                                <input type="hidden" class="form-control" id="imageUrl0" name="imgURL" value="">
                             </div>
                             <div class="form-group">
                                 <label for="postTitle">Title</label>
@@ -193,7 +207,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="postContent">Content</label>
-                                <textarea class="form-control" id="postContent" name="content" rows="5" required></textarea>
+                                <!--<textarea class="form-control" id="postContent" name="content" rows="5" required></textarea>-->
+                                <label for="editContent" class="form-label">Content:</label>
+                                <div id="postContentEdit" style="height: 900px;"></div>
+                                <input type="hidden" id="editContent" name="content">
                             </div>
                             <div class="form-group">
                                 <label for="postCategory">Category</label>
@@ -213,7 +230,7 @@
             </div>
         </div>
 
-        <!-- Modal for Adding New Post -->
+        <!--update-->
         <div class="modal fade" id="viewPostModal" tabindex="-1" aria-labelledby="viewPostModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -244,8 +261,11 @@
                                 <input type="text" class="form-control" id="createdBy" name="createdBy" readonly style="background-color: #e6e6e6">
                             </div>
                             <div class="form-group">
-                                <label for="postImgURLUpdate">Thumbnail Link:</label>
-                                <input type="text" class="form-control" id="postImgURLUpdate" name="imgURL" required>
+                                <label for="postImgURLUpdate">Thumbnail:</label>
+                                <!--<input type="text" class="form-control" id="postImgURLUpdate" name="imgURL" required>-->
+                                <img id="image1" class="w-100" src="">
+                                <input type="file" class="form-control" id="imageFile1" accept="image/*" onchange="updateImage(1)">
+                                <input type="hidden" class="form-control" id="imageUrl1" name="imgURL" value="">
                             </div>
                             <div class="form-group">
                                 <label for="postCategoryEdit">Category</label>
@@ -280,7 +300,8 @@
                                                         document.getElementById('postContentEdit').value = post.content;
                                                         document.getElementById('createdAt').value = post.createdAt;
                                                         document.getElementById('createdBy').value = post.createdBy;
-                                                        document.getElementById('postImgURLUpdate').value = post.imgURL;
+                                                        document.getElementById('image1').src = post.imgURL;
+                                                        document.getElementById('imageUrl1').value = post.imgURL;
 
 
                                                         let listCategory = document.getElementsByClassName('cateOption');
@@ -298,6 +319,64 @@
                                                 );
                                     }
         </script>
+
+        <script>
+            function updateImage(sliderId) {
+                let fileInput = document.getElementById(`imageFile` + sliderId);
+                let image = document.getElementById(`image` + sliderId);
+                let hiddenInput = document.getElementById(`imageUrl` + sliderId);
+                console.log(fileInput, image, hiddenInput)
+
+                // check file uploaded
+                if (fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+                    if (file.size > maxSize) {
+                        alert("The selected file is too large. Please select a file smaller than 2 MB.");
+                        fileInput.value = ''; // Clear the file input
+                        return;
+                    }
+
+                    // dịch image thành url
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        // Update the image src
+                        image.src = e.target.result;
+
+                        // Optionally, update the hidden input with the base64 data URL
+                        hiddenInput.value = e.target.result;
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            }
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+        <!-- Quill.js library -->
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+        <script>
+            var quill = new Quill('#postContentEdit', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{'header': [1, 2, 3, false]}],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{'align': []}],
+                        [{'list': 'ordered'}, {'list': 'bullet'}],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+        </script>
+
     </body>
 
 </html>
