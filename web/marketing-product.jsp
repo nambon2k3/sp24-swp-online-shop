@@ -380,7 +380,7 @@
                             <div class="form-group">
                                 <label>Size</label>
                                 <select class="sizeSelect form-control" name="size" multiple required>
-                                    <option value="M">S</option>
+                                    <option value="S">S</option>
                                     <option value="M">M</option>
                                     <option value="L">L</option>
                                     <option value="XL">XL</option>

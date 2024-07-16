@@ -42,7 +42,7 @@ public class MarketingProductController extends HttpServlet {
         Double minPrice = minPriceParam == null || minPriceParam.isEmpty() ? null : Double.parseDouble(minPriceParam);
         Double maxPrice = maxPriceParam == null || maxPriceParam.isEmpty() ? null : Double.parseDouble(maxPriceParam);
 
-        List<Product> products = new ProductDAO().getProductsByPage(pageNumber, pageSize, searchQuery, categoryId, minPrice, maxPrice, color, size);
+        List<Product> products = new ProductDAO().getProductsByPage2(pageNumber, pageSize, searchQuery, categoryId, minPrice, maxPrice, color, size);
         int total = new ProductDAO().countTotalProducts(searchQuery, categoryId, minPrice, maxPrice, color, size);
 
         int endPage = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
