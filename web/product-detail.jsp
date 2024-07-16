@@ -117,6 +117,7 @@
                                     </c:forEach>
                                 </div>
                             </div>
+                            <p><strong>Image:</strong> ${feedback.image}</p>
                             <p><strong>Comment:</strong> ${feedback.comment}</p>
                             <p><strong>Created By:</strong> ${feedback.userName}</p>
                             <p style="text-align: right">
