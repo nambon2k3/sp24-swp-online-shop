@@ -184,6 +184,36 @@ public class AdminDAO {
         return orders;
     }
     
+    public List<Order> getOrdersByStatusAndDateRange(String status, LocalDateTime startDate, LocalDateTime endDate, String name) {
+        if (name == null || name.trim().isBlank()) return getOrdersByStatusAndDateRange(status, startDate, endDate);
+        
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT o.* FROM [Order] o, Staff s WHERE LOWER(o.Status) = LOWER(?) AND o.[CreatedAt] >= ? AND o.[CreatedAt] <= ? AND o.CreatedBy = s.id AND s.Fullname = LOWER(?)";
+        try {
+            ps = conn.prepareStatement(query);
+            ps.setString(1, status);
+            ps.setTimestamp(2, Timestamp.valueOf(startDate));
+            ps.setTimestamp(3, Timestamp.valueOf(endDate));
+            ps.setString(4, name);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("ID"));
+                order.setUserId(rs.getInt("UserID"));
+                order.setCreatedAt(rs.getDate("CreatedAt"));
+                order.setStatus(rs.getString("Status"));
+                order.setFullname(rs.getString("Fullname"));
+                order.setPhone(rs.getString("Phone"));
+                order.setAddress(rs.getString("Address"));
+
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+    
     public User getLastOrderCustomer() {
         String sql = "SELECT TOP 1 * FROM [swp-online-shop].[dbo].[Order] ORDER BY ID DESC";
 
