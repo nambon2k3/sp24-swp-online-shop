@@ -87,10 +87,6 @@ public class CartContactController extends HttpServlet {
         int totalCartItems = cartDAO.getCartCount(userId, searchQuery, category);
         int totalPages = (int) Math.ceil((double) totalCartItems / PAGE_SIZE);
         
-        Setting setting = new SettingDAO().getSettingByID(3);
-        if(!setting.getIsDeleted()) {
-            request.setAttribute("setting", setting);
-        }
         request.setAttribute("cartItemsFull", cartItemsFull);
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("products", products);

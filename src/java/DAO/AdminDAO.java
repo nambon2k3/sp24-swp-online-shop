@@ -215,7 +215,7 @@ public class AdminDAO {
     }
     
     public User getLastOrderCustomer() {
-        String sql = "SELECT TOP 1 * FROM [swp-online-shop].[dbo].[Order] ORDER BY ID DESC";
+        String sql = "SELECT TOP 1 * FROM [online-shopd].[dbo].[Order] ORDER BY ID DESC";
 
         try {
             ps = conn.prepareStatement(sql);

@@ -244,10 +244,10 @@ public class FeedbackDAO {
     public List<Feedback> getFeedbackByProductDetailID(int productDetailID, int offset, int pageSize) {
         List<Feedback> feedbackList = new ArrayList<>();
         String query = "SELECT [ID], [OrderDetailID], [Rating], [Comment], [IsDeleted], [CreatedAt], [CreatedBy], [ImgURL] "
-                + "FROM [swp-online-shop].[dbo].[Feedback] "
+                + "FROM [online-shopd].[dbo].[Feedback] "
                 + "WHERE [OrderDetailID] IN ("
                 + "    SELECT [ID] "
-                + "    FROM [swp-online-shop].[dbo].[OrderDetail] "
+                + "    FROM [online-shopd].[dbo].[OrderDetail] "
                 + "    WHERE [ProductDetailID] = ?) "
                 + "ORDER BY [CreatedAt] DESC "
                 + "OFFSET ? ROWS "

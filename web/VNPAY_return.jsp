@@ -120,7 +120,8 @@
                                     if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
                                         out.print("Success");
                                         isSuccess = true;
-                                        new OrderDAO().updateOrder("Submitted", Config.orderID);
+                                        int orderId = Integer.parseInt(request.getParameter("vnp_OrderInfo"));
+                                        new OrderDAO().updateOrder("Submitted", orderId);
                                         EmailService.sendEmail(((User) request.getSession().getAttribute("user")).getEmail(), "Confirm Order", "We have receive your order!" + "Payment guidles: " 
                                         + request.getParameter("vnp_OrderInfo") + ", Amount:" + String.format("%,.0f",Double.parseDouble(request.getParameter("vnp_Amount"))/100) + ", Transaction Code: " + request.getParameter("vnp_TransactionNo"));
                                     } else {

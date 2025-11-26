@@ -372,7 +372,7 @@ public class ProductDAO extends DBContext {
                 return productDetail;
             }
         } catch (SQLException ex) {
-            System.out.println("getProductDetailsByProductId: " + ex.getMessage());
+            System.out.println("getProductDetailsByProductId261125: " + ex.getMessage());
         }
 
         return new ProductDetail();
@@ -430,7 +430,7 @@ public class ProductDAO extends DBContext {
                 productDetails.add(productDetail);
             }
         } catch (SQLException ex) {
-            System.out.println("getProductDetailsByProductId: " + ex.getMessage());
+            System.out.println("getProductDetailsByProductId261125: " + ex.getMessage());
         }
 
         return productDetails;
@@ -603,7 +603,7 @@ public class ProductDAO extends DBContext {
     public List<ProductDetail> getListProductDetailsByProductId(int productId) {
         List<ProductDetail> productDetails = new ArrayList<>();
         String query = "SELECT [ID], [ProductID], [ImageURL], [Size], [Color], [Stock], [IsDeleted], [CreatedAt], [CreatedBy], [price], [discount] "
-                + "FROM [swp-online-shop].[dbo].[ProductDetail] WHERE [ProductID] = ? and IsDeleted != 1";
+                + "FROM [online-shopd].[dbo].[ProductDetail] WHERE [ProductID] = ? and IsDeleted != 1";
 
         try (
                 PreparedStatement ps = connection.prepareStatement(query)) {
@@ -712,7 +712,7 @@ public class ProductDAO extends DBContext {
     public void updateQuantity(int orderId, int mode) {
         String GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL
                 = "SELECT ProductDetailID, [quantity] "
-                + "FROM [swp-online-shop].[dbo].[OrderDetail] "
+                + "FROM [online-shopd].[dbo].[OrderDetail] "
                 + "WHERE OrderID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL)) {
 
@@ -733,7 +733,7 @@ public class ProductDAO extends DBContext {
     public void updateHoldQuantity(int orderId, int mode) {
         String GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL
                 = "SELECT ProductDetailID, [quantity] "
-                + "FROM [swp-online-shop].[dbo].[OrderDetail] "
+                + "FROM [online-shopd].[dbo].[OrderDetail] "
                 + "WHERE OrderID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_PRODUCT_DETAIL_IDS_BY_ORDER_ID_SQL)) {
 

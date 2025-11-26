@@ -62,7 +62,7 @@ public class ConfirmOrderController extends HttpServlet {
         User user = (User) request.getSession().getAttribute("user");
         OrderDAO orderDAO = new OrderDAO();        
         boolean isSuccess = orderDAO.confirmOrder(orderId);
-        EmailService.sendEmail(user.getEmail(), "Thanks Card", "Thanks for trying our product, we want to hear your feedback! Link feedback: http://localhost:8080/swp-online-shop/customer/order-detail?orderId=" + orderId);
+        EmailService.sendEmail(user.getEmail(), "Thanks Card", "Thanks for trying our product, we want to hear your feedback! Link feedback: http://localhost:8080/online-shopd/customer/order-detail?orderId=" + orderId);
         request.setAttribute("isSuccess", request.getParameter("isSuccess"));
         response.sendRedirect("my-order?isSuccess=" + isSuccess + "&type=Close");
     } 

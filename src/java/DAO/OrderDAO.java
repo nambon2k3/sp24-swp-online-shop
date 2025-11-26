@@ -45,7 +45,7 @@ public class OrderDAO {
 
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM [swp-online-shop].[dbo].[Order]";
+        String sql = "SELECT * FROM [online-shopd].[dbo].[Order]";
 
         try {
             stmt = connection.prepareStatement(sql);
@@ -80,9 +80,9 @@ public class OrderDAO {
 
     public double getTotal(int orderId) {
         String sql = "SELECT SUM(pd.price * (100 - pd.discount)/100 * od.quantity) AS total_cost "
-                + "FROM [swp-online-shop].[dbo].[Order] o "
-                + "INNER JOIN [swp-online-shop].[dbo].[OrderDetail] od ON o.ID = od.OrderID "
-                + "INNER JOIN [swp-online-shop].[dbo].[ProductDetail] pd ON od.[ProductDetailID] = pd.ID "
+                + "FROM [online-shopd].[dbo].[Order] o "
+                + "INNER JOIN [online-shopd].[dbo].[OrderDetail] od ON o.ID = od.OrderID "
+                + "INNER JOIN [online-shopd].[dbo].[ProductDetail] pd ON od.[ProductDetailID] = pd.ID "
                 + "WHERE o.ID = ? "
                 + "GROUP BY o.ID";
 
@@ -156,6 +156,7 @@ public class OrderDAO {
                 orders.add(order);
             }
         } catch (SQLException e) {
+            System.out.println("getOrdersByPage: " + e.getMessage());
             e.printStackTrace();
         }
         return orders;
@@ -352,7 +353,7 @@ public class OrderDAO {
     public Order getOrderById(int orderId) {
         Order order = null;
         try {
-            String sql = "SELECT * FROM [swp-online-shop].[dbo].[Order] WHERE ID = ?";
+            String sql = "SELECT * FROM [online-shopd].[dbo].[Order] WHERE ID = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, orderId);
 
@@ -504,9 +505,9 @@ public class OrderDAO {
                 + "        s.Email,\n"
                 + "        COUNT(o.ID) AS OrderCount\n"
                 + "    FROM \n"
-                + "        [swp-online-shop].[dbo].[Staff] s\n"
+                + "        [online-shopd].[dbo].[Staff] s\n"
                 + "    LEFT JOIN \n"
-                + "        [swp-online-shop].[dbo].[Order] o\n"
+                + "        [online-shopd].[dbo].[Order] o\n"
                 + "    ON \n"
                 + "        s.ID = o.CreatedBy\n"
                 + "    WHERE \n"
@@ -542,9 +543,9 @@ public class OrderDAO {
                 + "                         s.Email,\n"
                 + "                         COUNT(o.ID) AS OrderCount\n"
                 + "                     FROM \n"
-                + "                         [swp-online-shop].[dbo].[Staff] s\n"
+                + "                         [online-shopd].[dbo].[Staff] s\n"
                 + "                     LEFT JOIN \n"
-                + "                         [swp-online-shop].[dbo].[Order] o\n"
+                + "                         [online-shopd].[dbo].[Order] o\n"
                 + "                     ON \n"
                 + "                         s.ID = o.CreatedBy\n"
                 + "                     WHERE \n"
@@ -606,6 +607,7 @@ public class OrderDAO {
     }
 
     public void updateOrder(String status, int orderId) throws SQLException {
+        System.out.println("261125: " + orderId);
         String UPDATE_ORDER_SQL = "UPDATE [Order] SET status = ? WHERE id = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_SQL)) {
@@ -619,7 +621,7 @@ public class OrderDAO {
             int affectedRows = preparedStatement.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new SQLException("Updating order failed, no rows affected.");
+                throw new SQLException(orderId);
             }
         } catch (SQLException e) {
             throw new SQLException("Error while updating the order", e);
@@ -695,10 +697,10 @@ public class OrderDAO {
         List<OrderDetail> orderDetails = new ArrayList<>();
         String GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL
                 = "SELECT od.ID, od.OrderID, od.ProductDetailID, od.IsDeleted, od.CreatedAt, od.CreatedBy, od.quantity "
-                + "FROM [swp-online-shop].[dbo].[OrderDetail] od "
-                + "LEFT JOIN [swp-online-shop].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID "
+                + "FROM [online-shopd].[dbo].[OrderDetail] od "
+                + "LEFT JOIN [online-shopd].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID "
                 + "WHERE fb.OrderDetailID IS NULL "
-                + "AND od.OrderID IN (SELECT o.ID FROM [swp-online-shop].[dbo].[Order] o WHERE o.UserID = ?) "
+                + "AND od.OrderID IN (SELECT o.ID FROM [online-shopd].[dbo].[Order] o WHERE o.UserID = ?) "
                 + "AND od.IsDeleted = 0";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL)) {
@@ -728,8 +730,8 @@ public class OrderDAO {
     public boolean isFeedbacked(int orderDetailId) {
         String GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL
                 = "SELECT * \n"
-                + "                 FROM [swp-online-shop].[dbo].[OrderDetail] od  \n"
-                + "                  JOIN [swp-online-shop].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID  \n"
+                + "                 FROM [online-shopd].[dbo].[OrderDetail] od  \n"
+                + "                  JOIN [online-shopd].[dbo].[Feedback] fb ON od.ID = fb.OrderDetailID  \n"
                 + "                 WHERE od.IsDeleted = 0 AND od.ID = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAILS_NOT_FEEDBACKED_SQL)) {
@@ -751,7 +753,7 @@ public class OrderDAO {
         OrderDetail orderDetail = null;
         String GET_ORDER_DETAIL_BY_ID_SQL
                 = "SELECT ID, OrderID, ProductDetailID, IsDeleted, CreatedAt, CreatedBy, quantity "
-                + "FROM [swp-online-shop].[dbo].[OrderDetail] WHERE ID = ?";
+                + "FROM [online-shopd].[dbo].[OrderDetail] WHERE ID = ?";
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAIL_BY_ID_SQL)) {
 

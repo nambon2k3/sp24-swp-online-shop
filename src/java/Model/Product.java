@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class Product {
+
     private int productId;
     private String productName;
     private String categoryName;
@@ -19,13 +20,14 @@ public class Product {
     private Boolean isDeleted;
     private int categoryId;
     private List<ProductDetail> listProductDetail;
+
     // Getters and setters
     public int getProductId() {
         return productId;
     }
 
     public List<ProductDetail> getListProductDetail() {
-        return  new ProductDAO().getProductDetailsByProductId(productId);
+        return new ProductDAO().getProductDetailsByProductId(productId);
     }
 
     public void setListProductDetail(List<ProductDetail> listProductDetail) {
@@ -104,7 +106,7 @@ public class Product {
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
-    
+
     public String getThumb() {
         return new ProductDAO().getProductDetailByProductId(productId).getImageURL();
     }
@@ -112,5 +114,5 @@ public class Product {
     public ProductDetail getDetail() {
         return new ProductDAO().getProductDetailByProductId(productId);
     }
-  
+
 }

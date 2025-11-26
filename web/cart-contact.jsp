@@ -212,7 +212,7 @@
                                         <li><strong>OWNER: </strong>Sloth shop</li>
                                     </ul>
                                 </div> 
-                                        <input type="radio"  name="method" value="COD" ${setting ne null && totalPrice > setting.value  ? "disabled" : ""}> COD 
+                                        <input type="radio"  name="method" value="COD"> COD 
                                         <c:if test="${totalPrice > setting.value && !setting.isDeleted}">(Order > ${setting.value}$ is not allow for COD)</c:if>
                             </td> 
                         </tr>

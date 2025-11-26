@@ -43,18 +43,81 @@ public class PaymentController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doPost(req, resp);
     }
-    
-    
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse respone) throws ServletException, IOException {
+
+        //Section : Add new payment
+        //Get user payment
+        String method = request.getParameter("method");
+        if (method.equalsIgnoreCase("tranfer1")) {
+            respone.sendRedirect("tranfer-commit");
+            return;
+        }
+
+        User user = (User) request.getSession().getAttribute("user");
+        //Create bill
+        String fullname = request.getParameter("fullname");
+        String address = request.getParameter("address");
+        String phone = request.getParameter("phone");
+        String notes = request.getParameter("notes");
+
+        Order order = new Order();
+        order.setFullname(fullname);
+        order.setAddress(address);
+        order.setPhone(phone);
+        order.setNotes(notes);
+        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay") || method.equalsIgnoreCase("COD")) {
+            order.setFullname(user.getFullname());
+            order.setAddress(user.getAddress());
+            order.setPhone(user.getPhone());
+            order.setNotes(notes);
+        }
+        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Wait for pay" : "Submitted");
+        order.setPaymentMethod(method);
+        order.setUserId(user.getId());
+        int orderId = 0;
+        if (request.getParameter("orderId") != null && !request.getParameter("orderId").isEmpty()) {
+            orderId = Integer.parseInt(request.getParameter("orderId"));
+        }
+
+        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("COD") || method.equalsIgnoreCase("tranfer")) {
+            orderId = new OrderDAO().createOrder(order);
+        }
+
+        Config.orderID = orderId;
+        // Retrieve cart items from session or request (assuming a method getCartItems exists)
+        List<Cart> cartItems = new CartDAO().getAllCarts(user.getId());
+        // Insert Order Details
+        if (request.getParameter("mode") != null) {
+            int productDetailId = Integer.parseInt(request.getParameter("productdetailId"));
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrderId(orderId);
+            orderDetail.setCreatedBy(user.getId());
+            orderDetail.setProductDetailId(productDetailId);
+            orderDetail.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+            new OrderDAO().createOrderDetail(orderDetail);
+        } else {
+            for (Cart cartItem : cartItems) {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setOrderId(orderId);
+                orderDetail.setCreatedBy(user.getId());
+                orderDetail.setProductDetailId(cartItem.getProductDetailId());
+                orderDetail.setQuantity(cartItem.getQuantity());
+                new OrderDAO().createOrderDetail(orderDetail);
+                if (method.equalsIgnoreCase("COD") || method.equalsIgnoreCase("tranfer")) {
+                    new ProductDAO().updateProductDetailHold(cartItem.getProductDetailId(), -cartItem.getQuantity());
+                }
+            }
+            new CartDAO().clearCart(user.getId());
+        }
 
         String amount_raw = request.getParameter("amount");
         double amount_d = Double.parseDouble(amount_raw);
         int amount = (int) amount_d * 100 * 25000;
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
-        String vnp_OrderInfo = "pay pay";
+        String vnp_OrderInfo = orderId + "";
         String orderType = "other";
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = Config.getIpAddress(request);
@@ -117,71 +180,6 @@ public class PaymentController extends HttpServlet {
         String vnp_SecureHash = Config.hmacSHA512(Config.vnp_HashSecret, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
-
-        //Section : Add new payment
-        //Get user payment
-        String method = request.getParameter("method");
-        if(method.equalsIgnoreCase("tranfer1")) {
-            respone.sendRedirect("tranfer-commit");
-            return;
-        }
-
-        User user = (User) request.getSession().getAttribute("user");
-        //Create bill
-        String fullname = request.getParameter("fullname");
-        String address = request.getParameter("address");
-        String phone = request.getParameter("phone");
-        String notes = request.getParameter("notes");
-
-        Order order = new Order();
-        order.setFullname(fullname);
-        order.setAddress(address);
-        order.setPhone(phone);
-        order.setNotes(notes);
-        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay") || method.equalsIgnoreCase("COD")) {
-            order.setFullname(user.getFullname());
-            order.setAddress(user.getAddress());
-            order.setPhone(user.getPhone());
-            order.setNotes(notes);
-        }
-        order.setStatus(method.equalsIgnoreCase("vnpay") ? "Wait for pay" : "Submitted");
-        order.setPaymentMethod(method);
-        order.setUserId(user.getId());
-        int orderId = 0;
-        if(request.getParameter("orderId") != null && !request.getParameter("orderId").isEmpty()) {
-           orderId = Integer.parseInt(request.getParameter("orderId"));
-        }
-         
-        if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("COD") || method.equalsIgnoreCase("tranfer")) {
-            orderId = new OrderDAO().createOrder(order);
-        }
-        
-        Config.orderID = orderId;
-        // Retrieve cart items from session or request (assuming a method getCartItems exists)
-        List<Cart> cartItems = new CartDAO().getAllCarts(user.getId());
-        // Insert Order Details
-        if (request.getParameter("mode") != null) {
-            int productDetailId = Integer.parseInt(request.getParameter("productdetailId"));
-            OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setOrderId(orderId);
-            orderDetail.setCreatedBy(user.getId());
-            orderDetail.setProductDetailId(productDetailId);
-            orderDetail.setQuantity(Integer.parseInt(request.getParameter("quantity")));
-            new OrderDAO().createOrderDetail(orderDetail);
-        } else {
-            for (Cart cartItem : cartItems) {
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setOrderId(orderId);
-                orderDetail.setCreatedBy(user.getId());
-                orderDetail.setProductDetailId(cartItem.getProductDetailId());
-                orderDetail.setQuantity(cartItem.getQuantity());
-                new OrderDAO().createOrderDetail(orderDetail);
-                if(method.equalsIgnoreCase("COD") || method.equalsIgnoreCase("tranfer")) {
-                    new ProductDAO().updateProductDetailHold(cartItem.getProductDetailId(), -cartItem.getQuantity());
-                }
-            }
-            new CartDAO().clearCart(user.getId());
-        }
 
         if (method.equalsIgnoreCase("vnpay") || method.equalsIgnoreCase("repay")) {
             respone.sendRedirect(paymentUrl);
